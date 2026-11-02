@@ -320,16 +320,28 @@ html[data-theme="light"] .danger-note strong{color:#b21f34}
 html[data-theme="light"] .theme-switch{background:rgba(255,255,255,.88);border-color:#b6b6ac}
 html[data-theme="light"] tbody tr{background:rgba(255,255,255,.82)}
 html[data-theme="light"] .card{
+  border-color:rgba(var(--card-rgb),.35);
   background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,247,243,.96));
 }
-html[data-theme="light"] .card::before{background:#111;box-shadow:none}
+html[data-theme="light"] .card::before{background:var(--card);box-shadow:none}
 html[data-theme="light"] .card h3{color:#111}
-html[data-theme="light"] .card h3 span{color:#555}
+html[data-theme="light"] .card h3 span{color:var(--card)}
 html[data-theme="light"] .card .loc,
 html[data-theme="light"] .card .stats,
 html[data-theme="light"] .card .flag{color:#5f5f58}
-html[data-theme="light"] .card .stats b{color:#111}
+html[data-theme="light"] .card .stats b{color:var(--card)}
+html[data-theme="light"] .card .pill{color:var(--card);border-color:rgba(var(--card-rgb),.45)}
+html[data-theme="light"] .card .btn{color:var(--card);border-color:rgba(var(--card-rgb),.45);background:rgba(var(--card-rgb),.06)}
+html[data-theme="light"] .card .btn:hover{background:rgba(var(--card-rgb),.14);color:var(--bg);box-shadow:none}
 html[data-theme="light"] .pill{color:#444;border-color:#b6b6ac}
+html[data-theme="light"] .card.c-amarr{--card:#8a5f00;--card-rgb:138,95,0}
+html[data-theme="light"] .card.c-caldari{--card:#006a99;--card-rgb:0,106,153}
+html[data-theme="light"] .card.c-gallente{--card:#1f7a45;--card-rgb:31,122,69}
+html[data-theme="light"] .card.c-minmatar{--card:#b23a1f;--card-rgb:178,58,31}
+html[data-theme="light"] .card.c-angel{--card:#b81f3c;--card-rgb:184,31,60}
+html[data-theme="light"] .card.c-blood-raider{--card:#a52a1f;--card-rgb:165,42,31}
+html[data-theme="light"] .card.c-guristas{--card:#6b45c4;--card-rgb:107,69,196}
+html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
 
 /* ---------- color theme switch ---------- */
 .theme-switch{
