@@ -24,6 +24,11 @@
     return value === "" || /^[\u2014\u2013-]+$/.test(value);
   }
 
+  /* "none" standing means no requirement: sort it below every numeric value. */
+  function isNone(value) {
+    return value.toLowerCase() === "none";
+  }
+
   function originalIndex(row) {
     return parseInt(row.getAttribute("data-sort-index"), 10) || 0;
   }
@@ -61,6 +66,13 @@
       if (aBlank || bBlank) {
         if (aBlank && bBlank) return originalIndex(a) - originalIndex(b);
         return aBlank ? 1 : -1;
+      }
+
+      var aNone = isNone(av);
+      var bNone = isNone(bv);
+      if (aNone || bNone) {
+        if (aNone && bNone) return originalIndex(a) - originalIndex(b);
+        return (aNone ? -1 : 1) * multiplier;
       }
 
       var result = compareText(av, bv);
