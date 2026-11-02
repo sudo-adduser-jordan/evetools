@@ -1,1 +1,9 @@
-- https://wiki.eveuniversity.org/Caldari_COSMOS
+- [COSMOS](https://wiki.eveuniversity.org/COSMOS)
+- [Amarr COSMOS](https://wiki.eveuniversity.org/Amarr_COSMOS)
+- [Angel COSMOS](https://wiki.eveuniversity.org/Angel_COSMOS)
+- [Blood Raider COSMOS](https://wiki.eveuniversity.org/Blood_Raider_COSMOS)
+- [Caldari COSMOS](https://wiki.eveuniversity.org/Caldari_COSMOS)
+- [Gallente COSMOS](https://wiki.eveuniversity.org/Gallente_COSMOS)
+- [Guristas COSMOS](https://wiki.eveuniversity.org/Guristas_COSMOS)
+- [Minmatar COSMOS](https://wiki.eveuniversity.org/Minmatar_COSMOS)
+- [Serpentis COSMOS](https://wiki.eveuniversity.org/Serpentis_COSMOS)
