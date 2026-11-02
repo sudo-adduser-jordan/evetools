@@ -172,12 +172,13 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
 .tag{
-  display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
+  display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
 }
-.tag.buy{color:#ffcf70;background:rgba(255,182,72,.09);border:1px solid rgba(255,182,72,.45)}
-.tag.buy::before{content:"\25C6";margin-right:5px;font-size:8px;vertical-align:1px}
-.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3);margin-left:4px}
+.tags{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;margin-left:8px;vertical-align:middle}
+.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3)}
+.tag.src.alt{color:var(--violet);background:rgba(180,140,255,.08);border:1px solid rgba(180,140,255,.32)}
+.tag.rep{color:var(--green);background:rgba(72,224,138,.07);border:1px solid rgba(72,224,138,.32)}
 
 /* faction chips */
 .chip{
@@ -228,8 +229,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
   tbody tr{position:relative;padding:9px 46px 10px 12px}
   tbody td.chk-cell::before{content:none}
   td.main{font-size:14px}
-  .tag.buy,.tag.src{display:inline-block;margin:6px 0 0;white-space:normal;max-width:100%}
-  .tag.buy + .tag.src{margin-left:5px}
+  .tags{display:flex;margin:6px 0 0}
   h2{font-size:16px}
   .hud{gap:12px 18px}
 }
@@ -308,6 +308,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
       COSMOS missions demand high enough <strong>faction standing</strong> to gain the missions &mdash; corp standing cannot be used instead.
       They also require higher standing than normal missions: <strong>2.00 for L2</strong>, <strong>4.00 for L3</strong> and <strong>6.00 for L4</strong>
       (normally 1.00 / 3.00 / 5.00). Checking an agent here marks the site they are located at and the shopping-list items required for their missions.
+      Agents tagged <span class="tag rep">Repeatable</span> offer the repeatable <em>Improving Relations</em> mission.
     </p>
 
     <div class="toolbar">
@@ -397,7 +398,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
           </tr>
           <tr data-name="Emma Tharkin" data-system="Otitoh" data-site="Friggi (gate)">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Emma Tharkin done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Emma_Tharkin">Emma Tharkin</a></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Emma_Tharkin">Emma Tharkin</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing max">9.20</span></td>
             <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
             <td data-label="Location">Otitoh - Friggi (gate)</td>
@@ -485,7 +486,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
           </tr>
           <tr data-name="Kaiko Maina" data-system="Otitoh" data-site="Friggi (gate)">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kaiko Maina done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaiko_Maina">Kaiko Maina</a></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaiko_Maina">Kaiko Maina</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing high">8.50</span></td>
             <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
             <td data-label="Location">Otitoh - Friggi (gate)</td>
@@ -725,7 +726,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
           </tr>
           <tr data-name="Zoun Makui" data-system="Otitoh" data-site="Friggi (gate)">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zoun Makui done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zoun_Makui">Zoun Makui</a></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zoun_Makui">Zoun Makui</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing max">9.90</span></td>
             <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
             <td data-label="Location">Otitoh - Friggi (gate)</td>
@@ -900,7 +901,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
     <div class="sec-head">
       <h2>Shopping list <span class="count" data-count="shopping"><b>0</b> / 0</span></h2>
     </div>
-    <p class="muted">Items that can be acquired <em>before</em> starting the mission that requires them. Many of these can also be found in contracts. This list is incomplete. Items marked <span class="tag buy">Can be bought</span><span class="tag src">market || contracts</span> can be purchased instead of farmed. Checking an agent auto-ticks the items required for that agent's missions &mdash; ticking an item here never changes an agent.</p>
+    <p class="muted">Items that can be acquired <em>before</em> starting the mission that requires them. Many of these can also be found in contracts. This list is incomplete. Items tagged <span class="tag src">Market</span> can be bought on the market; items tagged <span class="tag src alt">Contracts</span> can be bought from other players via contracts. Checking an agent auto-ticks the items required for that agent's missions &mdash; ticking an item here never changes an agent.</p>
 
     <div class="toolbar">
       <label class="search">
@@ -922,436 +923,436 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
           </tr>
         </thead>
         <tbody>
-          <tr data-name="Ancient Weapon (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Yru Hatamei|Tekirye Awazhen|Retin Ariato">
+          <tr data-channel="contracts" data-name="Ancient Weapon (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Yru Hatamei|Tekirye Awazhen|Retin Ariato">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ancient Weapon done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Ancient Weapon (3)</td>
+            <td class="main" data-label="Item">Ancient Weapon (3) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Yru_Hatamei#Ancient_Weaponry_(3_of_4)">Ancient Weaponry (3 of 4)</a> (1)<br><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Interested_in_Work?_(1_of_5)">Interested in Work? (1 of 5)</a> (1)<br><a href="https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_-_Unsuccessful_Excavation_(4_of_4)">Wiyrkomi Freelancing - Unsuccessful Excavation (4 of 4)</a> (1)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Assistant's Keychain" data-source="Contested Kazka Headquarters" data-required-for="Anou Dechien">
+          <tr data-channel="contracts" data-name="Assistant's Keychain" data-source="Contested Kazka Headquarters" data-required-for="Anou Dechien">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Assistant's Keychain done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Assistant's Keychain</td>
+            <td class="main" data-label="Item">Assistant's Keychain <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Anou_Dechien#The_Break_In_Expert_-_Keychain_(3_of_3)">The Break In Expert - Keychain (3 of 3)</a></td>
             <td data-label="Notes">Kazka Brothel, pocket 1 - Kazka Control Tower</td>
           </tr>
-          <tr data-name="Bag of Counterfeit Credits (500)" data-source="Contested Kazka Headquarters" data-required-for="Mika Etsuya">
+          <tr data-channel="contracts" data-name="Bag of Counterfeit Credits (500)" data-source="Contested Kazka Headquarters" data-required-for="Mika Etsuya">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bag of Counterfeit Credits done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Bag of Counterfeit Credits (500)</td>
+            <td class="main" data-label="Item">Bag of Counterfeit Credits (500) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Bad_Money_(2_of_4)">Protecting the Vault - Bad Money (2 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Bai's Corpse" data-source="Bai Tarziiki" data-required-for="Ryoke Aura">
+          <tr data-channel="contracts" data-name="Bai's Corpse" data-source="Bai Tarziiki" data-required-for="Ryoke Aura">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bai's Corpse done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Bai's Corpse</td>
+            <td class="main" data-label="Item">Bai's Corpse <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Bai_Tarziiki">Bai Tarziiki</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Last_Hindrance_(4_of_4)">Wrongfully Accused - Last Hindrance (4 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Bandit Spur (105)" data-source="Various rats" data-required-for="Arvo Watanen|Varma Fujimo|Krakan Rost">
+          <tr data-channel="contracts" data-name="Bandit Spur (105)" data-source="Various rats" data-required-for="Arvo Watanen|Varma Fujimo|Krakan Rost">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bandit Spur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Bandit Spur (105)</td>
+            <td class="main" data-label="Item">Bandit Spur (105) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Various rats</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Final_Blow_(4_of_5)">Artifact Excavations &ndash; Final Blow (4 of 5)</a> (25)<br><a href="https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Caldari_Troublemakers_(1_of_3)">Station In Crisis - Caldari Troublemakers (1 of 3)</a> (60)<br><a href="https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Good_To_Go_(1_of_5)">The Bank Heist - Good To Go (1 of 5)</a> (20)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Broken Bug Device" data-source="Contested Kazka Headquarters" data-required-for="Jali Tanaka">
+          <tr data-channel="contracts" data-name="Broken Bug Device" data-source="Contested Kazka Headquarters" data-required-for="Jali Tanaka">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Broken Bug Device done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Broken Bug Device</td>
+            <td class="main" data-label="Item">Broken Bug Device <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Jali_Tanaka#Bank_Security_%E2%80%93_Bug_Error_(2_of_3)">Bank Security &ndash; Bug Error (2 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Caldari Navy Convoy Disposition File" data-source="Contested Caldari Mining Facilities" data-required-for="Yka Katori">
+          <tr data-channel="contracts" data-name="Caldari Navy Convoy Disposition File" data-source="Contested Caldari Mining Facilities" data-required-for="Yka Katori">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Caldari Navy Convoy Disposition File done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Caldari Navy Convoy Disposition File</td>
+            <td class="main" data-label="Item">Caldari Navy Convoy Disposition File <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Yka_Katori#Interception_-_Data_Miner_(1_of_2)">Interception - Data Miner (1 of 2)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Caldari Shuttle" data-source="Market" data-buy="1" data-required-for="Akira Helkelen">
+          <tr data-channel="market" data-name="Caldari Shuttle" data-source="Market" data-buy="1" data-required-for="Akira Helkelen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Caldari Shuttle done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Caldari Shuttle <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td class="main" data-label="Item">Caldari Shuttle <span class="tags"><span class="tag src">Market</span></span></td>
             <td data-label="Source">Market</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Transportation_(3_of_5)">A Mad Scientists Dream &ndash; Transportation (3 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Cheri Mirei's DNA" data-source="Otitoh VI - Moon 3" data-required-for="Kaiya Tuuri">
+          <tr data-channel="contracts" data-name="Cheri Mirei's DNA" data-source="Otitoh VI - Moon 3" data-required-for="Kaiya Tuuri">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Cheri Mirei's DNA done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Cheri Mirei's DNA</td>
+            <td class="main" data-label="Item">Cheri Mirei's DNA <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otitoh VI &ndash; Moon 3</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Cheri_Mirei_(4_of_4)">Community Service &ndash; Cheri Mirei (4 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Construction Tools (60)" data-source="Urigamu's Warehouse" data-required-for="Midoki Urigamu">
+          <tr data-channel="contracts" data-name="Construction Tools (60)" data-source="Urigamu's Warehouse" data-required-for="Midoki Urigamu">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Construction Tools done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Construction Tools (60)</td>
+            <td class="main" data-label="Item">Construction Tools (60) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Urigamu%E2%80%98s_Warehouse">Urigamu's Warehouse</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Midoki_Urigamu#Pit_Stop_Slash_Saloon_-_The_Construction_Tools_(3_of_4)">Pit Stop Slash Saloon - The Construction Tools (3 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Drifter Spur (60)" data-source="Various rats" data-required-for="Kaiya Tuuri|Mika Etsuya">
+          <tr data-channel="contracts" data-name="Drifter Spur (60)" data-source="Various rats" data-required-for="Kaiya Tuuri|Mika Etsuya">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Drifter Spur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Drifter Spur (60)</td>
+            <td class="main" data-label="Item">Drifter Spur (60) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Various rats</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Pirates_at_Large_(1_of_4)">Community Service &ndash; Pirates at Large (1 of 4)</a> (30)<br><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Stirring_the_Nest_(1_of_4)">Protecting the Vault - Stirring the Nest (1 of 4)</a> (30)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Drill Parts (4)" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
+          <tr data-channel="contracts" data-name="Drill Parts (4)" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Drill Parts done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Drill Parts (4)</td>
+            <td class="main" data-label="Item">Drill Parts (4) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_The_Drill_(4_of_5)">A Mad Scientists Dream &ndash; The Drill (4 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Encoded Lai Dai Reports (6)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Oniya Arkimo">
+          <tr data-channel="contracts" data-name="Encoded Lai Dai Reports (6)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Oniya Arkimo">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Encoded Lai Dai Reports done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Encoded Lai Dai Reports (6)</td>
+            <td class="main" data-label="Item">Encoded Lai Dai Reports (6) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Oniya_Arkimo#Look,_I_Need_Your_Help_(1_of_3)">Look, I Need Your Help (1 of 3)</a> (1)<br><a href="https://wiki.eveuniversity.org/Oniya_Arkimo#Time_For_Payback_(3_of_3)">Time For Payback (3 of 3)</a> (5)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Frozen Food (500)" data-source="Market" data-buy="1" data-required-for="Arvo Watanen">
+          <tr data-channel="market" data-name="Frozen Food (500)" data-source="Market" data-buy="1" data-required-for="Arvo Watanen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Frozen Food done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Frozen Food (500) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td class="main" data-label="Item">Frozen Food (500) <span class="tags"><span class="tag src">Market</span></span></td>
             <td data-label="Source">Market</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Food_for_the_Needy_(1_of_5)">Artifact Excavations &ndash; Food for the Needy (1 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Garp Soolim's ID Tag" data-source="Contested Caldari Mining Facilities" data-required-for="">
+          <tr data-channel="contracts" data-name="Garp Soolim's ID Tag" data-source="Contested Caldari Mining Facilities" data-required-for="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Garp Soolim's ID Tag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Garp Soolim's ID Tag</td>
+            <td class="main" data-label="Item">Garp Soolim's ID Tag <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for">&mdash;</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Gatti's DNA" data-source="Otomainen XIII - Asteroid Belt 1" data-required-for="Hotaru Ahti">
+          <tr data-channel="contracts" data-name="Gatti's DNA" data-source="Otomainen XIII - Asteroid Belt 1" data-required-for="Hotaru Ahti">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gatti's DNA done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Gatti's DNA</td>
+            <td class="main" data-label="Item">Gatti's DNA <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otomainen XIII &ndash; Asteroid Belt 1</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Trespasser_(1_of_4)">Hotaru's Dilemma - Trespasser (1 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Goru's Shuttle" data-source="Otitoh VII - Moon 19" data-required-for="Goru Nikainen">
+          <tr data-channel="contracts" data-name="Goru's Shuttle" data-source="Otitoh VII - Moon 19" data-required-for="Goru Nikainen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Goru's Shuttle done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Goru's Shuttle</td>
+            <td class="main" data-label="Item">Goru's Shuttle <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otitoh VII - Moon 19</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Goru_Nikainen#Gambler's_Debt_-_The_Stolen_Shuttle_(1_of_3)">Gambler's Debt - The Stolen Shuttle (1 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Gunslinger Spur (25)" data-source="Various rats" data-required-for="Varma Fujimo">
+          <tr data-channel="contracts" data-name="Gunslinger Spur (25)" data-source="Various rats" data-required-for="Varma Fujimo">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gunslinger Spur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Gunslinger Spur (25)</td>
+            <td class="main" data-label="Item">Gunslinger Spur (25) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Various rats</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Hooligan_Gang_Leaders_(3_of_3)">Station In Crisis - Hooligan Gang Leaders (3 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Guristas Diamond Tag (30)" data-source="" data-required-for="Zoun Makui">
+          <tr data-channel="contracts" data-name="Guristas Diamond Tag (30)" data-source="" data-required-for="Zoun Makui">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Diamond Tag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Guristas Diamond Tag (30)</td>
+            <td class="main" data-label="Item">Guristas Diamond Tag (30) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
-            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zoun_Makui#Improving_Relations">Improving Relations</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zoun_Makui#Improving_Relations">Improving Relations</a> <span class="tags"><span class="tag rep" title="Repeatable mission">Repeatable</span></span></td>
             <td data-label="Notes">9.90 standing</td>
           </tr>
-          <tr data-name="Guristas Gold Tag (30)" data-source="" data-required-for="Emma Tharkin">
+          <tr data-channel="contracts" data-name="Guristas Gold Tag (30)" data-source="" data-required-for="Emma Tharkin">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Gold Tag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Guristas Gold Tag (30)</td>
+            <td class="main" data-label="Item">Guristas Gold Tag (30) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
-            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Emma_Tharkin#Improving_Relations">Improving Relations</a> (Emma Tharkin)</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Emma_Tharkin#Improving_Relations">Improving Relations</a> (Emma Tharkin) <span class="tags"><span class="tag rep" title="Repeatable mission">Repeatable</span></span></td>
             <td data-label="Notes">9.20 standing</td>
           </tr>
-          <tr data-name="Guristas Outlaw Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen|Yru Hatamei">
+          <tr data-channel="contracts" data-name="Guristas Outlaw Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen|Yru Hatamei">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Outlaw Dogtag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Guristas Outlaw Dogtag (10)</td>
+            <td class="main" data-label="Item">Guristas Outlaw Dogtag (10) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Pirates_Brought_to_Justice_(4_of_5)">Pirates Brought to Justice (4 of 5)</a> (5)<br><a href="https://wiki.eveuniversity.org/Yru_Hatamei#Training_Ground_Destruction_(4_of_4)">Training Ground Destruction (4 of 4)</a> (5)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Guristas Shuttle" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
+          <tr data-channel="contracts" data-name="Guristas Shuttle" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Shuttle done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Guristas Shuttle</td>
+            <td class="main" data-label="Item">Guristas Shuttle <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_The_Getaway_(3_of_3)">Escape From The Lion's Den - The Getaway (3 of 3)</a></td>
             <td data-label="Notes">Same location as the agent</td>
           </tr>
-          <tr data-name="Guristas Silver Tag (30)" data-source="" data-required-for="Kaiko Maina">
+          <tr data-channel="contracts" data-name="Guristas Silver Tag (30)" data-source="" data-required-for="Kaiko Maina">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Silver Tag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Guristas Silver Tag (30)</td>
+            <td class="main" data-label="Item">Guristas Silver Tag (30) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
-            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiko_Maina#Improving_Relations">Improving Relations</a> (Kaiko Maina)</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiko_Maina#Improving_Relations">Improving Relations</a> (Kaiko Maina) <span class="tags"><span class="tag rep" title="Repeatable mission">Repeatable</span></span></td>
             <td data-label="Notes">8.50 standing</td>
           </tr>
-          <tr data-name="Isogen (2674)" data-source="" data-required-for="Kusan Niemenen">
+          <tr data-channel="contracts" data-name="Isogen (2674)" data-source="" data-required-for="Kusan Niemenen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Isogen done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Isogen (2674)</td>
+            <td class="main" data-label="Item">Isogen (2674) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kusan_Niemenen#Lookin'_For_Work?_(1_of_2)">Lookin' For Work? (1 of 2)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Jakon's Head" data-source="Otitoh VII - Moon 19" data-required-for="Akemon Tolan">
+          <tr data-channel="contracts" data-name="Jakon's Head" data-source="Otitoh VII - Moon 19" data-required-for="Akemon Tolan">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jakon's Head done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Jakon's Head</td>
+            <td class="main" data-label="Item">Jakon's Head <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otitoh VII &ndash; Moon 19</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Mission_Impossible_(1_of_3)">Escape From The Lion's Den - Mission Impossible (1 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Jedon Hekkiren's Belongings (10)" data-source="Contested Guristas Outrider Post" data-required-for="Ikimara Hochi">
+          <tr data-channel="contracts" data-name="Jedon Hekkiren's Belongings (10)" data-source="Contested Guristas Outrider Post" data-required-for="Ikimara Hochi">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jedon Hekkiren's Belongings done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Jedon Hekkiren's Belongings (10)</td>
+            <td class="main" data-label="Item">Jedon Hekkiren's Belongings (10) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ikimara_Hochi#Banker's_Stash_-_Stolen_Goods_(1_of_3)">Banker's Stash - Stolen Goods (1 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Jorek Lephny" data-source="Rush Town Ruins" data-required-for="Hitami Magye">
+          <tr data-channel="contracts" data-name="Jorek Lephny" data-source="Rush Town Ruins" data-required-for="Hitami Magye">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jorek Lephny done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Jorek Lephny</td>
+            <td class="main" data-label="Item">Jorek Lephny <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Jorek_Lephny_(2_of_5)">Mercantile Settlers - Jorek Lephny (2 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Kepheur's Keycard" data-source="Contested Kazka Headquarters" data-required-for="Mintu Oshima">
+          <tr data-channel="contracts" data-name="Kepheur's Keycard" data-source="Contested Kazka Headquarters" data-required-for="Mintu Oshima">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kepheur's Keycard done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Kepheur's Keycard</td>
+            <td class="main" data-label="Item">Kepheur's Keycard <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mintu_Oshima#Hidden_Treasure_-_Retrieve_The_Keycard_(3_of_4)">Hidden Treasure - Retrieve The Keycard (3 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Loki's DNA" data-source="Contested Guristas Outrider Post" data-required-for="Ratan Saturi">
+          <tr data-channel="contracts" data-name="Loki's DNA" data-source="Contested Guristas Outrider Post" data-required-for="Ratan Saturi">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Loki's DNA done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Loki's DNA</td>
+            <td class="main" data-label="Item">Loki's DNA <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ratan_Saturi#Cattle_Thieves_-_Revenge_Is_Sweet_(3_of_3)">Cattle Thieves - Revenge Is Sweet (3 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Makele's Tag" data-source="Otitoh VI - Moon 2" data-required-for="Arvo Watanen">
+          <tr data-channel="contracts" data-name="Makele's Tag" data-source="Otitoh VI - Moon 2" data-required-for="Arvo Watanen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Makele's Tag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Makele's Tag</td>
+            <td class="main" data-label="Item">Makele's Tag <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otitoh VI &ndash; Moon 2</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Bandits_Beware_(3_of_5)">Artifact Excavations &ndash; Bandits Beware (3 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Manchura's Logs" data-source="Contested Guristas Outrider Post" data-required-for="Zabonn Michi">
+          <tr data-channel="contracts" data-name="Manchura's Logs" data-source="Contested Guristas Outrider Post" data-required-for="Zabonn Michi">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Manchura's Logs done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Manchura's Logs</td>
+            <td class="main" data-label="Item">Manchura's Logs <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zabonn_Michi#Lost_Love_-_Manchura_The_Pirate_(1_of_3)">Lost Love - Manchura The Pirate (1 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Marauder Spur (5)" data-source="Various rats" data-required-for="Kochi Utrainen">
+          <tr data-channel="contracts" data-name="Marauder Spur (5)" data-source="Various rats" data-required-for="Kochi Utrainen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Marauder Spur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Marauder Spur (5)</td>
+            <td class="main" data-label="Item">Marauder Spur (5) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Various rats</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kochi_Utrainen#The_Test_of_Competence_%E2%80%93_The_Roaming_Brigands_(2_of_2)">The Test of Competence &ndash; The Roaming Brigands (2 of 2)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Miner (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen">
+          <tr data-channel="contracts" data-name="Miner (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Miner done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Miner (3)</td>
+            <td class="main" data-label="Item">Miner (3) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Troubles_With_Outlaws_(2_of_5)">Troubles With Outlaws (2 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Miner II (5)" data-source="Market" data-buy="1" data-required-for="Hitami Magye">
+          <tr data-channel="market" data-name="Miner II (5)" data-source="Market" data-buy="1" data-required-for="Hitami Magye">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Miner II done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Miner II (5) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td class="main" data-label="Item">Miner II (5) <span class="tags"><span class="tag src">Market</span></span></td>
             <td data-label="Source">Market</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Laser_Shortage_(4_of_5)">Mercantile Settlers - Laser Shortage (4 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Myrkai's Data Chip" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
+          <tr data-channel="contracts" data-name="Myrkai's Data Chip" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Myrkai's Data Chip done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Myrkai's Data Chip</td>
+            <td class="main" data-label="Item">Myrkai's Data Chip <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Key_To_Survival_(2_of_3)">Escape From The Lion's Den - Key To Survival (2 of 3)</a></td>
             <td data-label="Notes">Next to the agent</td>
           </tr>
-          <tr data-name="Nugoeihuvi Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+          <tr data-channel="contracts" data-name="Nugoeihuvi Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nugoeihuvi Dogtag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Nugoeihuvi Dogtag (10)</td>
+            <td class="main" data-label="Item">Nugoeihuvi Dogtag (10) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Will_You_Help%3F_(1_of_2)">Will You Help? (1 of 2)</a> (5)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Nugoeihuvi Transaction Logs" data-source="Contested Caldari Mining Facilities" data-required-for="Aisha Gojivi">
+          <tr data-channel="contracts" data-name="Nugoeihuvi Transaction Logs" data-source="Contested Caldari Mining Facilities" data-required-for="Aisha Gojivi">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nugoeihuvi Transaction Logs done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Nugoeihuvi Transaction Logs</td>
+            <td class="main" data-label="Item">Nugoeihuvi Transaction Logs <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Aisha_Gojivi#Nefarious_Business_%E2%80%93_Songbird_(2_of_4)">Nefarious Business &ndash; Songbird (2 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Omber (400)" data-source="" data-required-for="Matani Jitainen">
+          <tr data-channel="contracts" data-name="Omber (400)" data-source="" data-required-for="Matani Jitainen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Omber done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Omber (400)</td>
+            <td class="main" data-label="Item">Omber (400) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_A_Little_More_For_My_Friends_(2_of_3)">The Lai Dai Research Project - A Little More For My Friends (2 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Outlaw Spur (40)" data-source="Various rats" data-required-for="Hitami Magye">
+          <tr data-channel="contracts" data-name="Outlaw Spur (40)" data-source="Various rats" data-required-for="Hitami Magye">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Outlaw Spur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Outlaw Spur (40)</td>
+            <td class="main" data-label="Item">Outlaw Spur (40) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Various rats</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Outlaws_(5_of_5)">Mercantile Settlers - Outlaws (5 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Oxygen (137)" data-source="Market or Planetary Industry" data-buy="1" data-required-for="Istei Poyri">
+          <tr data-channel="market" data-name="Oxygen (137)" data-source="Market or Planetary Industry" data-buy="1" data-required-for="Istei Poyri">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Oxygen done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Oxygen (137) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td class="main" data-label="Item">Oxygen (137) <span class="tags"><span class="tag src">Market</span></span></td>
             <td data-label="Source">Market or <a href="https://wiki.eveuniversity.org/Planetary_Industry">Planetary Industry</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Workers_Need_Air%E2%80%A6_(3_of_4)">Nugoeihuvi Freelancer &ndash; Workers Need Air&hellip; (3 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Pakkori's Hat" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Krakan Rost">
+          <tr data-channel="contracts" data-name="Pakkori's Hat" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Krakan Rost">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pakkori's Hat done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Pakkori's Hat</td>
+            <td class="main" data-label="Item">Pakkori's Hat <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Inside_Track_(5_of_5)">The Bank Heist - Inside Track (5 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Pansya's Head" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
+          <tr data-channel="contracts" data-name="Pansya's Head" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pansya's Head done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Pansya's Head</td>
+            <td class="main" data-label="Item">Pansya's Head <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Unforgiving_(4_of_4)">The Regiment &ndash; Unforgiving (4 of 4)</a></td>
             <td data-label="Notes">Contested Plagioclase field</td>
           </tr>
-          <tr data-name="Parts of Printing Machine (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Mika Etsuya">
+          <tr data-channel="contracts" data-name="Parts of Printing Machine (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Mika Etsuya">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Parts of Printing Machine done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Parts of Printing Machine (5)</td>
+            <td class="main" data-label="Item">Parts of Printing Machine (5) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Dry_Credit_Death_(4_of_4)">Protecting the Vault - Dry Credit Death (4 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Pata Wakiro's DNA" data-source="Kazka Blockade" data-required-for="Hotaru Ahti">
+          <tr data-channel="contracts" data-name="Pata Wakiro's DNA" data-source="Kazka Blockade" data-required-for="Hotaru Ahti">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pata Wakiro's DNA done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Pata Wakiro's DNA</td>
+            <td class="main" data-label="Item">Pata Wakiro's DNA <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Kazka_Blockade">Kazka Blockade</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Break_The_Blockade_(3_of_4)">Hotaru's Dilemma - Break The Blockade (3 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Powdered Cubensis (200)" data-source="Contested Caldari Mining Facilities" data-required-for="Mirmon Gorgoz">
+          <tr data-channel="contracts" data-name="Powdered Cubensis (200)" data-source="Contested Caldari Mining Facilities" data-required-for="Mirmon Gorgoz">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Powdered Cubensis done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Powdered Cubensis (200)</td>
+            <td class="main" data-label="Item">Powdered Cubensis (200) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mirmon_Gorgoz#The_Medicine_Man_%E2%80%93_A_Pinch_of_Spice_(1_of_3)">The Medicine Man &ndash; A Pinch of Spice (1 of 3)</a> (100)</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Propel Dynamics Dogtag (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Istei Poyri">
+          <tr data-channel="contracts" data-name="Propel Dynamics Dogtag (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Istei Poyri">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Propel Dynamics Dogtag done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Propel Dynamics Dogtag (5)</td>
+            <td class="main" data-label="Item">Propel Dynamics Dogtag (5) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Bad_News_(4_of_4)">Nugoeihuvi Freelancer &ndash; Bad News (4 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Prototype Cloaking Device" data-source="Market" data-buy="1" data-required-for="Ryoke Aura">
+          <tr data-channel="market" data-name="Prototype Cloaking Device" data-source="Market" data-buy="1" data-required-for="Ryoke Aura">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Prototype Cloaking Device done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Prototype Cloaking Device <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td class="main" data-label="Item">Prototype Cloaking Device <span class="tags"><span class="tag src">Market</span></span></td>
             <td data-label="Source">Market</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_The_Cloaking_Device_(3_of_4)">Wrongfully Accused - The Cloaking Device (3 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Quao Kale" data-source="Contested Kazka Headquarters" data-required-for="Raidon Setala">
+          <tr data-channel="contracts" data-name="Quao Kale" data-source="Contested Kazka Headquarters" data-required-for="Raidon Setala">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Quao Kale done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Quao Kale</td>
+            <td class="main" data-label="Item">Quao Kale <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Quao_(4_of_5)">The Caldari Migrants - Quao (4 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Ratei's Insignia" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
+          <tr data-channel="contracts" data-name="Ratei's Insignia" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ratei's Insignia done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Ratei's Insignia</td>
+            <td class="main" data-label="Item">Ratei's Insignia <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Last_Hindrance_(5_of_5)">A Mad Scientists Dream &ndash; Last Hindrance (5 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Raytio Family Supplies (30)" data-source="Otomainen VIII - Asteroid Belt 1" data-required-for="Tamoko Raytio">
+          <tr data-channel="contracts" data-name="Raytio Family Supplies (30)" data-source="Otomainen VIII - Asteroid Belt 1" data-required-for="Tamoko Raytio">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Raytio Family Supplies done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Raytio Family Supplies (30)</td>
+            <td class="main" data-label="Item">Raytio Family Supplies (30) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otomainen VIII &ndash; Asteroid Belt 1</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tamoko_Raytio#Wagon_Christ_-_Lost_Supplies_(2_of_3)">Wagon Christ - Lost Supplies (2 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Ryoke Laika" data-source="Contested Guristas Outrider Post" data-required-for="Eteri Tazaki">
+          <tr data-channel="contracts" data-name="Ryoke Laika" data-source="Contested Guristas Outrider Post" data-required-for="Eteri Tazaki">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ryoke Laika done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Ryoke Laika</td>
+            <td class="main" data-label="Item">Ryoke Laika <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Finding_Ryoke_(3_of_3)">Foul Play - Finding Ryoke (3 of 3)</a></td>
             <td data-label="Notes">Pocket 1 - Contested Veldspar Field</td>
           </tr>
-          <tr data-name="Scanner Data II" data-source="Belt rats" data-required-for="Raidon Setala">
+          <tr data-channel="contracts" data-name="Scanner Data II" data-source="Belt rats" data-required-for="Raidon Setala">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Scanner Data II done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Scanner Data II</td>
+            <td class="main" data-label="Item">Scanner Data II <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Reconnaissance_Point_2_(2_of_5)">The Caldari Migrants - Reconnaissance Point 2 (2 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Scanner Data III" data-source="Belt rats" data-required-for="Raidon Setala">
+          <tr data-channel="contracts" data-name="Scanner Data III" data-source="Belt rats" data-required-for="Raidon Setala">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Scanner Data III done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Scanner Data III</td>
+            <td class="main" data-label="Item">Scanner Data III <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_%E2%80%93_Reconnaissance_Point_3_(3_of_5)">The Caldari Migrants &ndash; Reconnaissance Point 3 (3 of 5)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Secret Garage Coordinates" data-source="Belt rats" data-required-for="Skurk Tekkurs">
+          <tr data-channel="contracts" data-name="Secret Garage Coordinates" data-source="Belt rats" data-required-for="Skurk Tekkurs">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Secret Garage Coordinates done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Secret Garage Coordinates</td>
+            <td class="main" data-label="Item">Secret Garage Coordinates <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Skurk_Tekkurs#Designated_Driver_-_The_Garage_(1_of_4)">Designated Driver - The Garage (1 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Shady Acres Deed" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
+          <tr data-channel="contracts" data-name="Shady Acres Deed" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Shady Acres Deed done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Shady Acres Deed</td>
+            <td class="main" data-label="Item">Shady Acres Deed <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Stolen_Deed_(1_of_4)">The Regiment &ndash; Stolen Deed (1 of 4)</a></td>
             <td data-label="Notes">Contested Plagioclase Field, Black Mask bandits</td>
           </tr>
-          <tr data-name="Sheriff Togany" data-source="Otitoh VII - Moon 5" data-required-for="Ryoke Aura">
+          <tr data-channel="contracts" data-name="Sheriff Togany" data-source="Otitoh VII - Moon 5" data-required-for="Ryoke Aura">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Sheriff Togany done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Sheriff Togany</td>
+            <td class="main" data-label="Item">Sheriff Togany <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">Otitoh VII &ndash; Moon 5</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Who_Shot_the_Sheriff_(2_of_4)">Wrongfully Accused - Who Shot the Sheriff (2 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Spare Parts (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+          <tr data-channel="contracts" data-name="Spare Parts (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Spare Parts done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Spare Parts (4)</td>
+            <td class="main" data-label="Item">Spare Parts (4) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Edge_of_Reason">Edge of Reason</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Talocan Sketch Book (4)" data-source="Contested Kazka Headquarters" data-required-for="Fumiku Viljanen">
+          <tr data-channel="contracts" data-name="Talocan Sketch Book (4)" data-source="Contested Kazka Headquarters" data-required-for="Fumiku Viljanen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Talocan Sketch Book done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Talocan Sketch Book (4)</td>
+            <td class="main" data-label="Item">Talocan Sketch Book (4) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Fumiku_Viljanen#Deadly_Diploma">Deadly Diploma</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="User Manual (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+          <tr data-channel="contracts" data-name="User Manual (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="User Manual done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">User Manual (4)</td>
+            <td class="main" data-label="Item">User Manual (4) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for">&mdash;</td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Veldspar (1,000)" data-source="" data-required-for="Matani Jitainen">
+          <tr data-channel="contracts" data-name="Veldspar (1,000)" data-source="" data-required-for="Matani Jitainen">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Veldspar done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Veldspar (1,000)</td>
+            <td class="main" data-label="Item">Veldspar (1,000) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source">&mdash;</td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_Ore_Shipment_(1_of_3)">The Lai Dai Research Project - Ore Shipment (1 of 3)</a></td>
             <td data-label="Notes">3 jump high-sec transport mission (free Veldspar) or bring your own.</td>
           </tr>
-          <tr data-name="Wiyrkomi Rifles (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Retin Ariato">
+          <tr data-channel="contracts" data-name="Wiyrkomi Rifles (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Retin Ariato">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Wiyrkomi Rifles done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Wiyrkomi Rifles (3)</td>
+            <td class="main" data-label="Item">Wiyrkomi Rifles (3) <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_%E2%80%93_Missing_Weapon_Stash_(1_of_4)">Wiyrkomi Freelancing &ndash; Missing Weapon Stash (1 of 4)</a></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
-          <tr data-name="Zvarin Karsha" data-source="Zvarin Karsha" data-required-for="Eteri Tazaki">
+          <tr data-channel="contracts" data-name="Zvarin Karsha" data-source="Zvarin Karsha" data-required-for="Eteri Tazaki">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zvarin Karsha done"><span class="box"></span></label></td>
-            <td class="main" data-label="Item">Zvarin Karsha</td>
+            <td class="main" data-label="Item">Zvarin Karsha <span class="tags"><span class="tag src alt">Contracts</span></span></td>
             <td data-label="Source"><a href="https://wiki.eveuniversity.org/Zvarin_Karsha">Zvarin Karsha</a></td>
             <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Ryoke's_Friend_(2_of_3)">Foul Play - Ryoke's Friend (2 of 3)</a></td>
             <td data-label="Notes">&mdash;</td>
