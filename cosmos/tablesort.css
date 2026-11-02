@@ -1,0 +1,49 @@
+/* Click-to-sort table headers (spreadsheet style) for the COSMOS trackers. */
+thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+thead th.sortable:hover {
+  color: var(--cyan2);
+  background: rgba(255, 209, 102, 0.06);
+}
+
+thead th.sortable:focus-visible {
+  outline: 2px solid var(--cyan2);
+  outline-offset: -2px;
+}
+
+thead th.sortable::after {
+  content: "\2195";
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  letter-spacing: 0;
+  opacity: 0.35;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+thead th.sortable[data-dir="asc"]::after {
+  content: "\25B2";
+  opacity: 1;
+  color: var(--cyan);
+}
+
+thead th.sortable[data-dir="desc"]::after {
+  content: "\25BC";
+  opacity: 1;
+  color: var(--cyan);
+}
+
+html[data-theme="light"] thead th.sortable:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+@media print {
+  thead th.sortable::after {
+    content: none;
+  }
+}
