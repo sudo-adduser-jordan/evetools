@@ -180,35 +180,37 @@
         background-color: color-mix(in srgb, var(--accent) 4%, transparent);
       }
 
-      /* Compact rows for the four tools in the list column. */
+      /* Compact rows for the five tools in the list column. */
       .gate-panel.list-item {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        grid-template-rows: auto auto;
-        align-content: center;
-        align-items: start;
-        justify-content: normal;
-        gap: 3px 18px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 18px;
         padding: clamp(14px, 1.6vw, 22px) clamp(22px, 2.4vw, 32px);
       }
-      .list-item .panel-icon {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        align-self: center;
+      .list-item > .panel-icon {
+        flex: 0 0 auto;
       }
-      .list-item h2 {
-        grid-column: 2;
-        grid-row: 1;
+      .list-body {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .list-copy {
+        flex: 0 1 44ch;
+        min-width: 0;
+      }
+      .list-copy h2 {
         font-size: clamp(19px, 1.6vw, 24px);
       }
-      .list-item .lead {
-        grid-column: 2;
-        grid-row: 2;
-        max-width: 78ch;
+      .list-copy .lead {
+        max-width: 44ch;
       }
       .list-item .panel-cta {
-        grid-column: 3;
-        grid-row: 1 / span 2;
+        flex: 0 0 auto;
         align-self: center;
         margin: 0;
         padding: 7px 14px;
@@ -238,6 +240,14 @@
         place-items: center;
         background: color-mix(in srgb, var(--accent) 12%, transparent);
         border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+        text-decoration: none;
+        cursor: pointer;
+        transform-origin: center;
+        transition:
+          background 0.15s,
+          border-color 0.15s,
+          box-shadow 0.15s,
+          transform 0.15s;
       }
       .panel-icon svg {
         width: 24px;
@@ -297,35 +307,60 @@
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
+        transform-origin: center;
         transition:
           background 0.15s,
           color 0.15s,
           border-color 0.15s,
-          box-shadow 0.15s;
+          box-shadow 0.15s,
+          transform 0.15s;
       }
       .panel-cta .arrow {
         transition: transform 0.15s;
       }
-      /* First hover: highlight the button when the whole panel is hovered. */
+      /* First hover: highlight the controls when the whole panel is hovered. */
       .gate-panel:hover .panel-cta {
         background: color-mix(in srgb, var(--accent) 12%, transparent);
       }
       .gate-panel:hover .panel-cta .arrow {
         transform: translateX(3px);
       }
-      /* Second hover: the button itself fills with its accent. */
+      .gate-panel:hover .panel-icon {
+        background: color-mix(in srgb, var(--accent) 18%, transparent);
+      }
+      /* Second hover: the control itself fills with its accent. */
       .gate-panel .panel-cta:hover,
       .gate-panel .panel-cta:focus-visible {
         background: var(--accent);
         border-color: var(--accent);
         color: var(--bg);
         box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 32%, transparent);
+        transform: scale(1.05);
       }
       .gate-panel .panel-cta:hover .arrow,
       .gate-panel .panel-cta:focus-visible .arrow {
         transform: translateX(5px);
       }
-      .panel-cta:focus-visible {
+      .gate-panel .panel-icon:hover,
+      .gate-panel .panel-icon:focus-visible {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 32%, transparent);
+        transform: scale(1.08);
+      }
+      .gate-panel .panel-icon:hover svg,
+      .gate-panel .panel-icon:focus-visible svg {
+        stroke: var(--bg);
+      }
+      /* Press feedback shrinks the control back down. */
+      .gate-panel .panel-cta:active {
+        transform: scale(0.96);
+      }
+      .gate-panel .panel-icon:active {
+        transform: scale(0.94);
+      }
+      .panel-cta:focus-visible,
+      .panel-icon:focus-visible {
         outline: 2px solid var(--focus);
         outline-offset: 3px;
       }
@@ -403,6 +438,17 @@
           gap: 12px;
           padding: 30px 26px;
         }
+        .gate-panel.list-item .list-body {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+          width: 100%;
+        }
+        .gate-panel.list-item .list-copy {
+          flex: 0 0 auto;
+          width: 100%;
+        }
         .list-item .panel-icon,
         .list-item h2,
         .list-item .lead,
@@ -435,12 +481,12 @@
 
     <main class="gate">
       <article class="gate-panel gate-cosmos">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
+        <a class="panel-icon" href="cosmos/index.html" aria-label="Open COSMOS Tracker">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="9" />
             <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" />
           </svg>
-        </span>
+        </a>
         <h2>COSMOS Tracker <span class="beta-tag">New</span></h2>
         <p class="lead">
           Mission, site, and shopping-list trackers for all eight empire and pirate COSMOS
@@ -456,77 +502,97 @@
       </article>
 
       <article class="gate-panel list-item gate-janice">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
+        <a class="panel-icon" href="https://janice.e-351.com/" aria-label="Open Janice">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" />
             <circle cx="7.5" cy="7.5" r="1.5" />
           </svg>
-        </span>
-        <h2>Janice</h2>
-        <p class="lead">
-          Item appraisal and market comparison for EVE Online — value loot, hangar
-          contents, and contracts against live prices.
-        </p>
-        <a class="panel-cta" href="https://janice.e-351.com/" aria-label="Open Janice">Open <span class="arrow">&#8594;</span></a>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>Janice</h2>
+            <p class="lead">
+              Item appraisal and market comparison for EVE Online — value loot, hangar
+              contents, and contracts against live prices.
+            </p>
+          </div>
+          <a class="panel-cta" href="https://janice.e-351.com/" aria-label="Open Janice">Open <span class="arrow">&#8594;</span></a>
+        </div>
       </article>
 
       <article class="gate-panel list-item gate-market">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
+        <a class="panel-icon" href="https://evemarketbrowser.com/" aria-label="Open EVE Market Browser">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3" y="4" width="18" height="16" rx="2" />
             <path d="M3 9h18" />
             <path d="m7 15 3-3 2.5 2.5L17 10" />
           </svg>
-        </span>
-        <h2>EVE Market Browser</h2>
-        <p class="lead">
-          Real-time market data for PLEX and every commodity, ship, and module — track
-          current prices, trends, and trade opportunities across regions.
-        </p>
-        <a class="panel-cta" href="https://evemarketbrowser.com/" aria-label="Open EVE Market Browser">Open <span class="arrow">&#8594;</span></a>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>EVE Market Browser</h2>
+            <p class="lead">
+              Real-time market data for PLEX and every commodity, ship, and module — track
+              current prices, trends, and trade opportunities across regions.
+            </p>
+          </div>
+          <a class="panel-cta" href="https://evemarketbrowser.com/" aria-label="Open EVE Market Browser">Open <span class="arrow">&#8594;</span></a>
+        </div>
       </article>
 
       <article class="gate-panel list-item gate-industry">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
+        <a class="panel-icon" href="https://eveindustry.app/login" aria-label="Open EVE Industry">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M3 21h18" />
             <path d="M4 21V10l5 3v-3l5 3v-3l5 3v8" />
             <path d="M8 21v-4h3v4" />
           </svg>
-        </span>
-        <h2>EVE Industry</h2>
-        <p class="lead">
-          Industry planning and production tracking for your EVE characters — sign in with
-          EVE SSO or explore the demo.
-        </p>
-        <a class="panel-cta" href="https://eveindustry.app/login" aria-label="Open EVE Industry">Open <span class="arrow">&#8594;</span></a>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>EVE Industry</h2>
+            <p class="lead">
+              Industry planning and production tracking for your EVE characters — sign in with
+              EVE SSO or explore the demo.
+            </p>
+          </div>
+          <a class="panel-cta" href="https://eveindustry.app/login" aria-label="Open EVE Industry">Open <span class="arrow">&#8594;</span></a>
+        </div>
       </article>
 
       <article class="gate-panel list-item gate-lp">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
-        </span>
-        <h2>LP Store Calculator</h2>
-        <p class="lead">
-          Every loyalty point store offer in New Eden, ranked by ISK per LP — priced against
-          live Jita market depth with fees, volume, and access-risk filters.
-        </p>
-        <a class="panel-cta" href="https://eve.ayokei.to/lp/" aria-label="Open LP Store Calculator">Open <span class="arrow">&#8594;</span></a>
+        <a class="panel-icon" href="https://eve.ayokei.to/lp/" aria-label="Open LP Store Calculator">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>LP Store Calculator</h2>
+            <p class="lead">
+              Every loyalty point store offer in New Eden, ranked by ISK per LP — priced against
+              live Jita market depth with fees, volume, and access-risk filters.
+            </p>
+          </div>
+          <a class="panel-cta" href="https://eve.ayokei.to/lp/" aria-label="Open LP Store Calculator">Open <span class="arrow">&#8594;</span></a>
+        </div>
       </article>
 
       <article class="gate-panel list-item gate-mail">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
+        <a class="panel-icon" href="https://sudo-adduser-jordan.github.io/marketmailer/" aria-label="Open Marketmailer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3" y="5" width="18" height="14" rx="2" />
             <path d="m3 7 9 6 9-6" />
           </svg>
-        </span>
-        <h2>Marketmailer</h2>
-        <p class="lead">
-          An EVE Online market watcher that polls ESI market orders and surfaces arbitrage
-          opportunities against the Jita buy wall.
-        </p>
-        <a class="panel-cta" href="https://sudo-adduser-jordan.github.io/marketmailer/" aria-label="Open Marketmailer">Open <span class="arrow">&#8594;</span></a>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>Marketmailer</h2>
+            <p class="lead">
+              An EVE Online market watcher that polls ESI market orders and surfaces arbitrage
+              opportunities against the Jita buy wall.
+            </p>
+          </div>
+          <a class="panel-cta" href="https://sudo-adduser-jordan.github.io/marketmailer/" aria-label="Open Marketmailer">Open <span class="arrow">&#8594;</span></a>
+        </div>
       </article>
     </main>
 
