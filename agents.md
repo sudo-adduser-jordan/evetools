@@ -7,3 +7,12 @@
 - [Guristas COSMOS](https://wiki.eveuniversity.org/Guristas_COSMOS)
 - [Minmatar COSMOS](https://wiki.eveuniversity.org/Minmatar_COSMOS)
 - [Serpentis COSMOS](https://wiki.eveuniversity.org/Serpentis_COSMOS)
+
+- [Character contracts](https://esi.evetech.net/latest/characters/{character_id}/contracts/?datasource=tranquility)
+- [Character contract items](https://esi.evetech.net/latest/characters/{character_id}/contracts/{contract_id}/items/?datasource=tranquility)
+- [Corporation contracts](https://esi.evetech.net/latest/corporations/{corporation_id}/contracts/?datasource=tranquility)
+- [Corporation contract items](https://esi.evetech.net/latest/corporations/{corporation_id}/contracts/{contract_id}/items/?datasource=tranquility)
+- [Public contracts](https://esi.evetech.net/latest/contracts/public/{region_id}/?datasource=tranquility)
+- [Public contract items](https://esi.evetech.net/latest/contracts/public/items/{contract_id}/?datasource=tranquility)
+- [Character assets](https://esi.evetech.net/latest/characters/{character_id}/assets/?datasource=tranquility)
+- [Corporation assets](https://esi.evetech.net/latest/corporations/{corporation_id}/assets/?datasource=tranquility)
