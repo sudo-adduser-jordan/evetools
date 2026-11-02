@@ -38,6 +38,7 @@
         --green: #4ade80;
         --sky: #57c7ff;
         --orange: #ff8a5c;
+        --red: #f87171;
         --focus: #67e8f9;
       }
       *,
@@ -79,14 +80,14 @@
       }
 
       /* 1:list gate: the COSMOS tracker is the featured "1" panel at 3/7 width;
-         the LP calculator, Janice, and EVE Market Browser form the three-item
-         list. Each tool keeps its own accent: LP teal, Janice gold, market
-         violet, COSMOS green. */
+         the remaining tools form the stacked list. Each tool keeps its own
+         accent: LP teal, Janice gold, market violet, industry orange, gatecamp
+         red, mail sky, COSMOS green. */
       .gate {
         flex: 1;
         display: grid;
         grid-template-columns: 3fr 4fr;
-        grid-template-rows: repeat(5, 1fr);
+        grid-template-rows: repeat(6, 1fr);
       }
       .gate-panel.gate-cosmos {
         grid-column: 1;
@@ -98,6 +99,7 @@
       .gate-janice,
       .gate-market,
       .gate-industry,
+      .gate-gatecamp,
       .gate-mail {
         grid-column: 2;
       }
@@ -110,11 +112,14 @@
       .gate-industry {
         grid-row: 3;
       }
-      .gate-lp {
+      .gate-gatecamp {
         grid-row: 4;
       }
-      .gate-mail {
+      .gate-lp {
         grid-row: 5;
+      }
+      .gate-mail {
+        grid-row: 6;
       }
       .gate-panel {
         --accent: var(--teal);
@@ -136,6 +141,7 @@
       }
       .gate-market,
       .gate-industry,
+      .gate-gatecamp,
       .gate-lp,
       .gate-mail {
         border-top: 1px solid var(--line);
@@ -148,6 +154,9 @@
       }
       .gate-industry {
         --accent: var(--orange);
+      }
+      .gate-gatecamp {
+        --accent: var(--red);
       }
       .gate-mail {
         --accent: var(--sky);
@@ -410,6 +419,7 @@
         .gate-janice,
         .gate-market,
         .gate-industry,
+        .gate-gatecamp,
         .gate-mail,
         .gate-cosmos {
           grid-column: 1;
@@ -427,6 +437,7 @@
         }
         .gate-market,
         .gate-industry,
+        .gate-gatecamp,
         .gate-lp,
         .gate-mail {
           border-top: 1px solid var(--line);
@@ -560,6 +571,26 @@
         </div>
       </article>
 
+      <article class="gate-panel list-item gate-gatecamp">
+        <a rel="noopener noreferrer" target="_blank" class="panel-icon" href="https://eve-gatecheck.space/eve/" aria-label="Open EVE Gatecamp Check">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m12 3 9 16H3L12 3Z" />
+            <path d="M12 9.5v4" />
+            <path d="M12 16.5h.01" />
+          </svg>
+        </a>
+        <div class="list-body">
+          <div class="list-copy">
+            <h2>EVE Gatecamp Check</h2>
+            <p class="lead">
+              Gatecamp and kill intel across New Eden — see where gate camps, smartbombs, and
+              interdictors are active before you jump.
+            </p>
+          </div>
+          <a rel="noopener noreferrer" target="_blank" class="panel-cta" href="https://eve-gatecheck.space/eve/" aria-label="Open EVE Gatecamp Check">Open <span class="arrow">&#8594;</span></a>
+        </div>
+      </article>
+
       <article class="gate-panel list-item gate-lp">
         <a rel="noopener noreferrer" target="_blank" class="panel-icon" href="https://eve.ayokei.to/lp/" aria-label="Open LP Store Calculator">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
@@ -602,6 +633,7 @@
       <a rel="noopener noreferrer" target="_blank" href="https://janice.e-351.com/">Janice</a>
       <a rel="noopener noreferrer" target="_blank" href="https://evemarketbrowser.com/">EVE Market Browser</a>
       <a rel="noopener noreferrer" target="_blank" href="https://eveindustry.app/login">EVE Industry</a>
+      <a rel="noopener noreferrer" target="_blank" href="https://eve-gatecheck.space/eve/">EVE Gatecamp Check</a>
       <a rel="noopener noreferrer" target="_blank" href="https://sudo-adduser-jordan.github.io/marketmailer/">Marketmailer</a>
       <a href="cosmos/index.html">COSMOS tracker</a>
       <a
