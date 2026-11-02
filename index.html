@@ -6,15 +6,15 @@
     <meta name="robots" content="index,follow" />
     <meta
       name="description"
-      content="EVE Online tools: an LP store calculator with live Jita pricing, Janice item appraisal, the EVE Market Browser, and COSMOS mission trackers for all eight empire and pirate lines."
+      content="EVE Online tools: an LP store calculator with live Jita pricing, Janice item appraisal, the EVE Market Browser, Marketmailer arbitrage alerts, and COSMOS mission trackers for all eight empire and pirate lines."
     />
     <meta property="og:title" content="EVE Tools" />
     <meta
       property="og:description"
-      content="LP store calculator with live Jita pricing, Janice item appraisal, the EVE Market Browser, and COSMOS trackers."
+      content="LP store calculator with live Jita pricing, Janice item appraisal, the EVE Market Browser, Marketmailer, and COSMOS trackers."
     />
     <meta property="og:type" content="website" />
-    <title>EVE Tools — LP Store Calculator, Janice, EVE Market Browser &amp; COSMOS Tracker</title>
+    <title>EVE Tools — LP Store Calculator, Janice, EVE Market Browser, Marketmailer &amp; COSMOS Tracker</title>
     <link rel="icon" type="image/svg+xml" href="https://eve.ayokei.to/lp/favicon.svg" />
     <!-- Single-request doorway page: styles inline, no JS. -->
     <style>
@@ -36,6 +36,8 @@
         --gold: #d9b85c;
         --violet: #c084fc;
         --green: #4ade80;
+        --sky: #57c7ff;
+        --orange: #ff8a5c;
         --focus: #67e8f9;
       }
       *,
@@ -84,27 +86,35 @@
         flex: 1;
         display: grid;
         grid-template-columns: 3fr 4fr;
-        grid-template-rows: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(5, 1fr);
       }
       .gate-panel.gate-cosmos {
         grid-column: 1;
-        grid-row: 1 / span 3;
+        grid-row: 1 / -1;
         border-right: 1px solid var(--line);
         padding: clamp(36px, 5vw, 76px);
       }
       .gate-lp,
       .gate-janice,
-      .gate-market {
+      .gate-market,
+      .gate-industry,
+      .gate-mail {
         grid-column: 2;
       }
-      .gate-lp {
+      .gate-janice {
         grid-row: 1;
       }
-      .gate-janice {
+      .gate-market {
         grid-row: 2;
       }
-      .gate-market {
+      .gate-industry {
         grid-row: 3;
+      }
+      .gate-lp {
+        grid-row: 4;
+      }
+      .gate-mail {
+        grid-row: 5;
       }
       .gate-panel {
         --accent: var(--teal);
@@ -124,8 +134,10 @@
         );
         transition: background-color 0.18s;
       }
-      .gate-janice,
-      .gate-market {
+      .gate-market,
+      .gate-industry,
+      .gate-lp,
+      .gate-mail {
         border-top: 1px solid var(--line);
       }
       .gate-janice {
@@ -133,6 +145,12 @@
       }
       .gate-market {
         --accent: var(--violet);
+      }
+      .gate-industry {
+        --accent: var(--orange);
+      }
+      .gate-mail {
+        --accent: var(--sky);
       }
       .gate-cosmos {
         --accent: var(--green);
@@ -161,25 +179,21 @@
       .gate-panel:hover {
         background-color: color-mix(in srgb, var(--accent) 4%, transparent);
       }
-      .gate-panel:focus-visible {
-        outline: 2px solid var(--focus);
-        outline-offset: -4px;
-      }
 
-      /* Compact rows for the three tools in the list column. */
+      /* Compact rows for the four tools in the list column. */
       .gate-panel.list-item {
         display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
-        grid-template-rows: auto auto auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
         align-content: center;
         align-items: start;
         justify-content: normal;
         gap: 3px 18px;
-        padding: clamp(20px, 2.4vw, 30px) clamp(22px, 2.4vw, 32px);
+        padding: clamp(14px, 1.6vw, 22px) clamp(22px, 2.4vw, 32px);
       }
       .list-item .panel-icon {
         grid-column: 1;
-        grid-row: 1 / span 3;
+        grid-row: 1 / span 2;
         align-self: center;
       }
       .list-item h2 {
@@ -193,10 +207,10 @@
         max-width: 78ch;
       }
       .list-item .panel-cta {
-        grid-column: 2;
-        grid-row: 3;
-        justify-self: start;
-        margin: 3px 0 0;
+        grid-column: 3;
+        grid-row: 1 / span 2;
+        align-self: center;
+        margin: 0;
         padding: 7px 14px;
         white-space: nowrap;
       }
@@ -281,16 +295,39 @@
         color: var(--accent);
         font-size: 13.5px;
         font-weight: 600;
-        transition: background 0.15s;
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s,
+          border-color 0.15s,
+          box-shadow 0.15s;
       }
       .panel-cta .arrow {
         transition: transform 0.15s;
       }
+      /* First hover: highlight the button when the whole panel is hovered. */
       .gate-panel:hover .panel-cta {
         background: color-mix(in srgb, var(--accent) 12%, transparent);
       }
       .gate-panel:hover .panel-cta .arrow {
         transform: translateX(3px);
+      }
+      /* Second hover: the button itself fills with its accent. */
+      .gate-panel .panel-cta:hover,
+      .gate-panel .panel-cta:focus-visible {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--bg);
+        box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 32%, transparent);
+      }
+      .gate-panel .panel-cta:hover .arrow,
+      .gate-panel .panel-cta:focus-visible .arrow {
+        transform: translateX(5px);
+      }
+      .panel-cta:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 3px;
       }
 
       .site-foot {
@@ -337,6 +374,8 @@
         .gate-lp,
         .gate-janice,
         .gate-market,
+        .gate-industry,
+        .gate-mail,
         .gate-cosmos {
           grid-column: 1;
           grid-row: auto;
@@ -351,9 +390,10 @@
           border-right: none;
           border-bottom: 1px solid var(--line);
         }
+        .gate-market,
+        .gate-industry,
         .gate-lp,
-        .gate-janice,
-        .gate-market {
+        .gate-mail {
           border-top: 1px solid var(--line);
         }
         .gate-panel.list-item {
@@ -394,7 +434,7 @@
     </header>
 
     <main class="gate">
-      <a class="gate-panel gate-cosmos" href="cosmos/index.html">
+      <article class="gate-panel gate-cosmos">
         <span class="panel-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9" />
@@ -412,22 +452,10 @@
           <span class="panel-chip"><strong>82</strong> sites</span>
           <span class="panel-chip"><strong>Local</strong> progress</span>
         </span>
-        <span class="panel-cta">Open the COSMOS tracker <span class="arrow">&#8594;</span></span>
-      </a>
+        <a class="panel-cta" href="cosmos/index.html">Open the COSMOS tracker <span class="arrow">&#8594;</span></a>
+      </article>
 
-      <a class="gate-panel list-item gate-lp" href="https://eve.ayokei.to/lp/">
-        <span class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
-        </span>
-        <h2>LP Store Calculator</h2>
-        <p class="lead">
-          Every loyalty point store offer in New Eden, ranked by ISK per LP — priced against
-          live Jita market depth with fees, volume, and access-risk filters.
-        </p>
-        <span class="panel-cta">Open the calculator <span class="arrow">&#8594;</span></span>
-      </a>
-
-      <a class="gate-panel list-item gate-janice" href="https://janice.e-351.com/">
+      <article class="gate-panel list-item gate-janice">
         <span class="panel-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" />
@@ -439,10 +467,10 @@
           Item appraisal and market comparison for EVE Online — value loot, hangar
           contents, and contracts against live prices.
         </p>
-        <span class="panel-cta">Open Janice <span class="arrow">&#8594;</span></span>
-      </a>
+        <a class="panel-cta" href="https://janice.e-351.com/">Open Janice <span class="arrow">&#8594;</span></a>
+      </article>
 
-      <a class="gate-panel list-item gate-market" href="https://evemarketbrowser.com/">
+      <article class="gate-panel list-item gate-market">
         <span class="panel-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <rect x="3" y="4" width="18" height="16" rx="2" />
@@ -455,8 +483,35 @@
           Real-time market data for PLEX and every commodity, ship, and module — track
           current prices, trends, and trade opportunities across regions.
         </p>
-        <span class="panel-cta">Open market browser <span class="arrow">&#8594;</span></span>
-      </a>
+        <a class="panel-cta" href="https://evemarketbrowser.com/">Open market browser <span class="arrow">&#8594;</span></a>
+      </article>
+
+      <article class="gate-panel list-item gate-lp">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
+        </span>
+        <h2>LP Store Calculator</h2>
+        <p class="lead">
+          Every loyalty point store offer in New Eden, ranked by ISK per LP — priced against
+          live Jita market depth with fees, volume, and access-risk filters.
+        </p>
+        <a class="panel-cta" href="https://eve.ayokei.to/lp/">Open the calculator <span class="arrow">&#8594;</span></a>
+      </article>
+
+      <article class="gate-panel list-item gate-mail">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 7 9 6 9-6" />
+          </svg>
+        </span>
+        <h2>Marketmailer</h2>
+        <p class="lead">
+          An EVE Online market watcher that polls ESI market orders and surfaces arbitrage
+          opportunities against the Jita buy wall.
+        </p>
+        <a class="panel-cta" href="https://sudo-adduser-jordan.github.io/marketmailer/">Open Marketmailer <span class="arrow">&#8594;</span></a>
+      </article>
     </main>
 
     <footer class="site-foot">
@@ -464,6 +519,7 @@
       <a href="https://eve.ayokei.to/lp/about.html">Methodology</a>
       <a href="https://janice.e-351.com/">Janice</a>
       <a href="https://evemarketbrowser.com/">EVE Market Browser</a>
+      <a href="https://sudo-adduser-jordan.github.io/marketmailer/">Marketmailer</a>
       <a href="cosmos/index.html">COSMOS tracker</a>
       <a
         class="github-link"
