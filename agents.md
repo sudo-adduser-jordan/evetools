@@ -1,0 +1,1 @@
+- https://wiki.eveuniversity.org/Caldari_COSMOS

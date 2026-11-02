@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caldari COSMOS — Mission Tracker</title>
+<meta name="description" content="Caldari COSMOS agent, site and shopping-list tracker with persistent progress checkboxes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050a0e'/%3E%3Cpath d='M6 24 16 6l10 18-10-4z' fill='none' stroke='%2335c9ff' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#05090e;--bg2:#080e15;--panel:#0b131c;--panel2:#0e1823;
+  --line:#1a2a39;--line2:#26415a;--text:#c6d7e4;--dim:#7b93a7;
+  --cyan:#35c9ff;--cyan2:#8ee7ff;--green:#48e08a;--amber:#ffb648;
+  --red:#ff5f70;--violet:#b48cff;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:104px}
+body{
+  margin:0;font-family:"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1100px 620px at 12% -12%,rgba(53,201,255,.11),transparent 62%),
+    radial-gradient(900px 520px at 96% -4%,rgba(180,140,255,.07),transparent 60%),
+    linear-gradient(rgba(53,201,255,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,201,255,.032) 1px,transparent 1px);
+  background-size:auto,auto,46px 46px,46px 46px;
+}
+a{color:var(--cyan2);text-decoration:none;border-bottom:1px solid rgba(53,201,255,.22);transition:color .15s,border-color .15s}
+a:hover{color:#fff;border-bottom-color:var(--cyan)}
+.wrap{max-width:1300px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- header ---------- */
+.top{padding:40px 0 26px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+h1{
+  margin:.32em 0 .18em;font-size:clamp(30px,4.6vw,54px);line-height:1.02;font-weight:700;
+  letter-spacing:-.015em;text-transform:uppercase;color:#eaf5fc;
+  text-shadow:0 0 42px rgba(53,201,255,.22);
+}
+h1 em{font-style:normal;color:var(--cyan)}
+.lede{max-width:78ch;color:var(--dim);font-size:15.5px;margin:0}
+.lede strong{color:var(--text);font-weight:600}
+.hud{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:26px}
+.meter{position:relative;flex:1 1 280px;min-width:220px;height:8px;background:#0a131b;border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#147d9e,var(--cyan) 70%,#c8f4ff);box-shadow:0 0 16px rgba(53,201,255,.55);transition:width .35s ease}
+.hud-stat{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+.hud-stat b{color:#eaf5fc;font-weight:600}
+.btn{
+  appearance:none;cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan);background:rgba(53,201,255,.06);
+  border:1px solid rgba(53,201,255,.4);padding:8px 16px;border-radius:0;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+  transition:background .15s,color .15s,box-shadow .15s;
+}
+.btn:hover{background:rgba(53,201,255,.16);color:#fff;box-shadow:0 0 18px rgba(53,201,255,.25)}
+.btn.danger{color:var(--red);border-color:rgba(255,95,112,.4);background:rgba(255,95,112,.05)}
+.btn.danger:hover{background:rgba(255,95,112,.14);box-shadow:0 0 18px rgba(255,95,112,.2)}
+.btn:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;background:rgba(5,9,14,.86);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-top:0;padding-bottom:0;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;border:0;padding:13px 14px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border-bottom:2px solid transparent;
+}
+.nav a:hover{color:var(--cyan2);border-bottom-color:rgba(53,201,255,.5);background:rgba(53,201,255,.05)}
+.nav .sep{flex:0 0 auto;width:1px;height:18px;background:var(--line2);margin:0 6px}
+
+/* ---------- sections ---------- */
+main{padding:34px 0 60px}
+.sec{margin:0 0 46px;scroll-margin-top:110px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:12px}
+h2{display:flex;align-items:center;gap:12px;margin:0;font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:#e8f4fb;font-weight:600}
+h2::before{content:"";width:4px;height:20px;background:var(--cyan);box-shadow:0 0 14px rgba(53,201,255,.7)}
+h2 .count{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--dim);font-weight:400}
+h2 .count b{color:var(--cyan);font-weight:600}
+h3{margin:26px 0 10px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan2);font-weight:600}
+p{margin:0 0 12px;max-width:88ch}
+.muted{color:var(--dim)}
+.note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,182,72,.055);
+  border-left:2px solid var(--amber);color:#d9c3a0;font-size:13.5px;max-width:none;
+}
+.note strong{color:var(--amber)}
+.danger-note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,95,112,.06);
+  border-left:2px solid var(--red);color:#e6b7bd;font-size:13.5px;max-width:none;
+}
+.danger-note strong{color:#ff8d99}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px}
+.search{
+  flex:1 1 240px;min-width:180px;display:flex;align-items:center;gap:8px;
+  background:#070d13;border:1px solid var(--line);padding:6px 10px;
+}
+.search svg{flex:0 0 auto;opacity:.55}
+.search input{
+  flex:1;background:none;border:0;outline:none;color:var(--text);font:inherit;font-size:13px;min-width:0;
+}
+.search input::placeholder{color:#5c7386}
+.search:focus-within{border-color:var(--line2);box-shadow:0 0 0 1px rgba(53,201,255,.2)}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);user-select:none}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.toggle .sw{width:30px;height:16px;border:1px solid var(--line2);background:#070d13;position:relative;transition:.18s}
+.toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;background:#4b6377;transition:.18s}
+.toggle input:checked + .sw{border-color:rgba(53,201,255,.6);background:rgba(53,201,255,.12)}
+.toggle input:checked + .sw::after{left:16px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.toggle input:focus-visible + .sw{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- tables ---------- */
+.tbl-wrap{border:1px solid var(--line);background:linear-gradient(180deg,rgba(14,24,35,.72),rgba(8,14,21,.72));overflow:auto;max-height:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+thead th{
+  position:sticky;top:0;z-index:3;background:#0b141d;text-align:left;font-weight:600;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8fa9bd;
+  padding:10px 12px;border-bottom:1px solid var(--line2);white-space:nowrap;
+}
+tbody td{padding:9px 12px;border-bottom:1px solid rgba(26,42,57,.6);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:rgba(53,201,255,.045)}
+tbody tr.done{background:rgba(72,224,138,.025)}
+tbody tr.done:hover{background:rgba(72,224,138,.055)}
+tbody tr.done > td{opacity:.56}
+tbody tr.done > td.chk-cell,tbody tr.done > td.main,tbody tr.done .badge{opacity:1}
+tbody tr.done > td.main a{text-decoration:line-through;text-decoration-color:rgba(72,224,138,.55);text-decoration-thickness:1px}
+td.main{font-weight:600;color:#dceaf4}
+td.main .sub{display:block;font-weight:400;font-size:12px;color:var(--dim);margin-top:1px}
+td.chk-cell{width:36px;padding-right:0;text-align:center}
+th.chk-cell{width:36px;padding-right:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+.standing{color:#a9c0d1}
+.standing.high{color:var(--amber)}
+.standing.max{color:#ff8a5c}
+.standing.none{color:#5f7689}
+.mono{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.nowrap{white-space:nowrap}
+
+/* checkboxes */
+.chk{display:inline-flex;position:relative;line-height:0;cursor:pointer;padding:2px}
+.chk input{position:absolute;opacity:0;width:1px;height:1px}
+.chk .box{
+  width:18px;height:18px;display:block;position:relative;background:#060c12;
+  border:1px solid var(--line2);transition:background .15s,border-color .15s,box-shadow .15s;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%);
+}
+.chk input:checked + .box{background:rgba(72,224,138,.14);border-color:rgba(72,224,138,.85);box-shadow:0 0 12px rgba(72,224,138,.25)}
+.chk input:checked + .box::after{
+  content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
+  border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(40deg);
+}
+tr.derived .chk .box{border-color:rgba(53,201,255,.8);background:rgba(53,201,255,.13);box-shadow:0 0 12px rgba(53,201,255,.28)}
+tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
+.chk input:focus-visible + .box{outline:2px solid var(--cyan2);outline-offset:2px}
+.chk:hover .box{border-color:var(--cyan)}
+
+/* badges */
+.badge{
+  display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
+  color:var(--cyan);background:rgba(53,201,255,.08);border:1px solid rgba(53,201,255,.3);
+}
+.badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.tag{
+  display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
+}
+.tag.buy{color:#ffcf70;background:rgba(255,182,72,.09);border:1px solid rgba(255,182,72,.45)}
+.tag.buy::before{content:"\25C6";margin-right:5px;font-size:8px;vertical-align:1px}
+.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3);margin-left:4px}
+
+/* faction chips */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:1px 8px;font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:#a9c0d1;border:1px solid var(--line2);border-radius:99px;white-space:nowrap;
+}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:#7b93a7;box-shadow:0 0 6px currentColor}
+.f-caldari::before{background:#4aa8ff;color:#4aa8ff}
+.f-amarr::before{background:#ffd166;color:#ffd166}
+.f-minmatar::before{background:#ff7a59;color:#ff7a59}
+.f-angel::before{background:#ff4d6d;color:#ff4d6d}
+.f-guristas::before{background:#b48cff;color:#b48cff}
+.f-interbus::before{background:#48e08a;color:#48e08a}
+.f-other::before{background:#7b93a7;color:#7b93a7}
+
+/* type pills */
+.type{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9db4c6;border:1px solid var(--line2);padding:1px 7px}
+.type.sig{color:var(--violet);border-color:rgba(180,140,255,.35)}
+.type.beacon{color:var(--cyan);border-color:rgba(53,201,255,.35)}
+
+/* hidden / filtered */
+table.hide-done tbody tr.done{display:none}
+tbody tr[hidden]{display:none}
+.empty{display:none;padding:18px 14px;color:var(--dim);font-size:13px}
+.tbl-wrap.is-empty .empty{display:block}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:#62798c;font-size:12px;position:relative;z-index:1}
+footer p{margin:0 0 6px;max-width:95ch}
+footer a{border-bottom-color:rgba(53,201,255,.15)}
+
+/* ---------- responsive ---------- */
+@media (max-width:820px){
+  .wrap{padding:0 16px}
+  .top{padding:28px 0 20px}
+  .tbl-wrap{border:0;background:none;overflow:visible}
+  table{min-width:0;display:block}
+  thead{display:none}
+  tbody{display:block}
+  tbody tr{display:block;border:1px solid var(--line);background:rgba(14,24,35,.8);margin:0 0 10px;padding:6px 10px 8px}
+  tbody tr:last-child{margin-bottom:0}
+  tbody td{display:block;padding:5px 0;border:0}
+  tbody td::before{
+    content:attr(data-label);display:block;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#5f7689;margin-bottom:2px;
+  }
+  tbody td.chk-cell{position:absolute;top:10px;right:11px;padding:0}
+  tbody tr{position:relative;padding:9px 46px 10px 12px}
+  tbody td.chk-cell::before{content:none}
+  td.main{font-size:14px}
+  .tag.buy,.tag.src{display:inline-block;margin:6px 0 0;white-space:normal;max-width:100%}
+  .tag.buy + .tag.src{margin-left:5px}
+  h2{font-size:16px}
+  .hud{gap:12px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  body{background:#fff;color:#111}
+  body::before,.nav,.toolbar,.hud .btn,.hud .meter{display:none}
+  .wrap{max-width:none;padding:0}
+  h1,h2,td.main{color:#000}
+  .tbl-wrap{border-color:#bbb;background:none;overflow:visible}
+  table{min-width:0}
+  thead th{position:static;background:#eee;color:#000;border-color:#bbb}
+  tbody td{border-color:#ddd}
+  a{color:#000;border:0}
+  tr.done{opacity:1}
+  tr.done > td{opacity:1}
+  table.hide-done tbody tr.done{display:table-row}
+  tbody tr[hidden]{display:table-row}
+  .badge{color:#000;border-color:#999}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">EVE University Wiki &middot; COSMOS</div>
+    <h1>Caldari <em>COSMOS</em></h1>
+    <p class="lede"><strong>Caldari COSMOS</strong> is a collection of PvE content located in Okkelen constellation in The Forge region and in 09-4XW constellation in Tenal region. This includes COSMOS mission agents, COSMOS combat sites and unique rats on belts.</p>
+
+    <div class="hud">
+      <div class="meter" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="global-meter"><i></i></div>
+      <div class="hud-stat" id="global-stat"><b>0</b> / 0 done</div>
+      <button class="btn danger" id="reset-all" type="button">Reset all</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a href="#agents-high">High-sec Agents</a>
+    <a href="#sites-high">Sites</a>
+    <a href="#shopping">Shopping list</a>
+    <span class="sep" aria-hidden="true"></span>
+    <a href="#agents-null">Null-sec Agents</a>
+    <a href="#sites-null">Sites</a>
+  </div>
+</nav>
+
+<noscript>
+  <div class="wrap">
+    <p class="note">JavaScript is disabled &mdash; checkboxes will still render, but progress will not be saved and the mission &rarr; site/shopping links will not work.</p>
+  </div>
+</noscript>
+
+<main class="wrap">
+
+  <section class="sec" id="high-sec">
+    <h2>High security Caldari COSMOS</h2>
+    <p class="muted">The high security COSMOS is located in Okkelen (The Forge).</p>
+  </section>
+
+  <section class="sec" id="agents-high">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-high"><b>0</b> / 0</span></h2>
+    </div>
+
+    <div class="danger-note">
+      <strong>Do not even talk to the agent unless you are going to run the mission.</strong>
+      Failing the mission or letting it expire will prevent you from ever doing that mission or any mission in the same chain. As soon as you talk to the agent you get a mission offer that <strong>expires in seven days</strong>.
+    </div>
+    <p class="note">
+      COSMOS missions demand high enough <strong>faction standing</strong> to gain the missions &mdash; corp standing cannot be used instead.
+      They also require higher standing than normal missions: <strong>2.00 for L2</strong>, <strong>4.00 for L3</strong> and <strong>6.00 for L4</strong>
+      (normally 1.00 / 3.00 / 5.00). Checking an agent here marks the site they are located at and the shopping-list items required for their missions.
+    </p>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter agents, factions, systems…" aria-label="Filter high-sec agents" data-filter="agents-high">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-high"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-high">
+        <thead>
+          <tr>
+            <th class="chk-cell"><span class="sr-only">Done</span></th>
+            <th scope="col">Agent</th>
+            <th scope="col">Standing req</th>
+            <th scope="col">Faction</th>
+            <th scope="col">Location</th>
+            <th scope="col">Previous in chain</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-name="Aisha Gojivi" data-system="Friggi" data-site="Bandit Hideout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Aisha Gojivi done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Aisha_Gojivi">Aisha Gojivi</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Friggi - Bandit Hideout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Akemon Tolan" data-system="Otomainen" data-site="Contested Guristas Outrider Post">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Akemon Tolan done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Akemon_Tolan">Akemon Tolan</a></td>
+            <td data-label="Standing"><span class="num standing high">7.50</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Otomainen - <a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Akira Helkelen" data-system="Otomainen" data-site="Rush Town Ruins">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Akira Helkelen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Akira_Helkelen">Akira Helkelen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Rush Town Ruins</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Anou Dechien" data-system="Vahunomi" data-site="Abandoned Astro Farm">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Anou Dechien done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Anou_Dechien">Anou Dechien</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
+            <td data-label="Location">Vahunomi - Abandoned Astro Farm</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Arvo Watanen" data-system="Otitoh" data-site="Devil's Dig Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Arvo Watanen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Arvo_Watanen">Arvo Watanen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Devil's Dig Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Chichiro Rati" data-system="Ihakana" data-site="Shady Acres">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Chichiro Rati done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Chichiro_Rati">Chichiro Rati</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ihakana - Shady Acres</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Christer Fuglesang" data-system="Autaris" data-site="Moon 5 - CONCORD Bureau">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Christer Fuglesang done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Christer_Fuglesang">Christer Fuglesang</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-interbus">InterBus</span></td>
+            <td data-label="Location">Autaris VIII - Moon 5 - CONCORD Bureau</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Daitsu Ikonen" data-system="Sakkikainen" data-site="Settler's Waystation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Daitsu Ikonen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Daitsu_Ikonen">Daitsu Ikonen</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Settler's Waystation</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Emma Tharkin" data-system="Otitoh" data-site="Friggi (gate)">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Emma Tharkin done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Emma_Tharkin">Emma Tharkin</a></td>
+            <td data-label="Standing"><span class="num standing max">9.20</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Friggi (gate)</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Eteri Tazaki" data-system="Otitoh" data-site="Devil's Dig Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Eteri Tazaki done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Eteri_Tazaki">Eteri Tazaki</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Devil's Dig Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Fumiku Viljanen" data-system="Otomainen" data-site="Foul Creek Ranch">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Fumiku Viljanen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Fumiku_Viljanen">Fumiku Viljanen</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Foul Creek Ranch</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Goru Nikainen" data-system="Otomainen" data-site="Foul Creek Ranch">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Goru Nikainen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Goru_Nikainen">Goru Nikainen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Foul Creek Ranch</td>
+            <td data-label="Chain"><a href="https://wiki.eveuniversity.org/Ryoke_Aura">Ryoke Aura</a></td>
+          </tr>
+          <tr data-name="Hansu Turu" data-system="Ishisomo" data-site="NOH Recruitment Center">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hansu Turu done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Hansu_Turu">Hansu Turu</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ishisomo - NOH Recruitment Center</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Helmi Nakamuta" data-system="Friggi" data-site="Sentinel Rise">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Helmi Nakamuta done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Helmi_Nakamuta">Helmi Nakamuta</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Friggi - Sentinel Rise</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Hitami Magye" data-system="Otomainen" data-site="Rush Town Ruins">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hitami Magye done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Hitami_Magye">Hitami Magye</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Rush Town Ruins</td>
+            <td data-label="Chain"><a href="https://wiki.eveuniversity.org/Kochi_Utrainen">Kochi Utrainen</a> and <a href="https://wiki.eveuniversity.org/Akira_Helkelen">Akira Helkelen</a></td>
+          </tr>
+          <tr data-name="Hotaru Ahti" data-system="Otomainen" data-site="Red Rock Outpost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hotaru Ahti done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Hotaru_Ahti">Hotaru Ahti</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Red Rock Outpost</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Ikimara Hochi" data-system="Sakkikainen" data-site="Settler's Waystation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ikimara Hochi done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ikimara_Hochi">Ikimara Hochi</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Settler's Waystation</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Istei Poyri" data-system="Airmia" data-site="Station Foundation Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Istei Poyri done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Istei_Poyri">Istei Poyri</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Airmia - Station Foundation Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Jali Tanaka" data-system="Vahunomi" data-site="Cactus Mill Lookout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jali Tanaka done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Jali_Tanaka">Jali Tanaka</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Vahunomi - Cactus Mill Lookout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Kaiko Maina" data-system="Otitoh" data-site="Friggi (gate)">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kaiko Maina done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaiko_Maina">Kaiko Maina</a></td>
+            <td data-label="Standing"><span class="num standing high">8.50</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Friggi (gate)</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Kaiya Tuuri" data-system="Sakkikainen" data-site="Frontier Stockade">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kaiya Tuuri done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaiya_Tuuri">Kaiya Tuuri</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Frontier Stockade</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Kochi Utrainen" data-system="Otomainen" data-site="Foul Creek Ranch">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kochi Utrainen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kochi_Utrainen">Kochi Utrainen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Foul Creek Ranch</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Krakan Rost" data-system="Vahunomi" data-site="Abandoned Astro Farm">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Krakan Rost done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Krakan_Rost">Krakan Rost</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
+            <td data-label="Location">Vahunomi - Abandoned Astro Farm</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Kusan Niemenen" data-system="Airmia" data-site="Station Foundation Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kusan Niemenen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kusan_Niemenen">Kusan Niemenen</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Airmia - Station Foundation Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Maro Yama" data-system="Friggi" data-site="Clear Water Spring">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Maro Yama done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Maro_Yama">Maro Yama</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Friggi - Clear Water Spring</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Matani Jitainen" data-system="Sakkikainen" data-site="Frontier Stockade">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Matani Jitainen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Matani_Jitainen">Matani Jitainen</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Frontier Stockade</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Midoki Urigamu" data-system="Sakkikainen" data-site="Settler's Waystation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Midoki Urigamu done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Midoki_Urigamu">Midoki Urigamu</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Settler's Waystation</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Mika Etsuya" data-system="Vahunomi" data-site="Cactus Mill Lookout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Mika Etsuya done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Mika_Etsuya">Mika Etsuya</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Vahunomi - Cactus Mill Lookout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Mintu Oshima" data-system="Otitoh" data-site="The Diamond Ace Den">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Mintu Oshima done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Mintu_Oshima">Mintu Oshima</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - The Diamond Ace Den</td>
+            <td data-label="Chain"><a href="https://wiki.eveuniversity.org/Hitami_Magye">Hitami Magye</a></td>
+          </tr>
+          <tr data-name="Mirmon Gorgoz" data-system="Friggi" data-site="Clear Water Spring">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Mirmon Gorgoz done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Mirmon_Gorgoz">Mirmon Gorgoz</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
+            <td data-label="Location">Friggi - Clear Water Spring</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Oniya Arkimo" data-system="Airmia" data-site="Grand Crag Watch">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Oniya Arkimo done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Oniya_Arkimo">Oniya Arkimo</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Airmia - Grand Crag Watch</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Raidon Setala" data-system="Sakkikainen" data-site="Settler's Waystation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Raidon Setala done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Raidon_Setala">Raidon Setala</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Settler's Waystation</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Ratan Saturi" data-system="Sakkikainen" data-site="Settler's Waystation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ratan Saturi done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ratan_Saturi">Ratan Saturi</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Sakkikainen - Settler's Waystation</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Retin Ariato" data-system="Ishisomo" data-site="Rusty Ridge Mine">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Retin Ariato done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Retin_Ariato">Retin Ariato</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ishisomo - Rusty Ridge Mine</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Ryoke Aura" data-system="Otitoh" data-site="The Diamond Ace Den">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ryoke Aura done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ryoke_Aura">Ryoke Aura</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - The Diamond Ace Den</td>
+            <td data-label="Chain"><a href="https://wiki.eveuniversity.org/Akira_Helkelen">Akira Helkelen</a></td>
+          </tr>
+          <tr data-name="Ryuki Sakkaro" data-system="Ishisomo" data-site="NOH Recruitment Center">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ryuki Sakkaro done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ryuki_Sakkaro">Ryuki Sakkaro</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ishisomo - NOH Recruitment Center</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Siringwe Opainen" data-system="Friggi" data-site="Bandit Hideout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Siringwe Opainen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Siringwe_Opainen">Siringwe Opainen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-guristas">Guristas Pirates</span></td>
+            <td data-label="Location">Friggi - Bandit Hideout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Skurk Tekkurs" data-system="Vahunomi" data-site="Abandoned Astro Farm">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Skurk Tekkurs done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Skurk_Tekkurs">Skurk Tekkurs</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
+            <td data-label="Location">Vahunomi - Abandoned Astro Farm</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Sokei Kirku" data-system="Airmia" data-site="Station Foundation Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Sokei Kirku done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Sokei_Kirku">Sokei Kirku</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Airmia - Station Foundation Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Tamoko Raytio" data-system="Otomainen" data-site="Red Rock Outpost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tamoko Raytio done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Tamoko_Raytio">Tamoko Raytio</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Red Rock Outpost</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Taru Kubona" data-system="Otitoh" data-site="Devil's Dig Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Taru Kubona done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Taru_Kubona">Taru Kubona</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Devil's Dig Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Tekirye Awazhen" data-system="Ishisomo" data-site="NOH Recruitment Center">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tekirye Awazhen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen">Tekirye Awazhen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ishisomo - NOH Recruitment Center</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Tida Aikato" data-system="Vahunomi" data-site="Cactus Mill Lookout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tida Aikato done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Tida_Aikato">Tida Aikato</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Vahunomi - Cactus Mill Lookout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Varma Fujimo" data-system="Otitoh" data-site="Devil's Dig Site">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Varma Fujimo done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Varma_Fujimo">Varma Fujimo</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Devil's Dig Site</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Yka Katori" data-system="Friggi" data-site="Bandit Hideout">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yka Katori done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Yka_Katori">Yka Katori</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-guristas">Guristas Pirates</span></td>
+            <td data-label="Location">Friggi - Bandit Hideout</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Yochuko Eskaila" data-system="Ihakana" data-site="Shady Acres">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yochuko Eskaila done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Yochuko_Eskaila">Yochuko Eskaila</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ihakana - Shady Acres</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Yoko Pihrava" data-system="Friggi" data-site="Sentinel Rise">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yoko Pihrava done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Yoko_Pihrava">Yoko Pihrava</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Friggi - Sentinel Rise</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Yru Hatamei" data-system="Ishisomo" data-site="Rusty Ridge Mine">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yru Hatamei done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Yru_Hatamei">Yru Hatamei</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Ishisomo - Rusty Ridge Mine</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Zabonn Michi" data-system="Otomainen" data-site="Rush Town Ruins">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zabonn Michi done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zabonn_Michi">Zabonn Michi</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otomainen - Rush Town Ruins</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+          <tr data-name="Zoun Makui" data-system="Otitoh" data-site="Friggi (gate)">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zoun Makui done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zoun_Makui">Zoun Makui</a></td>
+            <td data-label="Standing"><span class="num standing max">9.90</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Otitoh - Friggi (gate)</td>
+            <td data-label="Chain">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites-high">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-high"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="muted">The COSMOS constellation contains several static complexes. Sites are checked automatically when you complete an agent located there.</p>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter sites, systems…" aria-label="Filter high-sec sites" data-filter="sites-high">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="sites-high"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-high">
+        <thead>
+          <tr>
+            <th class="chk-cell"><span class="sr-only">Done</span></th>
+            <th scope="col">Name</th>
+            <th scope="col">DED rating</th>
+            <th scope="col">Type</th>
+            <th scope="col">System</th>
+            <th scope="col">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-name="Bai Tarziiki" data-system="Otitoh">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bai Tarziiki done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Bai_Tarziiki">Bai Tarziiki</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otitoh</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Bandit Hideout" data-system="Sakkikainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bandit Hideout done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Bandit_Hideout">Bandit Hideout</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Sakkikainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Caldari Lai Dai Refinery" data-system="Airmia">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Caldari Lai Dai Refinery done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Airmia</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Caldari Mining Facilities" data-system="Friggi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Caldari Mining Facilities done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Friggi</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Guristas Outrider Post" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Guristas Outrider Post done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Kazka Headquarters" data-system="Sakkikainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Kazka Headquarters done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Sakkikainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Devil's Dig Site" data-system="Otitoh">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Devil's Dig Site done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Devil%E2%80%98s_Dig_Site">Devil's Dig Site</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Otitoh</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Gatti Zhara" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gatti Zhara done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Gatti_Zhara">Gatti Zhara</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Ihakana VI – State and Region Bank Investment Bank" data-system="Ihakana">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ihakana VI State and Region Bank Investment Bank done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Ihakana_VI_%E2%80%93_State_and_Region_Bank_Investment_Bank">Ihakana VI &ndash; State and Region Bank Investment Bank</a><span class="sub">Zvarin Karsha</span></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Ihakana</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Kazka Bandit Post" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kazka Bandit Post done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Kazka_Bandit_Post">Kazka Bandit Post</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Kazka Blockade" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kazka Blockade done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Kazka_Blockade">Kazka Blockade</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Magye Pirates" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Magye Pirates done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Magye_Pirates">Magye Pirates</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Otitoh VI – Moon 2" data-system="Otitoh">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Otitoh VI Moon 2 done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Otitoh_VI_%E2%80%93_Moon_2">Otitoh VI &ndash; Moon 2</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otitoh</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Roaving Brigands" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Roaving Brigands done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Roaving_Brigands">Roaving Brigands</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Rush Town Ruins" data-system="Otomainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Rush Town Ruins done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Otomainen</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Urigamu's Warehouse" data-system="Otitoh">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Urigamu's Warehouse done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Urigamu%E2%80%98s_Warehouse">Urigamu's Warehouse</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type beacon">Beacon</span></td>
+            <td data-label="System">Otitoh</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="shopping">
+    <div class="sec-head">
+      <h2>Shopping list <span class="count" data-count="shopping"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="muted">Items that can be acquired <em>before</em> starting the mission that requires them. Many of these can also be found in contracts. This list is incomplete. Items marked <span class="tag buy">Can be bought</span><span class="tag src">market || contracts</span> can be purchased instead of farmed. Checking an agent auto-ticks the items required for that agent's missions &mdash; ticking an item here never changes an agent.</p>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter items, sources, missions…" aria-label="Filter shopping list" data-filter="shopping">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="shopping"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="item" data-scope="shopping">
+        <thead>
+          <tr>
+            <th class="chk-cell"><span class="sr-only">Done</span></th>
+            <th scope="col">Item (Amount)</th>
+            <th scope="col">Source</th>
+            <th scope="col">Required for</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-name="Ancient Weapon (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Yru Hatamei|Tekirye Awazhen|Retin Ariato">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ancient Weapon done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Ancient Weapon (3)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Yru_Hatamei#Ancient_Weaponry_(3_of_4)">Ancient Weaponry (3 of 4)</a> (1)<br><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Interested_in_Work?_(1_of_5)">Interested in Work? (1 of 5)</a> (1)<br><a href="https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_-_Unsuccessful_Excavation_(4_of_4)">Wiyrkomi Freelancing - Unsuccessful Excavation (4 of 4)</a> (1)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Assistant's Keychain" data-source="Contested Kazka Headquarters" data-required-for="Anou Dechien">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Assistant's Keychain done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Assistant's Keychain</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Anou_Dechien#The_Break_In_Expert_-_Keychain_(3_of_3)">The Break In Expert - Keychain (3 of 3)</a></td>
+            <td data-label="Notes">Kazka Brothel, pocket 1 - Kazka Control Tower</td>
+          </tr>
+          <tr data-name="Bag of Counterfeit Credits (500)" data-source="Contested Kazka Headquarters" data-required-for="Mika Etsuya">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bag of Counterfeit Credits done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Bag of Counterfeit Credits (500)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Bad_Money_(2_of_4)">Protecting the Vault - Bad Money (2 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Bai's Corpse" data-source="Bai Tarziiki" data-required-for="Ryoke Aura">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bai's Corpse done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Bai's Corpse</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Bai_Tarziiki">Bai Tarziiki</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Last_Hindrance_(4_of_4)">Wrongfully Accused - Last Hindrance (4 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Bandit Spur (105)" data-source="Various rats" data-required-for="Arvo Watanen|Varma Fujimo|Krakan Rost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bandit Spur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Bandit Spur (105)</td>
+            <td data-label="Source">Various rats</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Final_Blow_(4_of_5)">Artifact Excavations &ndash; Final Blow (4 of 5)</a> (25)<br><a href="https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Caldari_Troublemakers_(1_of_3)">Station In Crisis - Caldari Troublemakers (1 of 3)</a> (60)<br><a href="https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Good_To_Go_(1_of_5)">The Bank Heist - Good To Go (1 of 5)</a> (20)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Broken Bug Device" data-source="Contested Kazka Headquarters" data-required-for="Jali Tanaka">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Broken Bug Device done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Broken Bug Device</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Jali_Tanaka#Bank_Security_%E2%80%93_Bug_Error_(2_of_3)">Bank Security &ndash; Bug Error (2 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Caldari Navy Convoy Disposition File" data-source="Contested Caldari Mining Facilities" data-required-for="Yka Katori">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Caldari Navy Convoy Disposition File done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Caldari Navy Convoy Disposition File</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Yka_Katori#Interception_-_Data_Miner_(1_of_2)">Interception - Data Miner (1 of 2)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Caldari Shuttle" data-source="Market" data-buy="1" data-required-for="Akira Helkelen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Caldari Shuttle done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Caldari Shuttle <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td data-label="Source">Market</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Transportation_(3_of_5)">A Mad Scientists Dream &ndash; Transportation (3 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Cheri Mirei's DNA" data-source="Otitoh VI - Moon 3" data-required-for="Kaiya Tuuri">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Cheri Mirei's DNA done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Cheri Mirei's DNA</td>
+            <td data-label="Source">Otitoh VI &ndash; Moon 3</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Cheri_Mirei_(4_of_4)">Community Service &ndash; Cheri Mirei (4 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Construction Tools (60)" data-source="Urigamu's Warehouse" data-required-for="Midoki Urigamu">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Construction Tools done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Construction Tools (60)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Urigamu%E2%80%98s_Warehouse">Urigamu's Warehouse</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Midoki_Urigamu#Pit_Stop_Slash_Saloon_-_The_Construction_Tools_(3_of_4)">Pit Stop Slash Saloon - The Construction Tools (3 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Drifter Spur (60)" data-source="Various rats" data-required-for="Kaiya Tuuri|Mika Etsuya">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Drifter Spur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Drifter Spur (60)</td>
+            <td data-label="Source">Various rats</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Pirates_at_Large_(1_of_4)">Community Service &ndash; Pirates at Large (1 of 4)</a> (30)<br><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Stirring_the_Nest_(1_of_4)">Protecting the Vault - Stirring the Nest (1 of 4)</a> (30)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Drill Parts (4)" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Drill Parts done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Drill Parts (4)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_The_Drill_(4_of_5)">A Mad Scientists Dream &ndash; The Drill (4 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Encoded Lai Dai Reports (6)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Oniya Arkimo">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Encoded Lai Dai Reports done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Encoded Lai Dai Reports (6)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Oniya_Arkimo#Look,_I_Need_Your_Help_(1_of_3)">Look, I Need Your Help (1 of 3)</a> (1)<br><a href="https://wiki.eveuniversity.org/Oniya_Arkimo#Time_For_Payback_(3_of_3)">Time For Payback (3 of 3)</a> (5)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Frozen Food (500)" data-source="Market" data-buy="1" data-required-for="Arvo Watanen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Frozen Food done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Frozen Food (500) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td data-label="Source">Market</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Food_for_the_Needy_(1_of_5)">Artifact Excavations &ndash; Food for the Needy (1 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Garp Soolim's ID Tag" data-source="Contested Caldari Mining Facilities" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Garp Soolim's ID Tag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Garp Soolim's ID Tag</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for">&mdash;</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Gatti's DNA" data-source="Otomainen XIII - Asteroid Belt 1" data-required-for="Hotaru Ahti">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gatti's DNA done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Gatti's DNA</td>
+            <td data-label="Source">Otomainen XIII &ndash; Asteroid Belt 1</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Trespasser_(1_of_4)">Hotaru's Dilemma - Trespasser (1 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Goru's Shuttle" data-source="Otitoh VII - Moon 19" data-required-for="Goru Nikainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Goru's Shuttle done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Goru's Shuttle</td>
+            <td data-label="Source">Otitoh VII - Moon 19</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Goru_Nikainen#Gambler's_Debt_-_The_Stolen_Shuttle_(1_of_3)">Gambler's Debt - The Stolen Shuttle (1 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Gunslinger Spur (25)" data-source="Various rats" data-required-for="Varma Fujimo">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gunslinger Spur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Gunslinger Spur (25)</td>
+            <td data-label="Source">Various rats</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Hooligan_Gang_Leaders_(3_of_3)">Station In Crisis - Hooligan Gang Leaders (3 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Guristas Diamond Tag (30)" data-source="" data-required-for="Zoun Makui">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Diamond Tag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Guristas Diamond Tag (30)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zoun_Makui#Improving_Relations">Improving Relations</a></td>
+            <td data-label="Notes">9.90 standing</td>
+          </tr>
+          <tr data-name="Guristas Gold Tag (30)" data-source="" data-required-for="Emma Tharkin">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Gold Tag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Guristas Gold Tag (30)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Emma_Tharkin#Improving_Relations">Improving Relations</a> (Emma Tharkin)</td>
+            <td data-label="Notes">9.20 standing</td>
+          </tr>
+          <tr data-name="Guristas Outlaw Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen|Yru Hatamei">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Outlaw Dogtag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Guristas Outlaw Dogtag (10)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Pirates_Brought_to_Justice_(4_of_5)">Pirates Brought to Justice (4 of 5)</a> (5)<br><a href="https://wiki.eveuniversity.org/Yru_Hatamei#Training_Ground_Destruction_(4_of_4)">Training Ground Destruction (4 of 4)</a> (5)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Guristas Shuttle" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Shuttle done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Guristas Shuttle</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_The_Getaway_(3_of_3)">Escape From The Lion's Den - The Getaway (3 of 3)</a></td>
+            <td data-label="Notes">Same location as the agent</td>
+          </tr>
+          <tr data-name="Guristas Silver Tag (30)" data-source="" data-required-for="Kaiko Maina">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Guristas Silver Tag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Guristas Silver Tag (30)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kaiko_Maina#Improving_Relations">Improving Relations</a> (Kaiko Maina)</td>
+            <td data-label="Notes">8.50 standing</td>
+          </tr>
+          <tr data-name="Isogen (2674)" data-source="" data-required-for="Kusan Niemenen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Isogen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Isogen (2674)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kusan_Niemenen#Lookin'_For_Work?_(1_of_2)">Lookin' For Work? (1 of 2)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Jakon's Head" data-source="Otitoh VII - Moon 19" data-required-for="Akemon Tolan">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jakon's Head done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Jakon's Head</td>
+            <td data-label="Source">Otitoh VII &ndash; Moon 19</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Mission_Impossible_(1_of_3)">Escape From The Lion's Den - Mission Impossible (1 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Jedon Hekkiren's Belongings (10)" data-source="Contested Guristas Outrider Post" data-required-for="Ikimara Hochi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jedon Hekkiren's Belongings done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Jedon Hekkiren's Belongings (10)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ikimara_Hochi#Banker's_Stash_-_Stolen_Goods_(1_of_3)">Banker's Stash - Stolen Goods (1 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Jorek Lephny" data-source="Rush Town Ruins" data-required-for="Hitami Magye">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jorek Lephny done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Jorek Lephny</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Jorek_Lephny_(2_of_5)">Mercantile Settlers - Jorek Lephny (2 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Kepheur's Keycard" data-source="Contested Kazka Headquarters" data-required-for="Mintu Oshima">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kepheur's Keycard done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Kepheur's Keycard</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mintu_Oshima#Hidden_Treasure_-_Retrieve_The_Keycard_(3_of_4)">Hidden Treasure - Retrieve The Keycard (3 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Loki's DNA" data-source="Contested Guristas Outrider Post" data-required-for="Ratan Saturi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Loki's DNA done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Loki's DNA</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ratan_Saturi#Cattle_Thieves_-_Revenge_Is_Sweet_(3_of_3)">Cattle Thieves - Revenge Is Sweet (3 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Makele's Tag" data-source="Otitoh VI - Moon 2" data-required-for="Arvo Watanen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Makele's Tag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Makele's Tag</td>
+            <td data-label="Source">Otitoh VI &ndash; Moon 2</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Bandits_Beware_(3_of_5)">Artifact Excavations &ndash; Bandits Beware (3 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Manchura's Logs" data-source="Contested Guristas Outrider Post" data-required-for="Zabonn Michi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Manchura's Logs done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Manchura's Logs</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zabonn_Michi#Lost_Love_-_Manchura_The_Pirate_(1_of_3)">Lost Love - Manchura The Pirate (1 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Marauder Spur (5)" data-source="Various rats" data-required-for="Kochi Utrainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Marauder Spur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Marauder Spur (5)</td>
+            <td data-label="Source">Various rats</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kochi_Utrainen#The_Test_of_Competence_%E2%80%93_The_Roaming_Brigands_(2_of_2)">The Test of Competence &ndash; The Roaming Brigands (2 of 2)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Miner (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Tekirye Awazhen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Miner done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Miner (3)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tekirye_Awazhen#Troubles_With_Outlaws_(2_of_5)">Troubles With Outlaws (2 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Miner II (5)" data-source="Market" data-buy="1" data-required-for="Hitami Magye">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Miner II done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Miner II (5) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td data-label="Source">Market</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Laser_Shortage_(4_of_5)">Mercantile Settlers - Laser Shortage (4 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Myrkai's Data Chip" data-source="Contested Guristas Outrider Post" data-required-for="Akemon Tolan">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Myrkai's Data Chip done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Myrkai's Data Chip</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Key_To_Survival_(2_of_3)">Escape From The Lion's Den - Key To Survival (2 of 3)</a></td>
+            <td data-label="Notes">Next to the agent</td>
+          </tr>
+          <tr data-name="Nugoeihuvi Dogtag (10)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nugoeihuvi Dogtag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Nugoeihuvi Dogtag (10)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Will_You_Help%3F_(1_of_2)">Will You Help? (1 of 2)</a> (5)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Nugoeihuvi Transaction Logs" data-source="Contested Caldari Mining Facilities" data-required-for="Aisha Gojivi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nugoeihuvi Transaction Logs done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Nugoeihuvi Transaction Logs</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Aisha_Gojivi#Nefarious_Business_%E2%80%93_Songbird_(2_of_4)">Nefarious Business &ndash; Songbird (2 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Omber (400)" data-source="" data-required-for="Matani Jitainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Omber done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Omber (400)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_A_Little_More_For_My_Friends_(2_of_3)">The Lai Dai Research Project - A Little More For My Friends (2 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Outlaw Spur (40)" data-source="Various rats" data-required-for="Hitami Magye">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Outlaw Spur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Outlaw Spur (40)</td>
+            <td data-label="Source">Various rats</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Outlaws_(5_of_5)">Mercantile Settlers - Outlaws (5 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Oxygen (137)" data-source="Market or Planetary Industry" data-buy="1" data-required-for="Istei Poyri">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Oxygen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Oxygen (137) <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td data-label="Source">Market or <a href="https://wiki.eveuniversity.org/Planetary_Industry">Planetary Industry</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Workers_Need_Air%E2%80%A6_(3_of_4)">Nugoeihuvi Freelancer &ndash; Workers Need Air&hellip; (3 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Pakkori's Hat" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Krakan Rost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pakkori's Hat done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Pakkori's Hat</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Inside_Track_(5_of_5)">The Bank Heist - Inside Track (5 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Pansya's Head" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pansya's Head done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Pansya's Head</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Unforgiving_(4_of_4)">The Regiment &ndash; Unforgiving (4 of 4)</a></td>
+            <td data-label="Notes">Contested Plagioclase field</td>
+          </tr>
+          <tr data-name="Parts of Printing Machine (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Mika Etsuya">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Parts of Printing Machine done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Parts of Printing Machine (5)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Dry_Credit_Death_(4_of_4)">Protecting the Vault - Dry Credit Death (4 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Pata Wakiro's DNA" data-source="Kazka Blockade" data-required-for="Hotaru Ahti">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pata Wakiro's DNA done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Pata Wakiro's DNA</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Kazka_Blockade">Kazka Blockade</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Break_The_Blockade_(3_of_4)">Hotaru's Dilemma - Break The Blockade (3 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Powdered Cubensis (200)" data-source="Contested Caldari Mining Facilities" data-required-for="Mirmon Gorgoz">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Powdered Cubensis done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Powdered Cubensis (200)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Mirmon_Gorgoz#The_Medicine_Man_%E2%80%93_A_Pinch_of_Spice_(1_of_3)">The Medicine Man &ndash; A Pinch of Spice (1 of 3)</a> (100)</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Propel Dynamics Dogtag (5)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Istei Poyri">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Propel Dynamics Dogtag done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Propel Dynamics Dogtag (5)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Bad_News_(4_of_4)">Nugoeihuvi Freelancer &ndash; Bad News (4 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Prototype Cloaking Device" data-source="Market" data-buy="1" data-required-for="Ryoke Aura">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Prototype Cloaking Device done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Prototype Cloaking Device <span class="tag buy" title="Available from the market, and often via contracts">Can be bought</span><span class="tag src" title="Obtainable via market orders or contracts">market || contracts</span></td>
+            <td data-label="Source">Market</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_The_Cloaking_Device_(3_of_4)">Wrongfully Accused - The Cloaking Device (3 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Quao Kale" data-source="Contested Kazka Headquarters" data-required-for="Raidon Setala">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Quao Kale done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Quao Kale</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Quao_(4_of_5)">The Caldari Migrants - Quao (4 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Ratei's Insignia" data-source="Rush Town Ruins" data-required-for="Akira Helkelen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ratei's Insignia done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Ratei's Insignia</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Rush_Town_Ruins">Rush Town Ruins</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Last_Hindrance_(5_of_5)">A Mad Scientists Dream &ndash; Last Hindrance (5 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Raytio Family Supplies (30)" data-source="Otomainen VIII - Asteroid Belt 1" data-required-for="Tamoko Raytio">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Raytio Family Supplies done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Raytio Family Supplies (30)</td>
+            <td data-label="Source">Otomainen VIII &ndash; Asteroid Belt 1</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Tamoko_Raytio#Wagon_Christ_-_Lost_Supplies_(2_of_3)">Wagon Christ - Lost Supplies (2 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Ryoke Laika" data-source="Contested Guristas Outrider Post" data-required-for="Eteri Tazaki">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ryoke Laika done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Ryoke Laika</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Guristas_Outrider_Post">Contested Guristas Outrider Post</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Finding_Ryoke_(3_of_3)">Foul Play - Finding Ryoke (3 of 3)</a></td>
+            <td data-label="Notes">Pocket 1 - Contested Veldspar Field</td>
+          </tr>
+          <tr data-name="Scanner Data II" data-source="Belt rats" data-required-for="Raidon Setala">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Scanner Data II done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Scanner Data II</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Reconnaissance_Point_2_(2_of_5)">The Caldari Migrants - Reconnaissance Point 2 (2 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Scanner Data III" data-source="Belt rats" data-required-for="Raidon Setala">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Scanner Data III done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Scanner Data III</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_%E2%80%93_Reconnaissance_Point_3_(3_of_5)">The Caldari Migrants &ndash; Reconnaissance Point 3 (3 of 5)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Secret Garage Coordinates" data-source="Belt rats" data-required-for="Skurk Tekkurs">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Secret Garage Coordinates done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Secret Garage Coordinates</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Belt_rat">Belt rats</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Skurk_Tekkurs#Designated_Driver_-_The_Garage_(1_of_4)">Designated Driver - The Garage (1 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Shady Acres Deed" data-source="Contested Caldari Mining Facilities" data-required-for="Chichiro Rati">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Shady Acres Deed done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Shady Acres Deed</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Mining_Facilities">Contested Caldari Mining Facilities</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Stolen_Deed_(1_of_4)">The Regiment &ndash; Stolen Deed (1 of 4)</a></td>
+            <td data-label="Notes">Contested Plagioclase Field, Black Mask bandits</td>
+          </tr>
+          <tr data-name="Sheriff Togany" data-source="Otitoh VII - Moon 5" data-required-for="Ryoke Aura">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Sheriff Togany done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Sheriff Togany</td>
+            <td data-label="Source">Otitoh VII &ndash; Moon 5</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Who_Shot_the_Sheriff_(2_of_4)">Wrongfully Accused - Who Shot the Sheriff (2 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Spare Parts (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Spare Parts done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Spare Parts (4)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Edge_of_Reason">Edge of Reason</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Talocan Sketch Book (4)" data-source="Contested Kazka Headquarters" data-required-for="Fumiku Viljanen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Talocan Sketch Book done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Talocan Sketch Book (4)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Kazka_Headquarters">Contested Kazka Headquarters</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Fumiku_Viljanen#Deadly_Diploma">Deadly Diploma</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="User Manual (4)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="User Manual done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">User Manual (4)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for">&mdash;</td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Veldspar (1,000)" data-source="" data-required-for="Matani Jitainen">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Veldspar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Veldspar (1,000)</td>
+            <td data-label="Source">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_Ore_Shipment_(1_of_3)">The Lai Dai Research Project - Ore Shipment (1 of 3)</a></td>
+            <td data-label="Notes">3 jump high-sec transport mission (free Veldspar) or bring your own.</td>
+          </tr>
+          <tr data-name="Wiyrkomi Rifles (3)" data-source="Contested Caldari Lai Dai Refinery" data-required-for="Retin Ariato">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Wiyrkomi Rifles done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Wiyrkomi Rifles (3)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Caldari_Lai_Dai_Refinery">Contested Caldari Lai Dai Refinery</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_%E2%80%93_Missing_Weapon_Stash_(1_of_4)">Wiyrkomi Freelancing &ndash; Missing Weapon Stash (1 of 4)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+          <tr data-name="Zvarin Karsha" data-source="Zvarin Karsha" data-required-for="Eteri Tazaki">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zvarin Karsha done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Zvarin Karsha</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Zvarin_Karsha">Zvarin Karsha</a></td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Ryoke's_Friend_(2_of_3)">Foul Play - Ryoke's Friend (2 of 3)</a></td>
+            <td data-label="Notes">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <section class="sec" id="null-sec">
+    <h2>Null security Caldari COSMOS</h2>
+    <p class="muted">The Caldari COSMOS has additional agents located in null security space in the 09-4XW constellation in the Tenal region.</p>
+  </section>
+
+  <section class="sec" id="agents-null">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-null"><b>0</b> / 0</span></h2>
+    </div>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter null-sec agents…" aria-label="Filter null-sec agents" data-filter="agents-null">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-null"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-null">
+        <thead>
+          <tr>
+            <th class="chk-cell"><span class="sr-only">Done</span></th>
+            <th scope="col">Agent</th>
+            <th scope="col">Standing req</th>
+            <th scope="col">Faction</th>
+            <th scope="col">Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-name="Erakki Kihuo" data-system="ZH3-BS" data-site="Pioneer's Sanctuary">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Erakki Kihuo done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Erakki_Kihuo">Erakki Kihuo</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZH3-BS - Pioneer's Sanctuary</td>
+          </tr>
+          <tr data-name="Heiraitah Siakkano" data-system="ZXA-V6" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Heiraitah Siakkano done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Heiraitah_Siakkano">Heiraitah Siakkano</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZXA-V6</td>
+          </tr>
+          <tr data-name="Kakala Ikkawa" data-system="ZH3-BS" data-site="Pioneer's Sanctuary">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kakala Ikkawa done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kakala_Ikkawa">Kakala Ikkawa</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZH3-BS - Pioneer's Sanctuary</td>
+          </tr>
+          <tr data-name="Kara Morato" data-system="1QH-0K" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kara Morato done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kara_Morato">Kara Morato</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">1QH-0K</td>
+          </tr>
+          <tr data-name="Lauka Ikunol" data-system="ZH3-BS" data-site="Pioneer's Sanctuary">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Lauka Ikunol done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Lauka_Ikunol">Lauka Ikunol</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZH3-BS - Pioneer's Sanctuary</td>
+          </tr>
+          <tr data-name="Nuomo Kaavunin" data-system="ZH3-BS" data-site="Pioneer's Sanctuary">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nuomo Kaavunin done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Nuomo_Kaavunin">Nuomo Kaavunin</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZH3-BS - Pioneer's Sanctuary</td>
+          </tr>
+          <tr data-name="Oduma Pakane" data-system="ZH3-BS" data-site="Pioneer's Sanctuary">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Oduma Pakane done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Oduma_Pakane">Oduma Pakane</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">ZH3-BS - Pioneer's Sanctuary</td>
+          </tr>
+          <tr data-name="Tehjus Otsini" data-system="I1-BE8" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tehjus Otsini done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Tehjus_Otsini">Tehjus Otsini</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">I1-BE8</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites-null">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-null"><b>0</b> / 0</span></h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-null">
+        <thead>
+          <tr>
+            <th class="chk-cell"><span class="sr-only">Done</span></th>
+            <th scope="col">Name</th>
+            <th scope="col">DED rating</th>
+            <th scope="col">Type</th>
+            <th scope="col">System</th>
+            <th scope="col">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-name="Pioneer's Sanctuary" data-system="ZH3-BS">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Pioneer's Sanctuary done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Pioneer%27s_Sanctuary">Pioneer's Sanctuary</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">ZH3-BS</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="see-also">
+    <h2>See also</h2>
+    <p>&bull; EVE Special Agent Toolkit &mdash; a spreadsheet listing almost all special agents including COSMOS agents, with short info on the kind of mission they give: <a href="https://forums-archive.eveonline.com/topic/287701">EVE Forums (archive)</a></p>
+    <p>&bull; <a href="http://dl.eve-files.com/media/corp/jowen/Caldari_COSMOS_guide_by_Jowen_Datloran_v1.0.pdf">Caldari COSMOS guide</a> (PDF) by Jowen Datloran</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Unofficial progress tracker built from the EVE University Wiki article <a href="https://wiki.eveuniversity.org/Caldari_COSMOS">Caldari COSMOS</a> (revision <span class="mono">222879</span>, last edited 15 May 2025).</p>
+    <p>Wiki content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0</a>. EVE Online and all related logos and images are the property of CCP hf. Checkbox state is stored locally in your browser only.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "evetools.caldari-cosmos.v1";
+
+  function fresh() {
+    return { checked: {}, optOut: {}, hideDone: {} };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return fresh();
+      var p = JSON.parse(raw);
+      return {
+        checked: (p && p.checked) || {},
+        optOut: (p && p.optOut) || {},
+        hideDone: (p && p.hideDone) || {}
+      };
+    } catch (e) {
+      return fresh();
+    }
+  }
+
+  var state = load();
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage disabled or full: keep working in-memory */
+    }
+  }
+
+  function slug(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019']/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function norm(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  /* ---------- collect rows ---------- */
+  var rows = [];
+  var byId = new Map();
+
+  document.querySelectorAll("table[data-kind]").forEach(function (table) {
+    var kind = table.dataset.kind;
+    var scope = table.dataset.scope;
+    table.querySelectorAll("tbody tr").forEach(function (tr) {
+      var name = tr.dataset.name || "";
+      var id = kind + ":" + scope + ":" + slug(name);
+      if (kind === "site") id += ":" + slug(tr.dataset.system || "");
+      tr.dataset.rowId = id;
+      var row = {
+        tr: tr,
+        id: id,
+        kind: kind,
+        scope: scope,
+        name: name,
+        system: tr.dataset.system || "",
+        site: tr.dataset.site || "",
+        required: (tr.dataset.requiredFor || "").split("|").map(function (s) { return s.trim(); }).filter(Boolean),
+        input: tr.querySelector('input[type="checkbox"]'),
+        main: tr.querySelector("td.main")
+      };
+      rows.push(row);
+      byId.set(id, row);
+    });
+  });
+
+  var agents = rows.filter(function (r) { return r.kind === "agent"; });
+  var items = rows.filter(function (r) { return r.kind === "item"; });
+
+  var agentByName = new Map();
+  agents.forEach(function (a) { agentByName.set(norm(a.name), a); });
+
+  var siteByKey = new Map();
+  rows.filter(function (r) { return r.kind === "site"; }).forEach(function (s) {
+    siteByKey.set(norm(s.name) + "|" + norm(s.system), s);
+  });
+
+  /* ---------- build one-way links: agent -> site / shopping item ---------- */
+  var linksTo = new Map();   /* rowId -> [agentId] */
+  var linksFrom = new Map(); /* agentId -> [rowId] */
+
+  function link(agent, row) {
+    if (!linksTo.has(row.id)) linksTo.set(row.id, []);
+    linksTo.get(row.id).push(agent.id);
+    if (!linksFrom.has(agent.id)) linksFrom.set(agent.id, []);
+    linksFrom.get(agent.id).push(row.id);
+  }
+
+  agents.forEach(function (a) {
+    if (a.site) {
+      var site = siteByKey.get(norm(a.site) + "|" + norm(a.system));
+      if (site && site !== a) link(a, site);
+    }
+  });
+
+  items.forEach(function (item) {
+    item.required.forEach(function (name) {
+      var agent = agentByName.get(norm(name));
+      if (agent) link(agent, item);
+    });
+  });
+
+  /* ---------- derived state ---------- */
+  function isChecked(id) { return !!state.checked[id]; }
+
+  function isOptedOut(rowId, agentId) {
+    var list = state.optOut[rowId];
+    return !!list && list.indexOf(agentId) !== -1;
+  }
+
+  function activeLinks(row) {
+    var ids = linksTo.get(row.id) || [];
+    return ids.filter(function (aid) {
+      return isChecked(aid) && !isOptedOut(row.id, aid);
+    });
+  }
+
+  function derivedFor(row) {
+    var ids = activeLinks(row);
+    return ids.length ? byId.get(ids[0]) : null;
+  }
+
+  /* ---------- render ---------- */
+  function setBadge(row, text, cls) {
+    var badge = row.main.querySelector(".badge");
+    if (!text) {
+      if (badge) badge.remove();
+      return;
+    }
+    if (!badge) {
+      badge = document.createElement("span");
+      row.main.appendChild(badge);
+    }
+    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.textContent = text;
+  }
+
+  function recompute() {
+    rows.forEach(function (row) {
+      var derived = derivedFor(row);
+      var manual = isChecked(row.id);
+      var done = manual || !!derived;
+
+      row.tr.classList.toggle("done", done);
+      row.tr.classList.toggle("derived", !!derived && !manual);
+      if (row.input.checked !== done) row.input.checked = done;
+
+      if (derived && !manual) {
+        var n = activeLinks(row).length;
+        setBadge(row, "linked: " + derived.name + (n > 1 ? " +" + (n - 1) : ""), "");
+      } else {
+        setBadge(row, "");
+      }
+    });
+    updateCounts();
+    applyFilters();
+  }
+
+  function updateCounts() {
+    var scopes = {};
+    var totalDone = 0;
+
+    rows.forEach(function (row) {
+      var s = scopes[row.scope] || (scopes[row.scope] = { total: 0, done: 0 });
+      s.total++;
+      if (row.tr.classList.contains("done")) {
+        s.done++;
+        totalDone++;
+      }
+    });
+
+    document.querySelectorAll("[data-count]").forEach(function (el) {
+      var s = scopes[el.dataset.count];
+      if (!s) return;
+      el.innerHTML = "<b>" + s.done + "</b> / " + s.total;
+    });
+
+    var meter = document.getElementById("global-meter");
+    if (meter) {
+      var pct = rows.length ? Math.round((totalDone / rows.length) * 100) : 0;
+      meter.querySelector("i").style.width = pct + "%";
+      meter.setAttribute("aria-valuenow", String(pct));
+    }
+    var stat = document.getElementById("global-stat");
+    if (stat) stat.innerHTML = "<b>" + totalDone + "</b> / " + rows.length + " done";
+  }
+
+  /* ---------- search + hide done ---------- */
+  var queries = {};
+
+  function applyFilters() {
+    rows.forEach(function (row) {
+      var q = queries[row.scope] || "";
+      row.tr.hidden = !!q && row.tr.textContent.toLowerCase().indexOf(q) === -1;
+    });
+  }
+
+  document.querySelectorAll("input[data-filter]").forEach(function (input) {
+    input.addEventListener("input", function () {
+      queries[input.dataset.filter] = input.value.trim().toLowerCase();
+      applyFilters();
+    });
+  });
+
+  function syncHideToggles() {
+    document.querySelectorAll("input[data-hide]").forEach(function (input) {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      if (!table) return;
+      var on = !!state.hideDone[scope];
+      input.checked = on;
+      table.classList.toggle("hide-done", on);
+    });
+  }
+
+  document.querySelectorAll("input[data-hide]").forEach(function (input) {
+    input.addEventListener("change", function () {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      state.hideDone[scope] = input.checked;
+      if (table) table.classList.toggle("hide-done", input.checked);
+      save();
+    });
+  });
+
+  /* ---------- checkbox interaction ---------- */
+  rows.forEach(function (row) {
+    row.input.addEventListener("change", function () {
+      var on = row.input.checked;
+      var derived = derivedFor(row);
+
+      if (!on && derived) {
+        /* user is opting this row out of an auto-tick */
+        var optOuts = state.optOut[row.id] || (state.optOut[row.id] = []);
+        (linksTo.get(row.id) || []).forEach(function (aid) {
+          if (isChecked(aid) && optOuts.indexOf(aid) === -1) optOuts.push(aid);
+        });
+        state.checked[row.id] = false;
+      } else if (on) {
+        state.checked[row.id] = true;
+        delete state.optOut[row.id];
+      } else {
+        state.checked[row.id] = false;
+      }
+
+      /* unchecking a mission clears its opt-outs, so re-checking re-applies */
+      if (row.kind === "agent" && !on) {
+        Object.keys(state.optOut).forEach(function (rid) {
+          var rest = state.optOut[rid].filter(function (x) { return x !== row.id; });
+          if (rest.length) state.optOut[rid] = rest;
+          else delete state.optOut[rid];
+        });
+      }
+
+      save();
+      recompute();
+    });
+  });
+
+  /* ---------- reset ---------- */
+  var resetBtn = document.getElementById("reset-all");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      if (!window.confirm("Clear every checkbox and progress state? This cannot be undone.")) return;
+      state.checked = {};
+      state.optOut = {};
+      save();
+      recompute();
+    });
+  }
+
+  /* ---------- cross-tab sync ---------- */
+  window.addEventListener("storage", function (e) {
+    if (e.key !== STORAGE_KEY) return;
+    state = load();
+    syncHideToggles();
+    recompute();
+  });
+
+  /* ---------- boot ---------- */
+  syncHideToggles();
+  recompute();
+})();
+</script>
+</body>
+</html>
