@@ -36,6 +36,12 @@ a:hover{color:#fff;border-bottom-color:var(--cyan)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ---------- header ---------- */
+.backlink{
+  display:inline-block;margin:0 0 20px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border:0;
+}
+.backlink:hover{color:var(--cyan2)}
+.backlink span{color:var(--cyan);margin-right:6px}
 .top{padding:40px 0 26px}
 .eyebrow{display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);font-weight:600}
 .eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
@@ -259,6 +265,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
 
 <header class="top">
   <div class="wrap">
+    <a class="backlink" href="index.html"><span aria-hidden="true">&larr;</span> All COSMOS lines</a>
     <div class="eyebrow">EVE University Wiki &middot; COSMOS</div>
     <h1>Caldari <em>COSMOS</em></h1>
     <p class="lede"><strong>Caldari COSMOS</strong> is a collection of PvE content located in Okkelen constellation in The Forge region and in 09-4XW constellation in Tenal region. This includes COSMOS mission agents, COSMOS combat sites and unique rats on belts.</p>
@@ -273,6 +280,8 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
+    <a href="index.html">All lines</a>
+    <span class="sep" aria-hidden="true"></span>
     <a href="#agents-high">High-sec Agents</a>
     <a href="#sites-high">Sites</a>
     <a href="#shopping">Shopping list</a>

@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amarr COSMOS — Mission Tracker</title>
+<meta name="description" content="Amarr COSMOS agent, site and shopping-list tracker with persistent progress checkboxes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050a0e'/%3E%3Cpath d='M6 24 16 6l10 18-10-4z' fill='none' stroke='%2335c9ff' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#05090e;--bg2:#080e15;--panel:#0b131c;--panel2:#0e1823;
+  --line:#1a2a39;--line2:#26415a;--text:#c6d7e4;--dim:#7b93a7;
+  --cyan:#35c9ff;--cyan2:#8ee7ff;--green:#48e08a;--amber:#ffb648;
+  --red:#ff5f70;--violet:#b48cff;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:104px}
+body{
+  margin:0;font-family:"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1100px 620px at 12% -12%,rgba(53,201,255,.11),transparent 62%),
+    radial-gradient(900px 520px at 96% -4%,rgba(180,140,255,.07),transparent 60%),
+    linear-gradient(rgba(53,201,255,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,201,255,.032) 1px,transparent 1px);
+  background-size:auto,auto,46px 46px,46px 46px;
+}
+a{color:var(--cyan2);text-decoration:none;border-bottom:1px solid rgba(53,201,255,.22);transition:color .15s,border-color .15s}
+a:hover{color:#fff;border-bottom-color:var(--cyan)}
+.wrap{max-width:1300px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- header ---------- */
+.backlink{
+  display:inline-block;margin:0 0 20px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border:0;
+}
+.backlink:hover{color:var(--cyan2)}
+.backlink span{color:var(--cyan);margin-right:6px}
+.top{padding:40px 0 26px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+h1{
+  margin:.32em 0 .18em;font-size:clamp(30px,4.6vw,54px);line-height:1.02;font-weight:700;
+  letter-spacing:-.015em;text-transform:uppercase;color:#eaf5fc;
+  text-shadow:0 0 42px rgba(53,201,255,.22);
+}
+h1 em{font-style:normal;color:var(--cyan)}
+.lede{max-width:78ch;color:var(--dim);font-size:15.5px;margin:0}
+.lede strong{color:var(--text);font-weight:600}
+.hud{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:26px}
+.meter{position:relative;flex:1 1 280px;min-width:220px;height:8px;background:#0a131b;border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#147d9e,var(--cyan) 70%,#c8f4ff);box-shadow:0 0 16px rgba(53,201,255,.55);transition:width .35s ease}
+.hud-stat{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+.hud-stat b{color:#eaf5fc;font-weight:600}
+.btn{
+  appearance:none;cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan);background:rgba(53,201,255,.06);
+  border:1px solid rgba(53,201,255,.4);padding:8px 16px;border-radius:0;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+  transition:background .15s,color .15s,box-shadow .15s;
+}
+.btn:hover{background:rgba(53,201,255,.16);color:#fff;box-shadow:0 0 18px rgba(53,201,255,.25)}
+.btn.danger{color:var(--red);border-color:rgba(255,95,112,.4);background:rgba(255,95,112,.05)}
+.btn.danger:hover{background:rgba(255,95,112,.14);box-shadow:0 0 18px rgba(255,95,112,.2)}
+.btn:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;background:rgba(5,9,14,.86);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-top:0;padding-bottom:0;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;border:0;padding:13px 14px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border-bottom:2px solid transparent;
+}
+.nav a:hover{color:var(--cyan2);border-bottom-color:rgba(53,201,255,.5);background:rgba(53,201,255,.05)}
+.nav .sep{flex:0 0 auto;width:1px;height:18px;background:var(--line2);margin:0 6px}
+
+/* ---------- sections ---------- */
+main{padding:34px 0 60px}
+.sec{margin:0 0 46px;scroll-margin-top:110px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:12px}
+h2{display:flex;align-items:center;gap:12px;margin:0;font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:#e8f4fb;font-weight:600}
+h2::before{content:"";width:4px;height:20px;background:var(--cyan);box-shadow:0 0 14px rgba(53,201,255,.7)}
+h2 .count{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--dim);font-weight:400}
+h2 .count b{color:var(--cyan);font-weight:600}
+h3{margin:26px 0 10px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan2);font-weight:600}
+p{margin:0 0 12px;max-width:88ch}
+.muted{color:var(--dim)}
+.note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,182,72,.055);
+  border-left:2px solid var(--amber);color:#d9c3a0;font-size:13.5px;max-width:none;
+}
+.note strong{color:var(--amber)}
+.danger-note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,95,112,.06);
+  border-left:2px solid var(--red);color:#e6b7bd;font-size:13.5px;max-width:none;
+}
+.danger-note strong{color:#ff8d99}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px}
+.search{
+  flex:1 1 240px;min-width:180px;display:flex;align-items:center;gap:8px;
+  background:#070d13;border:1px solid var(--line);padding:6px 10px;
+}
+.search svg{flex:0 0 auto;opacity:.55}
+.search input{
+  flex:1;background:none;border:0;outline:none;color:var(--text);font:inherit;font-size:13px;min-width:0;
+}
+.search input::placeholder{color:#5c7386}
+.search:focus-within{border-color:var(--line2);box-shadow:0 0 0 1px rgba(53,201,255,.2)}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);user-select:none}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.toggle .sw{width:30px;height:16px;border:1px solid var(--line2);background:#070d13;position:relative;transition:.18s}
+.toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;background:#4b6377;transition:.18s}
+.toggle input:checked + .sw{border-color:rgba(53,201,255,.6);background:rgba(53,201,255,.12)}
+.toggle input:checked + .sw::after{left:16px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.toggle input:focus-visible + .sw{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- tables ---------- */
+.tbl-wrap{border:1px solid var(--line);background:linear-gradient(180deg,rgba(14,24,35,.72),rgba(8,14,21,.72));overflow:auto;max-height:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+thead th{
+  position:sticky;top:0;z-index:3;background:#0b141d;text-align:left;font-weight:600;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8fa9bd;
+  padding:10px 12px;border-bottom:1px solid var(--line2);white-space:nowrap;
+}
+tbody td{padding:9px 12px;border-bottom:1px solid rgba(26,42,57,.6);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:rgba(53,201,255,.045)}
+tbody tr.done{background:rgba(72,224,138,.025)}
+tbody tr.done:hover{background:rgba(72,224,138,.055)}
+tbody tr.done > td{opacity:.56}
+tbody tr.done > td.chk-cell,tbody tr.done > td.main,tbody tr.done .badge{opacity:1}
+tbody tr.done > td.main a{text-decoration:line-through;text-decoration-color:rgba(72,224,138,.55);text-decoration-thickness:1px}
+td.main{font-weight:600;color:#dceaf4}
+td.main .sub{display:block;font-weight:400;font-size:12px;color:var(--dim);margin-top:1px}
+td.chk-cell{width:36px;padding-right:0;text-align:center}
+th.chk-cell{width:36px;padding-right:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+.standing{color:#a9c0d1}
+.standing.high{color:var(--amber)}
+.standing.max{color:#ff8a5c}
+.standing.none{color:#5f7689}
+.mono{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.nowrap{white-space:nowrap}
+
+/* checkboxes */
+.chk{display:inline-flex;position:relative;line-height:0;cursor:pointer;padding:2px}
+.chk input{position:absolute;opacity:0;width:1px;height:1px}
+.chk .box{
+  width:18px;height:18px;display:block;position:relative;background:#060c12;
+  border:1px solid var(--line2);transition:background .15s,border-color .15s,box-shadow .15s;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%);
+}
+.chk input:checked + .box{background:rgba(72,224,138,.14);border-color:rgba(72,224,138,.85);box-shadow:0 0 12px rgba(72,224,138,.25)}
+.chk input:checked + .box::after{
+  content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
+  border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(40deg);
+}
+tr.derived .chk .box{border-color:rgba(53,201,255,.8);background:rgba(53,201,255,.13);box-shadow:0 0 12px rgba(53,201,255,.28)}
+tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
+.chk input:focus-visible + .box{outline:2px solid var(--cyan2);outline-offset:2px}
+.chk:hover .box{border-color:var(--cyan)}
+
+/* badges */
+.badge{
+  display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
+  color:var(--cyan);background:rgba(53,201,255,.08);border:1px solid rgba(53,201,255,.3);
+}
+.badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.tag{
+  display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+}
+.tags{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;margin-left:8px;vertical-align:middle}
+.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3)}
+.tag.src.alt{color:var(--violet);background:rgba(180,140,255,.08);border:1px solid rgba(180,140,255,.32)}
+.tag.rep{color:var(--green);background:rgba(72,224,138,.07);border:1px solid rgba(72,224,138,.32)}
+
+/* faction chips */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:1px 8px;font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:#a9c0d1;border:1px solid var(--line2);border-radius:99px;white-space:nowrap;
+}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:#7b93a7;box-shadow:0 0 6px currentColor}
+.f-caldari::before{background:#4aa8ff;color:#4aa8ff}
+.f-amarr::before{background:#ffd166;color:#ffd166}
+.f-minmatar::before{background:#ff7a59;color:#ff7a59}
+.f-angel::before{background:#ff4d6d;color:#ff4d6d}
+.f-guristas::before{background:#b48cff;color:#b48cff}
+.f-interbus::before{background:#48e08a;color:#48e08a}
+.f-other::before{background:#7b93a7;color:#7b93a7}
+
+/* type pills */
+.type{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9db4c6;border:1px solid var(--line2);padding:1px 7px}
+.type.sig{color:var(--violet);border-color:rgba(180,140,255,.35)}
+.type.beacon{color:var(--cyan);border-color:rgba(53,201,255,.35)}
+
+/* hidden / filtered */
+table.hide-done tbody tr.done{display:none}
+tbody tr[hidden]{display:none}
+.empty{display:none;padding:18px 14px;color:var(--dim);font-size:13px}
+.tbl-wrap.is-empty .empty{display:block}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:#62798c;font-size:12px;position:relative;z-index:1}
+footer p{margin:0 0 6px;max-width:95ch}
+footer a{border-bottom-color:rgba(53,201,255,.15)}
+
+/* ---------- responsive ---------- */
+@media (max-width:820px){
+  .wrap{padding:0 16px}
+  .top{padding:28px 0 20px}
+  .tbl-wrap{border:0;background:none;overflow:visible}
+  table{min-width:0;display:block}
+  thead{display:none}
+  tbody{display:block}
+  tbody tr{display:block;border:1px solid var(--line);background:rgba(14,24,35,.8);margin:0 0 10px;padding:6px 10px 8px}
+  tbody tr:last-child{margin-bottom:0}
+  tbody td{display:block;padding:5px 0;border:0}
+  tbody td::before{
+    content:attr(data-label);display:block;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#5f7689;margin-bottom:2px;
+  }
+  tbody td.chk-cell{position:absolute;top:10px;right:11px;padding:0}
+  tbody tr{position:relative;padding:9px 46px 10px 12px}
+  tbody td.chk-cell::before{content:none}
+  td.main{font-size:14px}
+  .tags{display:flex;margin:6px 0 0}
+  h2{font-size:16px}
+  .hud{gap:12px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  body{background:#fff;color:#111}
+  body::before,.nav,.toolbar,.hud .btn,.hud .meter{display:none}
+  .wrap{max-width:none;padding:0}
+  h1,h2,td.main{color:#000}
+  .tbl-wrap{border-color:#bbb;background:none;overflow:visible}
+  table{min-width:0}
+  thead th{position:static;background:#eee;color:#000;border-color:#bbb}
+  tbody td{border-color:#ddd}
+  a{color:#000;border:0}
+  tr.done{opacity:1}
+  tr.done > td{opacity:1}
+  table.hide-done tbody tr.done{display:table-row}
+  tbody tr[hidden]{display:table-row}
+  .badge{color:#000;border-color:#999}
+}
+
+/* faction chips used by the additional COSMOS lines */
+.f-gallente::before{background:#58d68d;color:#58d68d}
+.f-blood::before{background:#ff4d6d;color:#ff4d6d}
+.f-serpentis::before{background:#2ed3c6;color:#2ed3c6}
+.f-syndicate::before{background:#9fb4c6;color:#9fb4c6}
+.f-ore::before{background:#f0c674;color:#f0c674}
+.f-thukker::before{background:#d7a3ff;color:#d7a3ff}
+.f-khanid::before{background:#ffcf70;color:#ffcf70}
+.f-ammatar::before{background:#c9a227;color:#c9a227}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="backlink" href="index.html"><span aria-hidden="true">&larr;</span> All COSMOS lines</a>
+    <div class="eyebrow">EVE University Wiki &middot; COSMOS</div>
+    <h1>Amarr <em>COSMOS</em></h1>
+    <p class="lede"><strong>Amarr COSMOS</strong> is a collection of PvE content located in the Araz constellation in Domain, with additional low-security agents in Kenobanala and null-security agents in 9HXQ-G (Catch).</p>
+
+    <div class="hud">
+      <div class="meter" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="global-meter"><i></i></div>
+      <div class="hud-stat" id="global-stat"><b>0</b> / 0 done</div>
+      <button class="btn danger" id="reset-all" type="button">Reset all</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a href="index.html">All lines</a>
+    <span class="sep" aria-hidden="true"></span>
+    <a href="#agents-high">High-sec Agents</a>
+    <a href="#sites-high">Sites</a>
+    <a href="#shopping">Shopping list</a>
+    <a href="#agents-low">Low-sec Agents</a>
+    <a href="#sites-low">Low-sec Sites</a>
+    <a href="#agents-null">Null-sec Agents</a>
+    <a href="#sites-null">Null-sec Sites</a>
+  </div>
+</nav>
+
+<noscript>
+  <div class="wrap">
+    <p class="note">JavaScript is disabled &mdash; checkboxes will still render, but progress will not be saved and the mission &rarr; site/shopping links will not work.</p>
+  </div>
+</noscript>
+
+<main class="wrap">
+
+  <section class="sec" id="high-sec">
+    <h2>High security Amarr COSMOS</h2>
+    <p class="muted">The high security COSMOS is located in the Araz constellation in Domain.</p>
+  </section>
+
+
+  <section class="sec" id="agents-high">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-high"><b>0</b> / 0</span></h2>
+    </div>
+    <div class="danger-note">
+      <strong>Do not even talk to the agent unless you are going to run the mission.</strong>
+      Failing the mission or letting it expire will prevent you from ever doing that mission or any mission in the same chain. As soon as you talk to the agent you get a mission offer that <strong>expires in seven days</strong>.
+    </div>
+    <p class="note">COSMOS missions demand high enough <strong>faction standing</strong> to gain the missions &mdash; corp standing cannot be used instead.
+      They also require higher standing than normal missions: <strong>2.00 for L2</strong>, <strong>4.00 for L3</strong> and <strong>6.00 for L4</strong>
+      (normally 1.00 / 3.00 / 5.00). Checking an agent here marks the site they are located at and the shopping-list items required for their missions.</p>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter agents, factions, systems…" aria-label="Filter agents" data-filter="agents-high">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-high"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-high">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Agent</th>
+          <th scope="col">Standing req</th>
+          <th scope="col">Faction</th>
+          <th scope="col">Location</th>
+          <th scope="col">Notes / chain</th>
+        </tr></thead>
+        <tbody>
+          <tr data-name="Ader Finn" data-system="Munory" data-site="Munory 5 Moon 3">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ader Finn done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ader_Finn">Ader Finn</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Munory - Munory 5 Moon 3</td>
+            <td data-label="Notes / chain">Requires <a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a></td>
+          </tr>
+          <tr data-name="Amir Arshah" data-system="Nidupad" data-site="Carchatur Outpost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amir Arshah done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Amir_Arshah">Amir Arshah</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Nidupad - Carchatur Outpost</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Ammargal Detrone" data-system="Nidupad" data-site="Imperial Palace Complex">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ammargal Detrone done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ammargal_Detrone">Ammargal Detrone</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Nidupad - Imperial Palace Complex</td>
+            <td data-label="Notes / chain">Requires <a href="https://wiki.eveuniversity.org/Zach_Himun">Zach Himun</a></td>
+          </tr>
+          <tr data-name="Bartezo Maphante" data-system="Garisas" data-site="Port Maphante">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bartezo Maphante done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Bartezo_Maphante">Bartezo Maphante</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Garisas - Port Maphante</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Chari Shakai" data-system="Aphi" data-site="Civic Court Plaza">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Chari Shakai done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Chari_Shakai">Chari Shakai</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Aphi - Civic Court Plaza</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Hetras Dakumon" data-system="Munory" data-site="The Bonfire">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hetras Dakumon done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Hetras_Dakumon">Hetras Dakumon</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Munory - The Bonfire</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Jeeta Neek" data-system="Jakri" data-site="Garisas gate">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jeeta Neek done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Jeeta_Neek">Jeeta Neek</a></td>
+            <td data-label="Standing"><span class="num standing max">9.20</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Jakri - Garisas gate</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Kofur Karveran" data-system="Jakri" data-site="Caor Kordin">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kofur Karveran done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kofur_Karveran">Kofur Karveran</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Jakri - Caor Kordin</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Manel Kador" data-system="Chanoun" data-site="Lord Manel&#x27;s Mansion">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Manel Kador done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Manel_Kador">Manel Kador</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Chanoun - Lord Manel's Mansion</td>
+            <td data-label="Notes / chain">Requires <a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a></td>
+          </tr>
+          <tr data-name="Mandor Neek" data-system="Jakri" data-site="Garisas gate">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Mandor Neek done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Mandor_Neek">Mandor Neek</a></td>
+            <td data-label="Standing"><span class="num standing high">8.50</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Jakri - Garisas gate</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Nossa Farad" data-system="Chanoun" data-site="Governor&#x27;s Audience Chamber">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nossa Farad done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Nossa_Farad">Nossa Farad</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Chanoun - Governor's Audience Chamber</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Odan Poun" data-system="Chanoun" data-site="Governor&#x27;s Audience Chamber">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Odan Poun done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Chanoun - Governor's Audience Chamber</td>
+            <td data-label="Notes / chain">Requires <a href="https://wiki.eveuniversity.org/Nossa_Farad">Nossa Farad</a></td>
+          </tr>
+          <tr data-name="Ormon Parsik" data-system="Munory" data-site="The Bonfire">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ormon Parsik done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ormon_Parsik">Ormon Parsik</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Munory - The Bonfire</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Sheroz Amokin" data-system="Koona" data-site="Contested Amarr Bastion of Blood">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Sheroz Amokin done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Sheroz_Amokin">Sheroz Amokin</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Koona - <a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Stem Robikar" data-system="Aphi" data-site="Civic Court Plaza">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Stem Robikar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Stem_Robikar">Stem Robikar</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Aphi - Civic Court Plaza</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Thakor Udokas" data-system="Zimse" data-site="Museum Arcana">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Thakor Udokas done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Thakor_Udokas">Thakor Udokas</a></td>
+            <td data-label="Standing"><span class="num standing">2.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Zimse - Museum Arcana</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="The Curator" data-system="Zimse" data-site="Museum Arcana">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="The Curator done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/The_Curator">The Curator</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Zimse - Museum Arcana</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Thumal Ebotiz" data-system="Koona" data-site="Contested Amarr Bastion of Blood">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Thumal Ebotiz done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Thumal_Ebotiz">Thumal Ebotiz</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Koona - <a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Notes / chain">Requires <a href="https://wiki.eveuniversity.org/Hetras_Dakumon">Hetras Dakumon</a></td>
+          </tr>
+          <tr data-name="Torval Kerth" data-system="Nidupad" data-site="Carchatur Outpost">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Torval Kerth done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Torval_Kerth">Torval Kerth</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Nidupad - Carchatur Outpost</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Zach Himun" data-system="Zimse" data-site="Imperial Administration Complex">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zach Himun done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zach_Himun">Zach Himun</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Zimse - Imperial Administration Complex</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Zaestra Kuramor" data-system="Jakri" data-site="Garisas gate">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zaestra Kuramor done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zaestra_Kuramor">Zaestra Kuramor</a></td>
+            <td data-label="Standing"><span class="num standing max">9.90</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Jakri - Garisas gate</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Zar Forari" data-system="Zimse" data-site="Imperial Administration Complex">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zar Forari done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zar_Forari">Zar Forari</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Zimse - Imperial Administration Complex</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Jeremy Tacs" data-system="Mandoo" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jeremy Tacs done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Jeremy_Tacs">Jeremy Tacs</a></td>
+            <td data-label="Standing"><span class="num standing">2.0</span></td>
+            <td data-label="Faction"><span class="chip f-interbus">The InterBus</span></td>
+            <td data-label="Location">Mandoo</td>
+            <td data-label="Notes / chain">Agent suspended?</td>
+          </tr>
+          <tr data-name="Madibe Arnadi" data-system="Alkez" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Madibe Arnadi done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Madibe_Arnadi">Madibe Arnadi</a></td>
+            <td data-label="Standing"><span class="num standing max">9.5</span></td>
+            <td data-label="Faction"><span class="chip f-ammatar">Ammatar Mandate</span></td>
+            <td data-label="Location">Alkez</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+          <tr data-name="Tori Aman" data-system="Agil" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tori Aman done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Tori_Aman">Tori Aman</a></td>
+            <td data-label="Standing"><span class="num standing max">9.5</span></td>
+            <td data-label="Faction"><span class="chip f-khanid">Khanid Kingdom</span></td>
+            <td data-label="Location">Agil</td>
+            <td data-label="Notes / chain">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites-high">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-high"><b>0</b> / 0</span></h2>
+    </div>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter sites, systems…" aria-label="Filter COSMOS sites" data-filter="sites-high">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="sites-high"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-high">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Name</th><th scope="col">DED rating</th><th scope="col">Type</th><th scope="col">System</th><th scope="col">ID</th>
+        </tr></thead><tbody>
+          <tr data-name="Ader Finn (agent location)" data-system="Munory">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ader Finn (agent location) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Ader_Finn">Ader Finn</a> (agent location)</td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Munory</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Amarr Bastion of Blood" data-system="Koona">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Amarr Bastion of Blood done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="DED" class="num">4/10</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Koona</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Amarr Crimson Keep" data-system="Garisas">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Amarr Crimson Keep done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
+            <td data-label="DED" class="num">3/10</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Garisas</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Contested Amarr Sanguine Vaults" data-system="Aphi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Contested Amarr Sanguine Vaults done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Sanguine_Vaults">Contested Amarr Sanguine Vaults</a></td>
+            <td data-label="DED" class="num">4/10</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Aphi</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Drifting Cask" data-system="Zimse">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Drifting Cask done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Zimse</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Kador Military Outpost" data-system="Chanoun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kador Military Outpost done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Kador_Military_Outpost">Kador Military Outpost</a></td>
+            <td data-label="DED" class="num">5/10</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Chanoun</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Labyrinth" data-system="Aphi">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Labyrinth done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Labyrinth">Labyrinth</a></td>
+            <td data-label="DED" class="num">Unrated</td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Aphi</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Lord Manel&#x27;s Mansion" data-system="Chanoun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Lord Manel&#x27;s Mansion done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
+            <td data-label="DED" class="num">Unrated</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Chanoun</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Museum Arcana" data-system="Zimse">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Museum Arcana done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Museum_Arcana">Museum Arcana</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">Zimse</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Port Maphante" data-system="Garisas">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Port Maphante done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Port_Maphante">Port Maphante</a></td>
+            <td data-label="DED" class="num">unrated</td>
+            <td data-label="Type"></td>
+            <td data-label="System">Garisas</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Yamia Mida" data-system="Zimse">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yamia Mida done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Yamia_Mida">Yamia Mida</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Zimse</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody></table></div></section>
+
+  <section class="sec" id="shopping">
+    <div class="sec-head">
+      <h2>Shopping list <span class="count" data-count="shopping"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="muted">Items that can be acquired <em>before</em> starting the mission that requires them. Many can also be found in contracts. Checking an agent auto-ticks the items required for that agent's missions &mdash; ticking an item here never changes an agent.</p>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter items, sources, missions…" aria-label="Filter shopping list" data-filter="shopping">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="shopping"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="item" data-scope="shopping">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Item (Amount)</th><th scope="col">Source</th>
+          <th scope="col">Dropped by</th>
+          <th scope="col">Required for</th><th scope="col">Notes</th>
+        </tr></thead><tbody>
+          <tr data-name="Enigma Cypher Book" data-source="Warrior rats" data-required-for="Ammargal Detrone">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Enigma Cypher Book done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Enigma Cypher Book</td>
+            <td data-label="Source">Warrior rats</td>
+            <td data-label="Dropped by">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(9_of_13)">King of the Hill (9 of 13)</a></td>
+            <td data-label="Notes">Araz constellation - Asteroid belts</td>
+          </tr>
+          <tr data-name="Encoding Matrix Component (10)" data-source="Warrior rats" data-required-for="Ammargal Detrone">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Encoding Matrix Component (10) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Encoding Matrix Component (10)</td>
+            <td data-label="Source">Warrior rats</td>
+            <td data-label="Dropped by">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(10_of_13)">King of the Hill (10 of 13)</a></td>
+            <td data-label="Notes">Araz constellation - Asteroid belts</td>
+          </tr>
+          <tr data-name="Dynasty Ring (2)" data-source="Warrior rats" data-required-for="Thumal Ebotiz">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Dynasty Ring (2) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Dynasty Ring (2)</td>
+            <td data-label="Source">Warrior rats</td>
+            <td data-label="Dropped by">&mdash;</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Thumal_Ebotiz#Clear_Head_(1_of_5)_-_Throwing_Down_the_Gauntlet">Clear Head (1 of 5) - Throwing Down the Gauntlet</a> (1)<br><a href="https://wiki.eveuniversity.org/Pawns_on_the_Board_(2_of_5)">Pawns on the Board (2 of 5)</a> (1)</td>
+            <td data-label="Notes">Araz constellation - Asteroid belts</td>
+          </tr>
+          <tr data-name="Bug-Ridden Corpse (7)" data-source="Contested Amarr Sanguine Vaults Contested Amarr Bastion of Blood" data-required-for="Amir Arshah|Sheroz Amokin">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bug-Ridden Corpse (7) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Bug-Ridden Corpse (7)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Sanguine_Vaults">Contested Amarr Sanguine Vaults</a><br><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Biomass Recycling Storage Container<br>Corpse Dealer</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Amir_Arshah#Arming_Araz_(2_of_5)">Arming Araz (2 of 5)</a> (3)<br><a href="https://wiki.eveuniversity.org/Sheroz_Amokin#Blood_Hunt_-_Symptoms_(1_of_5)">Blood Hunt - Symptoms (1 of 5)</a></td>
+            <td data-label="Notes">(2nd stage)<br>(1st stage)</td>
+          </tr>
+          <tr data-name="Amarr Light Marines (50)" data-source="Kador Military Outpost" data-required-for="Nossa Farad">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amarr Light Marines (50) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Amarr Light Marines (50)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Kador_Military_Outpost">Kador Military Outpost</a></td>
+            <td data-label="Dropped by">Kador Bunker</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(4_of_5)">Governor's Aide (4 of 5)</a></td>
+            <td data-label="Notes">(5th stage)</td>
+          </tr>
+          <tr data-name="Manel&#x27;s Servant (14)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Nossa Farad">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Manel&#x27;s Servant (14) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Manel's Servant (14)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
+            <td data-label="Dropped by">Stranded Personnel Transport</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(5_of_5)">Governor's Aide (5 of 5)</a></td>
+            <td data-label="Notes">(entrance)</td>
+          </tr>
+          <tr data-name="Blood Grunt Tag (10)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Blood Grunt Tag (10) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Blood Grunt Tag (10)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
+            <td data-label="Dropped by">Blood Phantom/Templar</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(1_of_3)">Neutralizing the Threat (1 of 3)</a></td>
+            <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
+          </tr>
+          <tr data-name="Blood Lower-Tier Tag (5)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Blood Lower-Tier Tag (5) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Blood Lower-Tier Tag (5)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
+            <td data-label="Dropped by">Blood Arch Sage</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(2_of_3)">Neutralizing the Threat (2 of 3)</a></td>
+            <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
+          </tr>
+          <tr data-name="Blood Raider Squad Leader&#x27;s Head (2)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Blood Raider Squad Leader&#x27;s Head (2) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Blood Raider Squad Leader's Head (2)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
+            <td data-label="Dropped by">Dark Blood Arch Templar</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(3_of_3)">Neutralizing the Threat (3 of 3)</a></td>
+            <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
+          </tr>
+          <tr data-name="Blood Raider Scientist (5)" data-source="Contested Amarr Crimson Keep" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Blood Raider Scientist (5) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Blood Raider Scientist (5)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
+            <td data-label="Dropped by">Blood Factory</td>
+            <td data-label="Required for">&mdash;</td>
+            <td data-label="Notes">(1st, 2nd and 3rd stage)</td>
+          </tr>
+          <tr data-name="Elite Laser Pistols (50)" data-source="Contested Amarr Crimson Keep" data-required-for="Bartezo Maphante">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Elite Laser Pistols (50) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Elite Laser Pistols (50)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
+            <td data-label="Dropped by">Laser-Pistol Stash</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Bartezo_Maphante#Guild_Wars_(4_of_4)">Guild Wars (4 of 4)</a></td>
+            <td data-label="Notes">(2nd stage)</td>
+          </tr>
+          <tr data-name="Corpum Commander Medallion" data-source="Contested Amarr Crimson Keep" data-required-for="Zach Himun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Corpum Commander Medallion done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Corpum Commander Medallion</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
+            <td data-label="Dropped by">Corpum Blood Duke</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(5_of_13)">King of the Hill (5 of 13)</a></td>
+            <td data-label="Notes">(2nd and 3rd stage)</td>
+          </tr>
+          <tr data-name="Anema Bluechip" data-source="Contested Amarr Crimson Keep" data-required-for="Kofur Karveran">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Anema Bluechip done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Anema Bluechip</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
+            <td data-label="Dropped by">Rebuild Asteroid Station</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Kofur_Karveran">Kofur Karveran</a> ??</td>
+            <td data-label="Notes">(3rd stage)</td>
+          </tr>
+          <tr data-name="Blood Fund" data-source="Contested Amarr Bastion of Blood" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Blood Fund done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Blood Fund</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Blood Kernel</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Clean_Hands_%E2%80%93_Blood_Trail_(1_of_5)">Clean Hands – Blood Trail (1 of 5)</a></td>
+            <td data-label="Notes">(2nd stage)</td>
+          </tr>
+          <tr data-name="Antiseptic Biomass (2)" data-source="Contested Amarr Bastion of Blood" data-required-for="Sheroz Amokin">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Antiseptic Biomass (2) done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Antiseptic Biomass (2)</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Blood Kernel</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Sheroz_Amokin#Blood_Hunt_-_Morbid_Burden_(2_of_5)">Blood Hunt - Morbid Burden (2 of 5)</a></td>
+            <td data-label="Notes">(2nd and 3rd stage)</td>
+          </tr>
+          <tr data-name="Foreman&#x27;s Head" data-source="Contested Amarr Bastion of Blood" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Foreman&#x27;s Head done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Foreman's Head</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Blood Raider Foreman</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Clean_Hands_%E2%80%93_Rust_in_Peace_(4_of_5)">Clean Hands – Rust in Peace (4 of 5)</a></td>
+            <td data-label="Notes">(3rd stage)</td>
+          </tr>
+          <tr data-name="The Apocryphon" data-source="Contested Amarr Bastion of Blood" data-required-for="Ormon Parsik">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="The Apocryphon done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">The Apocryphon</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Altar of the Blessed</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ormon_Parsik#Pilgrim_-_Heretics">Pilgrim - Heretics</a></td>
+            <td data-label="Notes">(4th stage) Bastion Master Key needed, used up on entering.</td>
+          </tr>
+          <tr data-name="Generator Debris" data-source="Contested Amarr Bastion of Blood" data-required-for="Sheroz Amokin">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Generator Debris done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Generator Debris</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
+            <td data-label="Dropped by">Generator Building</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Sheroz_Amokin#Blood_Hunt_-_Cut_to_the_Heart_(4_of_5)">Blood Hunt - Cut to the Heart (4 of 5)</a></td>
+            <td data-label="Notes">(4th stage) Bastion Master Key needed, used up on entering.<br> Rare spawn!</td>
+          </tr>
+          <tr data-name="Runic Inscription" data-source="Museum Arcana" data-required-for="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Runic Inscription done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Runic Inscription</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Museum_Arcana">Museum Arcana</a></td>
+            <td data-label="Dropped by">Trial of Skill.</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Trial_of_Skill_(1_of_1)">Trial of Skill (1 of 1)</a></td>
+            <td data-label="Notes">(1st stage) Needs Relic Analyzer</td>
+          </tr>
+          <tr data-name="Takmahl Centrifugal Primer" data-source="Museum Arcana" data-required-for="The Curator">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Takmahl Centrifugal Primer done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Takmahl Centrifugal Primer</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Museum_Arcana">Museum Arcana</a></td>
+            <td data-label="Dropped by">Takmahl Digital Mezzotint</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(1_of_3)">Unearthing the Ancients (1 of 3)</a></td>
+            <td data-label="Notes">(2nd stage) Needs Relic Analyzer</td>
+          </tr>
+          <tr data-name="Holy Statue" data-source="Museum Arcana" data-required-for="The Curator">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Holy Statue done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Holy Statue</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Museum_Arcana">Museum Arcana</a></td>
+            <td data-label="Dropped by">Takmahl Striking Curiosity</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(2_of_3)">Unearthing the Ancients (2 of 3)</a></td>
+            <td data-label="Notes">(2nd stage) Needs Relic Analyzer</td>
+          </tr>
+          <tr data-name="Ritual Texts" data-source="Museum Arcana" data-required-for="The Curator">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ritual Texts done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Ritual Texts</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Museum_Arcana">Museum Arcana</a></td>
+            <td data-label="Dropped by">Arcana Patron</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(3_of_3)">Unearthing the Ancients (3 of 3)</a></td>
+            <td data-label="Notes">(2nd stage) Needs Relic Analyzer</td>
+          </tr>
+          <tr data-name="Amolah Kesti&#x27;s Data Fragment I" data-source="Drifting Cask" data-required-for="Zach Himun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amolah Kesti&#x27;s Data Fragment I done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Amolah Kesti's Data Fragment I</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
+            <td data-label="Dropped by">Drifting Cask</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)">King of the Hill (3 of 13)</a></td>
+            <td data-label="Notes">Signature near Zimse I – Asteroid Belt II</td>
+          </tr>
+          <tr data-name="Amolah Kesti&#x27;s Data Fragment II" data-source="Drifting Cask" data-required-for="Zach Himun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amolah Kesti&#x27;s Data Fragment II done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Amolah Kesti's Data Fragment II</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
+            <td data-label="Dropped by">Drifting Cask</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_2)">King of the Hill (3 of 13) (part 2)</a></td>
+            <td data-label="Notes">Signature near Zimse V. L4 defense fleet.</td>
+          </tr>
+          <tr data-name="Amolah Kesti&#x27;s Data Fragment III" data-source="Drifting Cask" data-required-for="Zach Himun">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amolah Kesti&#x27;s Data Fragment III done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Amolah Kesti's Data Fragment III</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
+            <td data-label="Dropped by">Drifting Cask</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3)">King of the Hill (3 of 13) (part 3)</a></td>
+            <td data-label="Notes">Signature near Zimse VI – Moon 6</td>
+          </tr>
+          <tr data-name="Yamia Mida&#x27;s Remains" data-source="Yamia Mida" data-required-for="Ammargal Detrone">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yamia Mida&#x27;s Remains done"><span class="box"></span></label></td>
+            <td class="main" data-label="Item">Yamia Mida's Remains</td>
+            <td data-label="Source"><a href="https://wiki.eveuniversity.org/Yamia_Mida">Yamia Mida</a></td>
+            <td data-label="Dropped by">Yamia Mida's Residence</td>
+            <td data-label="Required for"><a href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13)">King of the Hill (12 of 13)</a></td>
+            <td data-label="Notes">L4 defense fleet</td>
+          </tr>
+        </tbody></table></div></section>
+
+  <section class="sec" id="low-sec">
+    <h2>Low security Amarr COSMOS</h2>
+    <p class="muted">The low security part of Amarr COSMOS is located in the Kenobanala constellation.</p>
+  </section>
+
+
+  <section class="sec" id="agents-low">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-low"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="note">COSMOS missions can be run only once. Failing or letting one expire blocks that mission and the rest of its chain, so do not talk to an agent unless you intend to run the mission within seven days.</p>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter agents, factions, systems…" aria-label="Filter agents" data-filter="agents-low">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-low"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-low">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Agent</th>
+          <th scope="col">Standing req</th>
+          <th scope="col">Faction</th>
+          <th scope="col">Location</th>
+        </tr></thead>
+        <tbody>
+          <tr data-name="Fam Kishemas" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Fam Kishemas done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Fam_Kishemas">Fam Kishemas</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Fassara Nazarut" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Fassara Nazarut done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Fassara_Nazarut">Fassara Nazarut</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Kaeg Zkaen" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kaeg Zkaen done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaeg_Zkaen">Kaeg Zkaen</a></td>
+            <td data-label="Standing"><span class="num standing">4.00</span></td>
+            <td data-label="Faction"><span class="chip f-ammatar">Ammatar Mandate</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Krard Wengalill" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Krard Wengalill done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Krard_Wengalill">Krard Wengalill</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-ammatar">Ammatar Mandate</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Minas Iksan" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Minas Iksan done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Minas_Iksan">Minas Iksan</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Nuo Tuotura" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nuo Tuotura done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Nuo_Tuotura">Nuo Tuotura</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+          <tr data-name="Zama Fedas" data-system="Kenobanala" data-site="Fort Kumar">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zama Fedas done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Zama_Fedas">Zama Fedas</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-khanid">Khanid Kingdom</span></td>
+            <td data-label="Location">Kenobanala - Fort Kumar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites-low">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-low"><b>0</b> / 0</span></h2>
+    </div>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter sites, systems…" aria-label="Filter COSMOS sites" data-filter="sites-low">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="sites-low"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-low">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Name</th><th scope="col">DED rating</th><th scope="col">Type</th><th scope="col">System</th><th scope="col">ID</th>
+        </tr></thead><tbody>
+          <tr data-name="Amarr Military Training Grounds" data-system="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Amarr Military Training Grounds done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Amarr_Military_Training_Grounds">Amarr Military Training Grounds</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">&mdash;</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Ammatar Traitor&#x27;s Hideout" data-system="Kenobalana">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ammatar Traitor&#x27;s Hideout done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Ammatar_Traitor%27s_Hideout">Ammatar Traitor's Hideout</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"><span class="type sig">Signature</span></td>
+            <td data-label="System">Kenobalana</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Fort Kumar" data-system="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Fort Kumar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Fort_Kumar">Fort Kumar</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">&mdash;</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody></table></div></section>
+
+  <section class="sec" id="null-sec">
+    <h2>Null security Amarr COSMOS</h2>
+    <p class="muted">Additional Amarr COSMOS agents are located in the 9HXQ-G constellation in Catch. Information on these agents is limited.</p>
+  </section>
+
+
+  <section class="sec" id="agents-null">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-null"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="note">COSMOS missions can be run only once. Failing or letting one expire blocks that mission and the rest of its chain, so do not talk to an agent unless you intend to run the mission within seven days.</p>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter agents, factions, systems…" aria-label="Filter agents" data-filter="agents-null">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-null"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-null">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Agent</th>
+          <th scope="col">Standing req</th>
+          <th scope="col">Faction</th>
+          <th scope="col">Location</th>
+        </tr></thead>
+        <tbody>
+          <tr data-name="Desra Nekri" data-system="3GD6-8" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Desra Nekri done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Desra_Nekri">Desra Nekri</a></td>
+            <td data-label="Standing"><span class="num standing">-ire</span></td>
+            <td data-label="Faction"><span class="chip f-other">&mdash;</span></td>
+            <td data-label="Location">3GD6-8</td>
+          </tr>
+          <tr data-name="Dorim Fatimar" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Dorim Fatimar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Dorim_Fatimar">Dorim Fatimar</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+          <tr data-name="Enna Ahruneh" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Enna Ahruneh done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Enna_Ahruneh">Enna Ahruneh</a></td>
+            <td data-label="Standing"><span class="num standing">-</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+          <tr data-name="Galhar Lahara" data-system="GE-8JV." data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Galhar Lahara done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Galhar_Lahara">Galhar Lahara</a></td>
+            <td data-label="Standing"><span class="num standing">-</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">GE-8JV.</td>
+          </tr>
+          <tr data-name="Karo Zulak" data-system="HY-RWO" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Karo Zulak done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Karo_Zulak">Karo Zulak</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">HY-RWO</td>
+          </tr>
+          <tr data-name="Kushan Horeat" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kushan Horeat done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kushan_Horeat">Kushan Horeat</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+          <tr data-name="Nimpor Fatimar" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nimpor Fatimar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Nimpor_Fatimar">Nimpor Fatimar</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+          <tr data-name="Ragot Parah" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ragot Parah done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ragot_Parah">Ragot Parah</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+          <tr data-name="Rahli Saronu" data-system="AX-DOT" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Rahli Saronu done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Rahli_Saronu">Rahli Saronu</a></td>
+            <td data-label="Standing"><span class="num standing">-</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">AX-DOT</td>
+          </tr>
+          <tr data-name="Reqqa Bratesch" data-system="MY-W1V" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Reqqa Bratesch done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Reqqa_Bratesch">Reqqa Bratesch</a></td>
+            <td data-label="Standing"><span class="num standing">5.00 (?)</span></td>
+            <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
+            <td data-label="Location">MY-W1V</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites-null">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-null"><b>0</b> / 0</span></h2>
+    </div>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter sites, systems…" aria-label="Filter COSMOS sites" data-filter="sites-null">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="sites-null"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-null">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Name</th><th scope="col">DED rating</th><th scope="col">Type</th><th scope="col">System</th><th scope="col">ID</th>
+        </tr></thead><tbody>
+          <tr data-name="Rakogh Administration Complex" data-system="3GD6-8">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Rakogh Administration Complex done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Rakogh_Administration_Complex">Rakogh Administration Complex</a></td>
+            <td data-label="DED" class="num">10/10</td>
+            <td data-label="Type"></td>
+            <td data-label="System">3GD6-8</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody></table></div></section>
+
+  <section class="sec" id="see-also">
+    <h2>See also</h2>
+<p>&bull; <a href="https://www.scribd.com/doc/37309070/Amarr-COSMOS-Guide-by-Jowen-Datloran-v1-3">Amarr COSMOS Guide 1.3</a>, a pdf by Jowen Datloran which has details on all agents and each complex.</p>
+<p>&bull; <a href="https://www.fuzzwork.co.uk/evelopedia/index.php/COSMOS_constellation">COSMOS constellation (evelopedia)</a> overview of all COSMOS storyline agents.</p>
+<p class="muted">&bull; From the old evelopedia. Focus is on agents and mission descriptions.</p>
+<p>&bull; <a href="https://www.fuzzwork.co.uk/evelopedia/index.php/Amarr_Cosmos_(Guide)">Amarr COSMOS Guide</a></p>
+<p>&bull; <a href="https://www.fuzzwork.co.uk/evelopedia/index.php/Caldari_COSMOS_Guide">Caldari COSMOS Guide</a></p>
+<p>&bull; <a href="https://www.fuzzwork.co.uk/evelopedia/index.php/Gallente_COSMOS_Guide">Gallente COSMOS Guide</a></p>
+<p>&bull; <a href="https://www.fuzzwork.co.uk/evelopedia/index.php/Minmatar_COSMOS_Guide">Minmatar COSMOS Guide</a></p>
+<p>&bull; <a href="https://www.scribd.com/doc/16401872/Cosmos-Missions-101">Cosmos Missions 101</a>, a guide to Caldari COSMOS missions, which also give some Amarr standing.</p>
+<p>&bull; <a href="https://web.archive.org/web/20120806094939/http://eve-odessa.com/en/guides/cosmos.html">Minmatar, Gallente and SoE COSMOS</a> (Archived 2012-08-06)</p>
+<p>&bull; EVE Special Agent Toolkit. This spreadsheet lists almost all special agents including COSMOS agents. Also gives short info on what kind of mission they give: https://forums-archive.eveonline.com/topic/287701</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Unofficial progress tracker built from the EVE University Wiki article <a href="https://wiki.eveuniversity.org/Amarr_COSMOS">Amarr COSMOS</a> (revision <span class="mono">222878</span>, last edited 15 May 2025).</p>
+    <p>Wiki content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0</a>. EVE Online and all related logos and images are the property of CCP hf. Checkbox state is stored locally in your browser only.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "evetools.amarr-cosmos.v1";
+
+  function fresh() {
+    return { checked: {}, optOut: {}, hideDone: {} };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return fresh();
+      var p = JSON.parse(raw);
+      return {
+        checked: (p && p.checked) || {},
+        optOut: (p && p.optOut) || {},
+        hideDone: (p && p.hideDone) || {}
+      };
+    } catch (e) {
+      return fresh();
+    }
+  }
+
+  var state = load();
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage disabled or full: keep working in-memory */
+    }
+  }
+
+  function slug(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019']/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function norm(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  /* ---------- collect rows ---------- */
+  var rows = [];
+  var byId = new Map();
+
+  document.querySelectorAll("table[data-kind]").forEach(function (table) {
+    var kind = table.dataset.kind;
+    var scope = table.dataset.scope;
+    table.querySelectorAll("tbody tr").forEach(function (tr) {
+      var name = tr.dataset.name || "";
+      var id = kind + ":" + scope + ":" + slug(name);
+      if (kind === "site") id += ":" + slug(tr.dataset.system || "");
+      tr.dataset.rowId = id;
+      var row = {
+        tr: tr,
+        id: id,
+        kind: kind,
+        scope: scope,
+        name: name,
+        system: tr.dataset.system || "",
+        site: tr.dataset.site || "",
+        required: (tr.dataset.requiredFor || "").split("|").map(function (s) { return s.trim(); }).filter(Boolean),
+        input: tr.querySelector('input[type="checkbox"]'),
+        main: tr.querySelector("td.main")
+      };
+      rows.push(row);
+      byId.set(id, row);
+    });
+  });
+
+  var agents = rows.filter(function (r) { return r.kind === "agent"; });
+  var items = rows.filter(function (r) { return r.kind === "item"; });
+
+  var agentByName = new Map();
+  agents.forEach(function (a) { agentByName.set(norm(a.name), a); });
+
+  var siteByKey = new Map();
+  rows.filter(function (r) { return r.kind === "site"; }).forEach(function (s) {
+    siteByKey.set(norm(s.name) + "|" + norm(s.system), s);
+  });
+
+  /* ---------- build one-way links: agent -> site / shopping item ---------- */
+  var linksTo = new Map();   /* rowId -> [agentId] */
+  var linksFrom = new Map(); /* agentId -> [rowId] */
+
+  function link(agent, row) {
+    if (!linksTo.has(row.id)) linksTo.set(row.id, []);
+    linksTo.get(row.id).push(agent.id);
+    if (!linksFrom.has(agent.id)) linksFrom.set(agent.id, []);
+    linksFrom.get(agent.id).push(row.id);
+  }
+
+  agents.forEach(function (a) {
+    if (a.site) {
+      var site = siteByKey.get(norm(a.site) + "|" + norm(a.system));
+      if (site && site !== a) link(a, site);
+    }
+  });
+
+  items.forEach(function (item) {
+    item.required.forEach(function (name) {
+      var agent = agentByName.get(norm(name));
+      if (agent) link(agent, item);
+    });
+  });
+
+  /* ---------- derived state ---------- */
+  function isChecked(id) { return !!state.checked[id]; }
+
+  function isOptedOut(rowId, agentId) {
+    var list = state.optOut[rowId];
+    return !!list && list.indexOf(agentId) !== -1;
+  }
+
+  function activeLinks(row) {
+    var ids = linksTo.get(row.id) || [];
+    return ids.filter(function (aid) {
+      return isChecked(aid) && !isOptedOut(row.id, aid);
+    });
+  }
+
+  function derivedFor(row) {
+    var ids = activeLinks(row);
+    return ids.length ? byId.get(ids[0]) : null;
+  }
+
+  /* ---------- render ---------- */
+  function setBadge(row, text, cls) {
+    var badge = row.main.querySelector(".badge");
+    if (!text) {
+      if (badge) badge.remove();
+      return;
+    }
+    if (!badge) {
+      badge = document.createElement("span");
+      row.main.appendChild(badge);
+    }
+    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.textContent = text;
+  }
+
+  function recompute() {
+    rows.forEach(function (row) {
+      var derived = derivedFor(row);
+      var manual = isChecked(row.id);
+      var done = manual || !!derived;
+
+      row.tr.classList.toggle("done", done);
+      row.tr.classList.toggle("derived", !!derived && !manual);
+      if (row.input.checked !== done) row.input.checked = done;
+
+      if (derived && !manual) {
+        var n = activeLinks(row).length;
+        setBadge(row, "linked: " + derived.name + (n > 1 ? " +" + (n - 1) : ""), "");
+      } else {
+        setBadge(row, "");
+      }
+    });
+    updateCounts();
+    applyFilters();
+  }
+
+  function updateCounts() {
+    var scopes = {};
+    var totalDone = 0;
+
+    rows.forEach(function (row) {
+      var s = scopes[row.scope] || (scopes[row.scope] = { total: 0, done: 0 });
+      s.total++;
+      if (row.tr.classList.contains("done")) {
+        s.done++;
+        totalDone++;
+      }
+    });
+
+    document.querySelectorAll("[data-count]").forEach(function (el) {
+      var s = scopes[el.dataset.count];
+      if (!s) return;
+      el.innerHTML = "<b>" + s.done + "</b> / " + s.total;
+    });
+
+    var meter = document.getElementById("global-meter");
+    if (meter) {
+      var pct = rows.length ? Math.round((totalDone / rows.length) * 100) : 0;
+      meter.querySelector("i").style.width = pct + "%";
+      meter.setAttribute("aria-valuenow", String(pct));
+    }
+    var stat = document.getElementById("global-stat");
+    if (stat) stat.innerHTML = "<b>" + totalDone + "</b> / " + rows.length + " done";
+  }
+
+  /* ---------- search + hide done ---------- */
+  var queries = {};
+
+  function applyFilters() {
+    rows.forEach(function (row) {
+      var q = queries[row.scope] || "";
+      row.tr.hidden = !!q && row.tr.textContent.toLowerCase().indexOf(q) === -1;
+    });
+  }
+
+  document.querySelectorAll("input[data-filter]").forEach(function (input) {
+    input.addEventListener("input", function () {
+      queries[input.dataset.filter] = input.value.trim().toLowerCase();
+      applyFilters();
+    });
+  });
+
+  function syncHideToggles() {
+    document.querySelectorAll("input[data-hide]").forEach(function (input) {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      if (!table) return;
+      var on = !!state.hideDone[scope];
+      input.checked = on;
+      table.classList.toggle("hide-done", on);
+    });
+  }
+
+  document.querySelectorAll("input[data-hide]").forEach(function (input) {
+    input.addEventListener("change", function () {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      state.hideDone[scope] = input.checked;
+      if (table) table.classList.toggle("hide-done", input.checked);
+      save();
+    });
+  });
+
+  /* ---------- checkbox interaction ---------- */
+  rows.forEach(function (row) {
+    row.input.addEventListener("change", function () {
+      var on = row.input.checked;
+      var derived = derivedFor(row);
+
+      if (!on && derived) {
+        /* user is opting this row out of an auto-tick */
+        var optOuts = state.optOut[row.id] || (state.optOut[row.id] = []);
+        (linksTo.get(row.id) || []).forEach(function (aid) {
+          if (isChecked(aid) && optOuts.indexOf(aid) === -1) optOuts.push(aid);
+        });
+        state.checked[row.id] = false;
+      } else if (on) {
+        state.checked[row.id] = true;
+        delete state.optOut[row.id];
+      } else {
+        state.checked[row.id] = false;
+      }
+
+      /* unchecking a mission clears its opt-outs, so re-checking re-applies */
+      if (row.kind === "agent" && !on) {
+        Object.keys(state.optOut).forEach(function (rid) {
+          var rest = state.optOut[rid].filter(function (x) { return x !== row.id; });
+          if (rest.length) state.optOut[rid] = rest;
+          else delete state.optOut[rid];
+        });
+      }
+
+      save();
+      recompute();
+    });
+  });
+
+  /* ---------- reset ---------- */
+  var resetBtn = document.getElementById("reset-all");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      if (!window.confirm("Clear every checkbox and progress state? This cannot be undone.")) return;
+      state.checked = {};
+      state.optOut = {};
+      save();
+      recompute();
+    });
+  }
+
+  /* ---------- cross-tab sync ---------- */
+  window.addEventListener("storage", function (e) {
+    if (e.key !== STORAGE_KEY) return;
+    state = load();
+    syncHideToggles();
+    recompute();
+  });
+
+  /* ---------- boot ---------- */
+  syncHideToggles();
+  recompute();
+})();
+</script>
+</body>
+</html>

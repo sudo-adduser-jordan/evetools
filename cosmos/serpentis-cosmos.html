@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serpentis COSMOS — Mission Tracker</title>
+<meta name="description" content="Serpentis COSMOS agent and site tracker with persistent progress checkboxes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050a0e'/%3E%3Cpath d='M6 24 16 6l10 18-10-4z' fill='none' stroke='%2335c9ff' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#05090e;--bg2:#080e15;--panel:#0b131c;--panel2:#0e1823;
+  --line:#1a2a39;--line2:#26415a;--text:#c6d7e4;--dim:#7b93a7;
+  --cyan:#35c9ff;--cyan2:#8ee7ff;--green:#48e08a;--amber:#ffb648;
+  --red:#ff5f70;--violet:#b48cff;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:104px}
+body{
+  margin:0;font-family:"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1100px 620px at 12% -12%,rgba(53,201,255,.11),transparent 62%),
+    radial-gradient(900px 520px at 96% -4%,rgba(180,140,255,.07),transparent 60%),
+    linear-gradient(rgba(53,201,255,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,201,255,.032) 1px,transparent 1px);
+  background-size:auto,auto,46px 46px,46px 46px;
+}
+a{color:var(--cyan2);text-decoration:none;border-bottom:1px solid rgba(53,201,255,.22);transition:color .15s,border-color .15s}
+a:hover{color:#fff;border-bottom-color:var(--cyan)}
+.wrap{max-width:1300px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- header ---------- */
+.backlink{
+  display:inline-block;margin:0 0 20px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border:0;
+}
+.backlink:hover{color:var(--cyan2)}
+.backlink span{color:var(--cyan);margin-right:6px}
+.top{padding:40px 0 26px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cyan);font-weight:600}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+h1{
+  margin:.32em 0 .18em;font-size:clamp(30px,4.6vw,54px);line-height:1.02;font-weight:700;
+  letter-spacing:-.015em;text-transform:uppercase;color:#eaf5fc;
+  text-shadow:0 0 42px rgba(53,201,255,.22);
+}
+h1 em{font-style:normal;color:var(--cyan)}
+.lede{max-width:78ch;color:var(--dim);font-size:15.5px;margin:0}
+.lede strong{color:var(--text);font-weight:600}
+.hud{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:26px}
+.meter{position:relative;flex:1 1 280px;min-width:220px;height:8px;background:#0a131b;border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#147d9e,var(--cyan) 70%,#c8f4ff);box-shadow:0 0 16px rgba(53,201,255,.55);transition:width .35s ease}
+.hud-stat{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+.hud-stat b{color:#eaf5fc;font-weight:600}
+.btn{
+  appearance:none;cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan);background:rgba(53,201,255,.06);
+  border:1px solid rgba(53,201,255,.4);padding:8px 16px;border-radius:0;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+  transition:background .15s,color .15s,box-shadow .15s;
+}
+.btn:hover{background:rgba(53,201,255,.16);color:#fff;box-shadow:0 0 18px rgba(53,201,255,.25)}
+.btn.danger{color:var(--red);border-color:rgba(255,95,112,.4);background:rgba(255,95,112,.05)}
+.btn.danger:hover{background:rgba(255,95,112,.14);box-shadow:0 0 18px rgba(255,95,112,.2)}
+.btn:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;background:rgba(5,9,14,.86);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-top:0;padding-bottom:0;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;border:0;padding:13px 14px;font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);border-bottom:2px solid transparent;
+}
+.nav a:hover{color:var(--cyan2);border-bottom-color:rgba(53,201,255,.5);background:rgba(53,201,255,.05)}
+.nav .sep{flex:0 0 auto;width:1px;height:18px;background:var(--line2);margin:0 6px}
+
+/* ---------- sections ---------- */
+main{padding:34px 0 60px}
+.sec{margin:0 0 46px;scroll-margin-top:110px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:12px}
+h2{display:flex;align-items:center;gap:12px;margin:0;font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:#e8f4fb;font-weight:600}
+h2::before{content:"";width:4px;height:20px;background:var(--cyan);box-shadow:0 0 14px rgba(53,201,255,.7)}
+h2 .count{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--dim);font-weight:400}
+h2 .count b{color:var(--cyan);font-weight:600}
+h3{margin:26px 0 10px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan2);font-weight:600}
+p{margin:0 0 12px;max-width:88ch}
+.muted{color:var(--dim)}
+.note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,182,72,.055);
+  border-left:2px solid var(--amber);color:#d9c3a0;font-size:13.5px;max-width:none;
+}
+.note strong{color:var(--amber)}
+.danger-note{
+  margin:0 0 18px;padding:12px 16px;background:rgba(255,95,112,.06);
+  border-left:2px solid var(--red);color:#e6b7bd;font-size:13.5px;max-width:none;
+}
+.danger-note strong{color:#ff8d99}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px}
+.search{
+  flex:1 1 240px;min-width:180px;display:flex;align-items:center;gap:8px;
+  background:#070d13;border:1px solid var(--line);padding:6px 10px;
+}
+.search svg{flex:0 0 auto;opacity:.55}
+.search input{
+  flex:1;background:none;border:0;outline:none;color:var(--text);font:inherit;font-size:13px;min-width:0;
+}
+.search input::placeholder{color:#5c7386}
+.search:focus-within{border-color:var(--line2);box-shadow:0 0 0 1px rgba(53,201,255,.2)}
+.toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);user-select:none}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.toggle .sw{width:30px;height:16px;border:1px solid var(--line2);background:#070d13;position:relative;transition:.18s}
+.toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;background:#4b6377;transition:.18s}
+.toggle input:checked + .sw{border-color:rgba(53,201,255,.6);background:rgba(53,201,255,.12)}
+.toggle input:checked + .sw::after{left:16px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.toggle input:focus-visible + .sw{outline:2px solid var(--cyan2);outline-offset:2px}
+
+/* ---------- tables ---------- */
+.tbl-wrap{border:1px solid var(--line);background:linear-gradient(180deg,rgba(14,24,35,.72),rgba(8,14,21,.72));overflow:auto;max-height:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+thead th{
+  position:sticky;top:0;z-index:3;background:#0b141d;text-align:left;font-weight:600;
+  font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8fa9bd;
+  padding:10px 12px;border-bottom:1px solid var(--line2);white-space:nowrap;
+}
+tbody td{padding:9px 12px;border-bottom:1px solid rgba(26,42,57,.6);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:rgba(53,201,255,.045)}
+tbody tr.done{background:rgba(72,224,138,.025)}
+tbody tr.done:hover{background:rgba(72,224,138,.055)}
+tbody tr.done > td{opacity:.56}
+tbody tr.done > td.chk-cell,tbody tr.done > td.main,tbody tr.done .badge{opacity:1}
+tbody tr.done > td.main a{text-decoration:line-through;text-decoration-color:rgba(72,224,138,.55);text-decoration-thickness:1px}
+td.main{font-weight:600;color:#dceaf4}
+td.main .sub{display:block;font-weight:400;font-size:12px;color:var(--dim);margin-top:1px}
+td.chk-cell{width:36px;padding-right:0;text-align:center}
+th.chk-cell{width:36px;padding-right:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+.standing{color:#a9c0d1}
+.standing.high{color:var(--amber)}
+.standing.max{color:#ff8a5c}
+.standing.none{color:#5f7689}
+.mono{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.nowrap{white-space:nowrap}
+
+/* checkboxes */
+.chk{display:inline-flex;position:relative;line-height:0;cursor:pointer;padding:2px}
+.chk input{position:absolute;opacity:0;width:1px;height:1px}
+.chk .box{
+  width:18px;height:18px;display:block;position:relative;background:#060c12;
+  border:1px solid var(--line2);transition:background .15s,border-color .15s,box-shadow .15s;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%);
+}
+.chk input:checked + .box{background:rgba(72,224,138,.14);border-color:rgba(72,224,138,.85);box-shadow:0 0 12px rgba(72,224,138,.25)}
+.chk input:checked + .box::after{
+  content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
+  border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(40deg);
+}
+tr.derived .chk .box{border-color:rgba(53,201,255,.8);background:rgba(53,201,255,.13);box-shadow:0 0 12px rgba(53,201,255,.28)}
+tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
+.chk input:focus-visible + .box{outline:2px solid var(--cyan2);outline-offset:2px}
+.chk:hover .box{border-color:var(--cyan)}
+
+/* badges */
+.badge{
+  display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
+  color:var(--cyan);background:rgba(53,201,255,.08);border:1px solid rgba(53,201,255,.3);
+}
+.badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.tag{
+  display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+}
+.tags{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;margin-left:8px;vertical-align:middle}
+.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3)}
+.tag.src.alt{color:var(--violet);background:rgba(180,140,255,.08);border:1px solid rgba(180,140,255,.32)}
+.tag.rep{color:var(--green);background:rgba(72,224,138,.07);border:1px solid rgba(72,224,138,.32)}
+
+/* faction chips */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:1px 8px;font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:#a9c0d1;border:1px solid var(--line2);border-radius:99px;white-space:nowrap;
+}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:#7b93a7;box-shadow:0 0 6px currentColor}
+.f-caldari::before{background:#4aa8ff;color:#4aa8ff}
+.f-amarr::before{background:#ffd166;color:#ffd166}
+.f-minmatar::before{background:#ff7a59;color:#ff7a59}
+.f-angel::before{background:#ff4d6d;color:#ff4d6d}
+.f-guristas::before{background:#b48cff;color:#b48cff}
+.f-interbus::before{background:#48e08a;color:#48e08a}
+.f-other::before{background:#7b93a7;color:#7b93a7}
+
+/* type pills */
+.type{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9db4c6;border:1px solid var(--line2);padding:1px 7px}
+.type.sig{color:var(--violet);border-color:rgba(180,140,255,.35)}
+.type.beacon{color:var(--cyan);border-color:rgba(53,201,255,.35)}
+
+/* hidden / filtered */
+table.hide-done tbody tr.done{display:none}
+tbody tr[hidden]{display:none}
+.empty{display:none;padding:18px 14px;color:var(--dim);font-size:13px}
+.tbl-wrap.is-empty .empty{display:block}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:#62798c;font-size:12px;position:relative;z-index:1}
+footer p{margin:0 0 6px;max-width:95ch}
+footer a{border-bottom-color:rgba(53,201,255,.15)}
+
+/* ---------- responsive ---------- */
+@media (max-width:820px){
+  .wrap{padding:0 16px}
+  .top{padding:28px 0 20px}
+  .tbl-wrap{border:0;background:none;overflow:visible}
+  table{min-width:0;display:block}
+  thead{display:none}
+  tbody{display:block}
+  tbody tr{display:block;border:1px solid var(--line);background:rgba(14,24,35,.8);margin:0 0 10px;padding:6px 10px 8px}
+  tbody tr:last-child{margin-bottom:0}
+  tbody td{display:block;padding:5px 0;border:0}
+  tbody td::before{
+    content:attr(data-label);display:block;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#5f7689;margin-bottom:2px;
+  }
+  tbody td.chk-cell{position:absolute;top:10px;right:11px;padding:0}
+  tbody tr{position:relative;padding:9px 46px 10px 12px}
+  tbody td.chk-cell::before{content:none}
+  td.main{font-size:14px}
+  .tags{display:flex;margin:6px 0 0}
+  h2{font-size:16px}
+  .hud{gap:12px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  body{background:#fff;color:#111}
+  body::before,.nav,.toolbar,.hud .btn,.hud .meter{display:none}
+  .wrap{max-width:none;padding:0}
+  h1,h2,td.main{color:#000}
+  .tbl-wrap{border-color:#bbb;background:none;overflow:visible}
+  table{min-width:0}
+  thead th{position:static;background:#eee;color:#000;border-color:#bbb}
+  tbody td{border-color:#ddd}
+  a{color:#000;border:0}
+  tr.done{opacity:1}
+  tr.done > td{opacity:1}
+  table.hide-done tbody tr.done{display:table-row}
+  tbody tr[hidden]{display:table-row}
+  .badge{color:#000;border-color:#999}
+}
+
+/* faction chips used by the additional COSMOS lines */
+.f-gallente::before{background:#58d68d;color:#58d68d}
+.f-blood::before{background:#ff4d6d;color:#ff4d6d}
+.f-serpentis::before{background:#2ed3c6;color:#2ed3c6}
+.f-syndicate::before{background:#9fb4c6;color:#9fb4c6}
+.f-ore::before{background:#f0c674;color:#f0c674}
+.f-thukker::before{background:#d7a3ff;color:#d7a3ff}
+.f-khanid::before{background:#ffcf70;color:#ffcf70}
+.f-ammatar::before{background:#c9a227;color:#c9a227}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="backlink" href="index.html"><span aria-hidden="true">&larr;</span> All COSMOS lines</a>
+    <div class="eyebrow">EVE University Wiki &middot; COSMOS</div>
+    <h1>Serpentis <em>COSMOS</em></h1>
+    <p class="lede"><strong>Serpentis COSMOS</strong> is a null-security COSMOS line located in the Pegasus constellation in Fountain. It contains Serpentis agents and COSMOS sites.</p>
+
+    <div class="hud">
+      <div class="meter" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="global-meter"><i></i></div>
+      <div class="hud-stat" id="global-stat"><b>0</b> / 0 done</div>
+      <button class="btn danger" id="reset-all" type="button">Reset all</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a href="index.html">All lines</a>
+    <span class="sep" aria-hidden="true"></span>
+    <a href="#agents">Agents</a>
+    <a href="#sites">Sites</a>
+  </div>
+</nav>
+
+<noscript>
+  <div class="wrap">
+    <p class="note">JavaScript is disabled &mdash; checkboxes will still render, but progress will not be saved and the mission &rarr; site/shopping links will not work.</p>
+  </div>
+</noscript>
+
+<main class="wrap">
+
+  <section class="sec" id="overview">
+    <h2>Serpentis COSMOS</h2>
+    <p class="muted">Pegasus in Fountain is one of the null-security COSMOS constellations. Information on these agents and sites is limited.</p>
+  </section>
+
+
+  <section class="sec" id="agents">
+    <div class="sec-head">
+      <h2>Agents <span class="count" data-count="agents-null"><b>0</b> / 0</span></h2>
+    </div>
+    <p class="note">COSMOS missions can be run only once. Failing or letting one expire blocks that mission and the rest of its chain, so do not talk to an agent unless you intend to run the mission within seven days.</p>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter agents, factions, systems…" aria-label="Filter agents" data-filter="agents-null">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="agents-null"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="agent" data-scope="agents-null">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Agent</th>
+          <th scope="col">Standing req</th>
+          <th scope="col">Faction</th>
+          <th scope="col">Location</th>
+        </tr></thead>
+        <tbody>
+          <tr data-name="Barou Lardoss" data-system="IGE-RI" data-site="Gallente Mining Operation">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Barou Lardoss done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Barou_Lardoss">Barou Lardoss</a></td>
+            <td data-label="Standing"><span class="num standing high">6.00</span></td>
+            <td data-label="Faction"><span class="chip f-gallente">Gallente Federation</span></td>
+            <td data-label="Location">IGE-RI - Gallente Mining Operation</td>
+          </tr>
+          <tr data-name="Bley Oreriel" data-system="A8-XBW" data-site="Yakura Harvesting Depot">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Bley Oreriel done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Bley_Oreriel">Bley Oreriel</a></td>
+            <td data-label="Standing"><span class="num standing">5.00</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">A8-XBW - Yakura Harvesting Depot</td>
+          </tr>
+          <tr data-name="Cliene Veine" data-system="A8-XBW" data-site="Yakura Harvesting Depot">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Cliene Veine done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Cliene_Veine">Cliene Veine</a></td>
+            <td data-label="Standing"><span class="num standing">5.00</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">A8-XBW - Yakura Harvesting Depot</td>
+          </tr>
+          <tr data-name="Goligere Debanelis" data-system="9-VO0Q on 5-D82P Gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Goligere Debanelis done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Goligere_Debanelis">Goligere Debanelis</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">9-VO0Q on 5-D82P Gate</td>
+          </tr>
+          <tr data-name="Gomosabin Zerdanne" data-system="9-VO0Q on PNQY-Y Gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gomosabin Zerdanne done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Gomosabin_Zerdanne">Gomosabin Zerdanne</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">9-VO0Q on PNQY-Y Gate</td>
+          </tr>
+          <tr data-name="Hara Lafleur" data-system="MN5N-X On D-Q04X gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hara Lafleur done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Hara_Lafleur">Hara Lafleur</a></td>
+            <td data-label="Standing"><span class="num standing max">9.90</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">MN5N-X On D-Q04X gate</td>
+          </tr>
+          <tr data-name="Jaquon Jalibar" data-system="MN5N-X On D-Q04X gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jaquon Jalibar done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Jaquon_Jalibar">Jaquon Jalibar</a></td>
+            <td data-label="Standing"><span class="num standing high">8.50</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">MN5N-X On D-Q04X gate</td>
+          </tr>
+          <tr data-name="Jarvas Ladier" data-system="A8-XBW" data-site="Yakura Harvesting Depot">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jarvas Ladier done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Jarvas_Ladier">Jarvas Ladier</a></td>
+            <td data-label="Standing"><span class="num standing">5.00</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">A8-XBW - Yakura Harvesting Depot</td>
+          </tr>
+          <tr data-name="Juvoire Sche" data-system="IR-WT1 on E-BWUU Gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Juvoire Sche done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Juvoire_Sche">Juvoire Sche</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">IR-WT1 on E-BWUU Gate</td>
+          </tr>
+          <tr data-name="Kaymotin Gradance" data-system="A8-XBW" data-site="Yakura Harvesting Depot">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kaymotin Gradance done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Kaymotin_Gradance">Kaymotin Gradance</a></td>
+            <td data-label="Standing"><span class="num standing">5.00</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">A8-XBW - Yakura Harvesting Depot</td>
+          </tr>
+          <tr data-name="Luthetion Preque" data-system="MN5N-X On D-Q04X gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Luthetion Preque done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Luthetion_Preque">Luthetion Preque</a></td>
+            <td data-label="Standing"><span class="num standing max">9.20</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">MN5N-X On D-Q04X gate</td>
+          </tr>
+          <tr data-name="Oguet Aene" data-system="YZS5-4 on Z9PP-H Gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Oguet Aene done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Oguet_Aene">Oguet Aene</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">YZS5-4 on Z9PP-H Gate</td>
+          </tr>
+          <tr data-name="Ravacesel Roque" data-system="XF-TQL on 7-692B Gate" data-site="">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ravacesel Roque done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Ravacesel_Roque">Ravacesel Roque</a></td>
+            <td data-label="Standing"><span class="num standing none">none</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">XF-TQL on 7-692B Gate</td>
+          </tr>
+          <tr data-name="Wessette Gauze" data-system="A8-XBW" data-site="Yakura Harvesting Depot">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Wessette Gauze done"><span class="box"></span></label></td>
+            <td class="main" data-label="Agent"><a href="https://wiki.eveuniversity.org/Wessette_Gauze">Wessette Gauze</a></td>
+            <td data-label="Standing"><span class="num standing">5.00</span></td>
+            <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
+            <td data-label="Location">A8-XBW - Yakura Harvesting Depot</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="sites">
+    <div class="sec-head">
+      <h2>COSMOS sites <span class="count" data-count="sites-null"><b>0</b> / 0</span></h2>
+    </div>
+    <div class="toolbar">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Filter sites, systems…" aria-label="Filter COSMOS sites" data-filter="sites-null">
+      </label>
+      <label class="toggle"><input type="checkbox" data-hide="sites-null"><span class="sw" aria-hidden="true"></span>Hide done</label>
+    </div>
+
+    <div class="tbl-wrap">
+      <table data-kind="site" data-scope="sites-null">
+        <thead><tr>
+          <th class="chk-cell"><span class="sr-only">Done</span></th>
+          <th scope="col">Name</th><th scope="col">DED rating</th><th scope="col">Type</th><th scope="col">System</th><th scope="col">ID</th>
+        </tr></thead><tbody>
+          <tr data-name="Gallente Mining Operation" data-system="IGE-RI">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Gallente Mining Operation done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Gallente_Mining_Operation">Gallente Mining Operation</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">IGE-RI</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+          <tr data-name="Yakura Harvesting Depot" data-system="A8-XBW">
+            <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Yakura Harvesting Depot done"><span class="box"></span></label></td>
+            <td class="main" data-label="Name"><a href="https://wiki.eveuniversity.org/Yakura_Harvesting_Depot">Yakura Harvesting Depot</a></td>
+            <td data-label="DED" class="num"></td>
+            <td data-label="Type"></td>
+            <td data-label="System">A8-XBW</td>
+            <td data-label="ID" class="mono"></td>
+          </tr>
+        </tbody></table></div></section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Unofficial progress tracker built from the EVE University Wiki article <a href="https://wiki.eveuniversity.org/Serpentis_COSMOS">Serpentis COSMOS</a> (revision <span class="mono">222885</span>, last edited 15 May 2025).</p>
+    <p>Wiki content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">Creative Commons Attribution-ShareAlike 4.0</a>. EVE Online and all related logos and images are the property of CCP hf. Checkbox state is stored locally in your browser only.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "evetools.serpentis-cosmos.v1";
+
+  function fresh() {
+    return { checked: {}, optOut: {}, hideDone: {} };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return fresh();
+      var p = JSON.parse(raw);
+      return {
+        checked: (p && p.checked) || {},
+        optOut: (p && p.optOut) || {},
+        hideDone: (p && p.hideDone) || {}
+      };
+    } catch (e) {
+      return fresh();
+    }
+  }
+
+  var state = load();
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage disabled or full: keep working in-memory */
+    }
+  }
+
+  function slug(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019']/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function norm(s) {
+    var v = String(s || "");
+    if (v.normalize) v = v.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return v
+      .toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  /* ---------- collect rows ---------- */
+  var rows = [];
+  var byId = new Map();
+
+  document.querySelectorAll("table[data-kind]").forEach(function (table) {
+    var kind = table.dataset.kind;
+    var scope = table.dataset.scope;
+    table.querySelectorAll("tbody tr").forEach(function (tr) {
+      var name = tr.dataset.name || "";
+      var id = kind + ":" + scope + ":" + slug(name);
+      if (kind === "site") id += ":" + slug(tr.dataset.system || "");
+      tr.dataset.rowId = id;
+      var row = {
+        tr: tr,
+        id: id,
+        kind: kind,
+        scope: scope,
+        name: name,
+        system: tr.dataset.system || "",
+        site: tr.dataset.site || "",
+        required: (tr.dataset.requiredFor || "").split("|").map(function (s) { return s.trim(); }).filter(Boolean),
+        input: tr.querySelector('input[type="checkbox"]'),
+        main: tr.querySelector("td.main")
+      };
+      rows.push(row);
+      byId.set(id, row);
+    });
+  });
+
+  var agents = rows.filter(function (r) { return r.kind === "agent"; });
+  var items = rows.filter(function (r) { return r.kind === "item"; });
+
+  var agentByName = new Map();
+  agents.forEach(function (a) { agentByName.set(norm(a.name), a); });
+
+  var siteByKey = new Map();
+  rows.filter(function (r) { return r.kind === "site"; }).forEach(function (s) {
+    siteByKey.set(norm(s.name) + "|" + norm(s.system), s);
+  });
+
+  /* ---------- build one-way links: agent -> site / shopping item ---------- */
+  var linksTo = new Map();   /* rowId -> [agentId] */
+  var linksFrom = new Map(); /* agentId -> [rowId] */
+
+  function link(agent, row) {
+    if (!linksTo.has(row.id)) linksTo.set(row.id, []);
+    linksTo.get(row.id).push(agent.id);
+    if (!linksFrom.has(agent.id)) linksFrom.set(agent.id, []);
+    linksFrom.get(agent.id).push(row.id);
+  }
+
+  agents.forEach(function (a) {
+    if (a.site) {
+      var site = siteByKey.get(norm(a.site) + "|" + norm(a.system));
+      if (site && site !== a) link(a, site);
+    }
+  });
+
+  items.forEach(function (item) {
+    item.required.forEach(function (name) {
+      var agent = agentByName.get(norm(name));
+      if (agent) link(agent, item);
+    });
+  });
+
+  /* ---------- derived state ---------- */
+  function isChecked(id) { return !!state.checked[id]; }
+
+  function isOptedOut(rowId, agentId) {
+    var list = state.optOut[rowId];
+    return !!list && list.indexOf(agentId) !== -1;
+  }
+
+  function activeLinks(row) {
+    var ids = linksTo.get(row.id) || [];
+    return ids.filter(function (aid) {
+      return isChecked(aid) && !isOptedOut(row.id, aid);
+    });
+  }
+
+  function derivedFor(row) {
+    var ids = activeLinks(row);
+    return ids.length ? byId.get(ids[0]) : null;
+  }
+
+  /* ---------- render ---------- */
+  function setBadge(row, text, cls) {
+    var badge = row.main.querySelector(".badge");
+    if (!text) {
+      if (badge) badge.remove();
+      return;
+    }
+    if (!badge) {
+      badge = document.createElement("span");
+      row.main.appendChild(badge);
+    }
+    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.textContent = text;
+  }
+
+  function recompute() {
+    rows.forEach(function (row) {
+      var derived = derivedFor(row);
+      var manual = isChecked(row.id);
+      var done = manual || !!derived;
+
+      row.tr.classList.toggle("done", done);
+      row.tr.classList.toggle("derived", !!derived && !manual);
+      if (row.input.checked !== done) row.input.checked = done;
+
+      if (derived && !manual) {
+        var n = activeLinks(row).length;
+        setBadge(row, "linked: " + derived.name + (n > 1 ? " +" + (n - 1) : ""), "");
+      } else {
+        setBadge(row, "");
+      }
+    });
+    updateCounts();
+    applyFilters();
+  }
+
+  function updateCounts() {
+    var scopes = {};
+    var totalDone = 0;
+
+    rows.forEach(function (row) {
+      var s = scopes[row.scope] || (scopes[row.scope] = { total: 0, done: 0 });
+      s.total++;
+      if (row.tr.classList.contains("done")) {
+        s.done++;
+        totalDone++;
+      }
+    });
+
+    document.querySelectorAll("[data-count]").forEach(function (el) {
+      var s = scopes[el.dataset.count];
+      if (!s) return;
+      el.innerHTML = "<b>" + s.done + "</b> / " + s.total;
+    });
+
+    var meter = document.getElementById("global-meter");
+    if (meter) {
+      var pct = rows.length ? Math.round((totalDone / rows.length) * 100) : 0;
+      meter.querySelector("i").style.width = pct + "%";
+      meter.setAttribute("aria-valuenow", String(pct));
+    }
+    var stat = document.getElementById("global-stat");
+    if (stat) stat.innerHTML = "<b>" + totalDone + "</b> / " + rows.length + " done";
+  }
+
+  /* ---------- search + hide done ---------- */
+  var queries = {};
+
+  function applyFilters() {
+    rows.forEach(function (row) {
+      var q = queries[row.scope] || "";
+      row.tr.hidden = !!q && row.tr.textContent.toLowerCase().indexOf(q) === -1;
+    });
+  }
+
+  document.querySelectorAll("input[data-filter]").forEach(function (input) {
+    input.addEventListener("input", function () {
+      queries[input.dataset.filter] = input.value.trim().toLowerCase();
+      applyFilters();
+    });
+  });
+
+  function syncHideToggles() {
+    document.querySelectorAll("input[data-hide]").forEach(function (input) {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      if (!table) return;
+      var on = !!state.hideDone[scope];
+      input.checked = on;
+      table.classList.toggle("hide-done", on);
+    });
+  }
+
+  document.querySelectorAll("input[data-hide]").forEach(function (input) {
+    input.addEventListener("change", function () {
+      var scope = input.dataset.hide;
+      var table = document.querySelector('table[data-scope="' + scope + '"]');
+      state.hideDone[scope] = input.checked;
+      if (table) table.classList.toggle("hide-done", input.checked);
+      save();
+    });
+  });
+
+  /* ---------- checkbox interaction ---------- */
+  rows.forEach(function (row) {
+    row.input.addEventListener("change", function () {
+      var on = row.input.checked;
+      var derived = derivedFor(row);
+
+      if (!on && derived) {
+        /* user is opting this row out of an auto-tick */
+        var optOuts = state.optOut[row.id] || (state.optOut[row.id] = []);
+        (linksTo.get(row.id) || []).forEach(function (aid) {
+          if (isChecked(aid) && optOuts.indexOf(aid) === -1) optOuts.push(aid);
+        });
+        state.checked[row.id] = false;
+      } else if (on) {
+        state.checked[row.id] = true;
+        delete state.optOut[row.id];
+      } else {
+        state.checked[row.id] = false;
+      }
+
+      /* unchecking a mission clears its opt-outs, so re-checking re-applies */
+      if (row.kind === "agent" && !on) {
+        Object.keys(state.optOut).forEach(function (rid) {
+          var rest = state.optOut[rid].filter(function (x) { return x !== row.id; });
+          if (rest.length) state.optOut[rid] = rest;
+          else delete state.optOut[rid];
+        });
+      }
+
+      save();
+      recompute();
+    });
+  });
+
+  /* ---------- reset ---------- */
+  var resetBtn = document.getElementById("reset-all");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      if (!window.confirm("Clear every checkbox and progress state? This cannot be undone.")) return;
+      state.checked = {};
+      state.optOut = {};
+      save();
+      recompute();
+    });
+  }
+
+  /* ---------- cross-tab sync ---------- */
+  window.addEventListener("storage", function (e) {
+    if (e.key !== STORAGE_KEY) return;
+    state = load();
+    syncHideToggles();
+    recompute();
+  });
+
+  /* ---------- boot ---------- */
+  syncHideToggles();
+  recompute();
+})();
+</script>
+</body>
+</html>
