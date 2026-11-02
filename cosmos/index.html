@@ -298,8 +298,9 @@ footer a{border-bottom-color:rgba(255,255,255,.15)}
 .card .btn:hover{background:rgba(var(--card-rgb),.14);color:var(--bg);box-shadow:0 0 18px rgba(var(--card-rgb),.2)}
 .card .flag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 .pill{display:inline-block;padding:1px 7px;border:1px solid #5f5f5f;font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#cfcfcf}
-.card .pill{color:var(--card);border-color:rgba(var(--card-rgb),.45)}
-.pill.high,.pill.low,.pill.null,.pill.pirate{color:#cfcfcf;border-color:#5f5f5f}
+.pill.high{color:#48e08a;border-color:rgba(72,224,138,.55)}
+.pill.low{color:#ffb648;border-color:rgba(255,182,72,.55)}
+.pill.null,.pill.pirate{color:#ff5f70;border-color:rgba(255,95,112,.55)}
 :root{--accent-rgb:255,255,255;--cyan:#ffffff;--cyan2:#d8d8d8;}
 html[data-theme="light"]{--cyan:#111111;--cyan2:#333333;--accent-rgb:0,0,0;}
 
@@ -360,10 +361,12 @@ html[data-theme="light"] .card .loc,
 html[data-theme="light"] .card .stats,
 html[data-theme="light"] .card .flag{color:#5f5f58}
 html[data-theme="light"] .card .stats b{color:var(--card)}
-html[data-theme="light"] .card .pill{color:var(--card);border-color:rgba(var(--card-rgb),.45)}
 html[data-theme="light"] .card .btn{color:var(--card);border-color:rgba(var(--card-rgb),.45);background:rgba(var(--card-rgb),.06)}
 html[data-theme="light"] .card .btn:hover{background:rgba(var(--card-rgb),.14);color:var(--bg);box-shadow:none}
 html[data-theme="light"] .pill{color:#444;border-color:#b6b6ac}
+html[data-theme="light"] .pill.high{color:#1f7a45;border-color:#1f7a45}
+html[data-theme="light"] .pill.low{color:#8a5f00;border-color:#8a5f00}
+html[data-theme="light"] .pill.null,html[data-theme="light"] .pill.pirate{color:#b81f3c;border-color:#b81f3c}
 html[data-theme="light"] .card.c-amarr{--card:#8a5f00;--card-rgb:138,95,0}
 html[data-theme="light"] .card.c-caldari{--card:#006a99;--card-rgb:0,106,153}
 html[data-theme="light"] .card.c-gallente{--card:#1f7a45;--card-rgb:31,122,69}
