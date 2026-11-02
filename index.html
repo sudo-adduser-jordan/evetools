@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index,follow" />
+    <meta
+      name="description"
+      content="EVE Online tools: an LP store calculator with live Jita pricing, mission guides for every epic arc, an agent finder for every NPC corporation, and COSMOS mission trackers for all eight empire and pirate lines."
+    />
+    <meta property="og:title" content="EVE Tools" />
+    <meta
+      property="og:description"
+      content="LP store calculator with live Jita pricing, combat-ready mission guides, a mission-agent hub finder, and COSMOS trackers."
+    />
+    <meta property="og:type" content="website" />
+    <title>EVE Tools — LP Store Calculator, Mission Reference, Agent Finder &amp; COSMOS Tracker</title>
+    <link rel="icon" type="image/svg+xml" href="https://eve.ayokei.to/lp/favicon.svg" />
+    <!-- Single-request doorway page: styles inline, no JS. -->
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("https://eve.ayokei.to/lp/assets/fonts/inter-var.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+      }
+      :root {
+        color-scheme: dark;
+        --bg: #071014;
+        --text: #e6edf3;
+        --muted: #8fa3ad;
+        --subtle: #607782;
+        --line: #243744;
+        --teal: #2dd4bf;
+        --gold: #d9b85c;
+        --violet: #c084fc;
+        --green: #4ade80;
+        --focus: #67e8f9;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 13px;
+      }
+      body {
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .site-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 10px;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--line);
+      }
+      .site-head h1 {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .site-head .domain {
+        font-size: 11.5px;
+        color: var(--subtle);
+      }
+
+      /* 2×2 gate: LP calculator and missions on the top row, agent finder and the
+         new COSMOS tracker on the bottom row. Each tool keeps its own accent:
+         LP teal, missions gold, agents violet, COSMOS green. */
+      .gate {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+      .gate-lp {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .gate-missions {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .gate-agents {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .gate-cosmos {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .gate-panel {
+        --accent: var(--teal);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        padding: clamp(24px, 3vw, 44px);
+        text-decoration: none;
+        color: inherit;
+        background: radial-gradient(
+          circle at 18% 0%,
+          color-mix(in srgb, var(--accent) 7%, transparent),
+          transparent 30rem
+        );
+        transition: background-color 0.18s;
+      }
+      .gate-missions,
+      .gate-cosmos {
+        border-left: 1px solid var(--line);
+      }
+      .gate-agents,
+      .gate-cosmos {
+        border-top: 1px solid var(--line);
+      }
+      .gate-missions {
+        --accent: var(--gold);
+      }
+      .gate-agents {
+        --accent: var(--violet);
+      }
+      .gate-cosmos {
+        --accent: var(--green);
+      }
+      .gate-panel:hover {
+        background-color: color-mix(in srgb, var(--accent) 4%, transparent);
+      }
+      .gate-panel:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: -4px;
+      }
+
+      .beta-tag {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        background: color-mix(in srgb, var(--accent) 14%, transparent);
+        color: var(--accent);
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        vertical-align: middle;
+      }
+
+      .panel-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: color-mix(in srgb, var(--accent) 12%, transparent);
+        border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      }
+      .panel-icon svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--accent);
+        fill: none;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .gate-panel h2 {
+        font-size: clamp(20px, 2vw, 28px);
+        font-weight: 760;
+        letter-spacing: -0.02em;
+      }
+      .gate-panel .lead {
+        font-size: 13.5px;
+        line-height: 1.55;
+        color: var(--muted);
+        max-width: 46ch;
+      }
+
+      .panel-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .panel-chip {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 5px 11px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 11.5px;
+        color: var(--subtle);
+        background: rgba(255, 255, 255, 0.015);
+      }
+      .panel-chip strong {
+        color: var(--text);
+        font-weight: 650;
+        font-size: 12px;
+      }
+
+      .panel-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        align-self: flex-start;
+        margin-top: 4px;
+        padding: 9px 18px;
+        border-radius: 9px;
+        border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        color: var(--accent);
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background 0.15s;
+      }
+      .panel-cta .arrow {
+        transition: transform 0.15s;
+      }
+      .gate-panel:hover .panel-cta {
+        background: color-mix(in srgb, var(--accent) 12%, transparent);
+      }
+      .gate-panel:hover .panel-cta .arrow {
+        transform: translateX(3px);
+      }
+
+      .site-foot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        padding: 14px 28px;
+        border-top: 1px solid var(--line);
+        font-size: 11px;
+        color: var(--subtle);
+        text-align: center;
+      }
+      .site-foot a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+      .site-foot a:hover {
+        color: var(--teal);
+      }
+      .site-foot .github-link {
+        display: inline-flex;
+        align-items: center;
+        color: var(--text);
+      }
+      .site-foot .github-link:hover {
+        color: var(--teal);
+      }
+      .site-foot .github-link svg {
+        display: block;
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      @media (max-width: 840px) {
+        .gate {
+          grid-template-columns: 1fr;
+          grid-template-rows: none;
+          align-content: start;
+        }
+        /* Collapse the explicit placement so the panels stack in source order. */
+        .gate-lp,
+        .gate-missions,
+        .gate-agents,
+        .gate-cosmos {
+          grid-column: 1;
+          grid-row: auto;
+        }
+        .gate-panel {
+          padding: 34px 26px;
+          gap: 15px;
+          justify-content: flex-start;
+        }
+        .gate-missions,
+        .gate-agents,
+        .gate-cosmos {
+          border-left: none;
+          border-top: 1px solid var(--line);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-head">
+      <h1>EVE Tools</h1>
+      <span class="domain">evetools</span>
+    </header>
+
+    <main class="gate">
+      <a class="gate-panel gate-lp" href="https://eve.ayokei.to/lp/">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9m4 7V5m4 11v-6m4 6V8" /></svg>
+        </span>
+        <h2>LP Store Calculator</h2>
+        <p class="lead">
+          Every loyalty point store offer in New Eden, ranked by ISK per LP — priced against
+          live Jita market depth with fees, volume, and access-risk filters.
+        </p>
+        <span class="panel-chips">
+          <span class="panel-chip"><strong>166</strong> corporations</span>
+          <span class="panel-chip"><strong>15 min</strong> price refresh</span>
+          <span class="panel-chip"><strong>Daily</strong> LP store sync</span>
+        </span>
+        <span class="panel-cta">Open the calculator <span class="arrow">&#8594;</span></span>
+      </a>
+
+      <a class="gate-panel gate-missions" href="https://eve.ayokei.to/missions/">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8" />
+            <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+            <circle cx="12" cy="12" r="1.6" />
+          </svg>
+        </span>
+        <h2>Mission Reference <span class="beta-tag">Beta</span></h2>
+        <p class="lead">
+          Epic arc guides with branch diagrams, faction damage profiles, rewards, and
+          per-mission combat intel — tuned to your ship's resist profile.
+        </p>
+        <span class="panel-chips">
+          <span class="panel-chip"><strong>7</strong> epic arcs</span>
+          <span class="panel-chip"><strong>196</strong> missions</span>
+          <span class="panel-chip"><strong>Fit-aware</strong> intel</span>
+        </span>
+        <span class="panel-cta">Open mission guides <span class="arrow">&#8594;</span></span>
+      </a>
+
+      <a class="gate-panel gate-agents" href="https://eve.ayokei.to/agents/">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" />
+            <circle cx="12" cy="10" r="2.6" />
+          </svg>
+        </span>
+        <h2>Agent Finder</h2>
+        <p class="lead">
+          Mission-agent hubs across every NPC corporation — solar systems and stations ranked by
+          agent density, level, security band, and division.
+        </p>
+        <span class="panel-chips">
+          <span class="panel-chip"><strong>All</strong> corporations</span>
+          <span class="panel-chip"><strong>L1&#8211;L5</strong> agents</span>
+          <span class="panel-chip">Systems &amp; stations</span>
+        </span>
+        <span class="panel-cta">Open the agent finder <span class="arrow">&#8594;</span></span>
+      </a>
+
+      <a class="gate-panel gate-cosmos" href="cosmos/index.html">
+        <span class="panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" />
+          </svg>
+        </span>
+        <h2>COSMOS Tracker <span class="beta-tag">New</span></h2>
+        <p class="lead">
+          Mission, site, and shopping-list trackers for all eight empire and pirate COSMOS
+          lines — with checkbox progress saved locally in your browser.
+        </p>
+        <span class="panel-chips">
+          <span class="panel-chip"><strong>8</strong> lines</span>
+          <span class="panel-chip"><strong>248</strong> agents</span>
+          <span class="panel-chip"><strong>82</strong> sites</span>
+          <span class="panel-chip"><strong>Local</strong> progress</span>
+        </span>
+        <span class="panel-cta">Open the COSMOS tracker <span class="arrow">&#8594;</span></span>
+      </a>
+    </main>
+
+    <footer class="site-foot">
+      <span>Market data from EVE ESI · Static data © Fenris Creations (formerly CCP Games) · Not affiliated with Fenris Creations</span>
+      <a href="https://eve.ayokei.to/lp/about.html">Methodology</a>
+      <a href="https://eve.ayokei.to/missions/browse">Mission browser</a>
+      <a href="cosmos/index.html">COSMOS tracker</a>
+      <a
+        class="github-link"
+        href="https://github.com/AyoKeito/eve-toolkit"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="GitHub"
+        aria-label="GitHub"
+        ><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a
+      >
+    </footer>
+  </body>
+</html>
