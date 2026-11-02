@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>COSMOS — Line Selector</title>
 <meta name="description" content="Select an EVE Online COSMOS line: Amarr, Caldari, Gallente, Minmatar and pirate COSMOS trackers.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050a0e'/%3E%3Cpath d='M6 24 16 6l10 18-10-4z' fill='none' stroke='%2335c9ff' stroke-width='2'/%3E%3C/svg%3E">
+<script>try{if(localStorage.getItem('evetools.theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050a0e'/%3E%3Cpath d='M6 24 16 6l10 18-10-4z' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 :root{
   --bg:#05090e;--bg2:#080e15;--panel:#0b131c;--panel2:#0e1823;
   --line:#1a2a39;--line2:#26415a;--text:#c6d7e4;--dim:#7b93a7;
-  --cyan:#35c9ff;--cyan2:#8ee7ff;--green:#48e08a;--amber:#ffb648;
+  --cyan:#ffffff;--cyan2:#d8d8d8;--green:#48e08a;--amber:#ffb648;
   --red:#ff5f70;--violet:#b48cff;
   --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
 }
@@ -24,13 +25,13 @@ body{
 body::before{
   content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(1100px 620px at 12% -12%,rgba(53,201,255,.11),transparent 62%),
-    radial-gradient(900px 520px at 96% -4%,rgba(180,140,255,.07),transparent 60%),
-    linear-gradient(rgba(53,201,255,.032) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(53,201,255,.032) 1px,transparent 1px);
+    radial-gradient(1100px 620px at 12% -12%,rgba(255,255,255,.11),transparent 62%),
+    radial-gradient(900px 520px at 96% -4%,rgba(255,255,255,.06),transparent 60%),
+    linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
   background-size:auto,auto,46px 46px,46px 46px;
 }
-a{color:var(--cyan2);text-decoration:none;border-bottom:1px solid rgba(53,201,255,.22);transition:color .15s,border-color .15s}
+a{color:var(--cyan2);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.22);transition:color .15s,border-color .15s}
 a:hover{color:#fff;border-bottom-color:var(--cyan)}
 .wrap{max-width:1300px;margin:0 auto;padding:0 26px;position:relative;z-index:1}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -48,24 +49,24 @@ a:hover{color:#fff;border-bottom-color:var(--cyan)}
 h1{
   margin:.32em 0 .18em;font-size:clamp(30px,4.6vw,54px);line-height:1.02;font-weight:700;
   letter-spacing:-.015em;text-transform:uppercase;color:#eaf5fc;
-  text-shadow:0 0 42px rgba(53,201,255,.22);
+  text-shadow:0 0 42px rgba(255,255,255,.22);
 }
 h1 em{font-style:normal;color:var(--cyan)}
 .lede{max-width:78ch;color:var(--dim);font-size:15.5px;margin:0}
 .lede strong{color:var(--text);font-weight:600}
 .hud{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:26px}
 .meter{position:relative;flex:1 1 280px;min-width:220px;height:8px;background:#0a131b;border:1px solid var(--line);overflow:hidden}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#147d9e,var(--cyan) 70%,#c8f4ff);box-shadow:0 0 16px rgba(53,201,255,.55);transition:width .35s ease}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#555555,var(--cyan) 70%,#f2f2f2);box-shadow:0 0 16px rgba(255,255,255,.55);transition:width .35s ease}
 .hud-stat{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
 .hud-stat b{color:#eaf5fc;font-weight:600}
 .btn{
   appearance:none;cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--cyan);background:rgba(53,201,255,.06);
-  border:1px solid rgba(53,201,255,.4);padding:8px 16px;border-radius:0;
+  text-transform:uppercase;color:var(--cyan);background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.4);padding:8px 16px;border-radius:0;
   clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
   transition:background .15s,color .15s,box-shadow .15s;
 }
-.btn:hover{background:rgba(53,201,255,.16);color:#fff;box-shadow:0 0 18px rgba(53,201,255,.25)}
+.btn:hover{background:rgba(255,255,255,.16);color:#fff;box-shadow:0 0 18px rgba(255,255,255,.25)}
 .btn.danger{color:var(--red);border-color:rgba(255,95,112,.4);background:rgba(255,95,112,.05)}
 .btn.danger:hover{background:rgba(255,95,112,.14);box-shadow:0 0 18px rgba(255,95,112,.2)}
 .btn:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
@@ -78,7 +79,7 @@ h1 em{font-style:normal;color:var(--cyan)}
   flex:0 0 auto;border:0;padding:13px 14px;font-size:11px;font-weight:600;letter-spacing:.16em;
   text-transform:uppercase;color:var(--dim);border-bottom:2px solid transparent;
 }
-.nav a:hover{color:var(--cyan2);border-bottom-color:rgba(53,201,255,.5);background:rgba(53,201,255,.05)}
+.nav a:hover{color:var(--cyan2);border-bottom-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05)}
 .nav .sep{flex:0 0 auto;width:1px;height:18px;background:var(--line2);margin:0 6px}
 
 /* ---------- sections ---------- */
@@ -86,7 +87,7 @@ main{padding:34px 0 60px}
 .sec{margin:0 0 46px;scroll-margin-top:110px}
 .sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:12px}
 h2{display:flex;align-items:center;gap:12px;margin:0;font-size:19px;letter-spacing:.05em;text-transform:uppercase;color:#e8f4fb;font-weight:600}
-h2::before{content:"";width:4px;height:20px;background:var(--cyan);box-shadow:0 0 14px rgba(53,201,255,.7)}
+h2::before{content:"";width:4px;height:20px;background:var(--cyan);box-shadow:0 0 14px rgba(255,255,255,.7)}
 h2 .count{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--dim);font-weight:400}
 h2 .count b{color:var(--cyan);font-weight:600}
 h3{margin:26px 0 10px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan2);font-weight:600}
@@ -114,12 +115,12 @@ p{margin:0 0 12px;max-width:88ch}
   flex:1;background:none;border:0;outline:none;color:var(--text);font:inherit;font-size:13px;min-width:0;
 }
 .search input::placeholder{color:#5c7386}
-.search:focus-within{border-color:var(--line2);box-shadow:0 0 0 1px rgba(53,201,255,.2)}
+.search:focus-within{border-color:var(--line2);box-shadow:0 0 0 1px rgba(255,255,255,.2)}
 .toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);user-select:none}
 .toggle input{position:absolute;opacity:0;width:1px;height:1px}
 .toggle .sw{width:30px;height:16px;border:1px solid var(--line2);background:#070d13;position:relative;transition:.18s}
 .toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;background:#4b6377;transition:.18s}
-.toggle input:checked + .sw{border-color:rgba(53,201,255,.6);background:rgba(53,201,255,.12)}
+.toggle input:checked + .sw{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.12)}
 .toggle input:checked + .sw::after{left:16px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
 .toggle input:focus-visible + .sw{outline:2px solid var(--cyan2);outline-offset:2px}
 
@@ -134,7 +135,7 @@ thead th{
 tbody td{padding:9px 12px;border-bottom:1px solid rgba(26,42,57,.6);vertical-align:top}
 tbody tr:last-child td{border-bottom:0}
 tbody tr{transition:background .12s}
-tbody tr:hover{background:rgba(53,201,255,.045)}
+tbody tr:hover{background:rgba(255,255,255,.045)}
 tbody tr.done{background:rgba(72,224,138,.025)}
 tbody tr.done:hover{background:rgba(72,224,138,.055)}
 tbody tr.done > td{opacity:.56}
@@ -165,7 +166,7 @@ th.chk-cell{width:36px;padding-right:0}
   content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
   border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(40deg);
 }
-tr.derived .chk .box{border-color:rgba(53,201,255,.8);background:rgba(53,201,255,.13);box-shadow:0 0 12px rgba(53,201,255,.28)}
+tr.derived .chk .box{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.13);box-shadow:0 0 12px rgba(255,255,255,.28)}
 tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
 .chk input:focus-visible + .box{outline:2px solid var(--cyan2);outline-offset:2px}
 .chk:hover .box{border-color:var(--cyan)}
@@ -174,7 +175,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
 .badge{
   display:inline-block;margin-left:8px;padding:1px 6px;font-size:9.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;vertical-align:2px;white-space:nowrap;
-  color:var(--cyan);background:rgba(53,201,255,.08);border:1px solid rgba(53,201,255,.3);
+  color:var(--cyan);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
 .tag{
@@ -182,7 +183,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
 }
 .tags{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;margin-left:8px;vertical-align:middle}
-.tag.src{color:var(--cyan);background:rgba(53,201,255,.07);border:1px solid rgba(53,201,255,.3)}
+.tag.src{color:var(--cyan);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.3)}
 .tag.src.alt{color:var(--violet);background:rgba(180,140,255,.08);border:1px solid rgba(180,140,255,.32)}
 .tag.rep{color:var(--green);background:rgba(72,224,138,.07);border:1px solid rgba(72,224,138,.32)}
 
@@ -203,7 +204,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
 /* type pills */
 .type{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#9db4c6;border:1px solid var(--line2);padding:1px 7px}
 .type.sig{color:var(--violet);border-color:rgba(180,140,255,.35)}
-.type.beacon{color:var(--cyan);border-color:rgba(53,201,255,.35)}
+.type.beacon{color:var(--cyan);border-color:rgba(255,255,255,.35)}
 
 /* hidden / filtered */
 table.hide-done tbody tr.done{display:none}
@@ -214,7 +215,7 @@ tbody tr[hidden]{display:none}
 /* footer */
 footer{border-top:1px solid var(--line);padding:26px 0 44px;color:#62798c;font-size:12px;position:relative;z-index:1}
 footer p{margin:0 0 6px;max-width:95ch}
-footer a{border-bottom-color:rgba(53,201,255,.15)}
+footer a{border-bottom-color:rgba(255,255,255,.15)}
 
 /* ---------- responsive ---------- */
 @media (max-width:820px){
@@ -277,15 +278,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
   background:linear-gradient(180deg,rgba(14,24,35,.82),rgba(8,14,21,.82));
   overflow:hidden;
 }
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);box-shadow:0 0 16px rgba(53,201,255,.5)}
-.card.c-amarr::before{background:#ffd166;box-shadow:0 0 16px rgba(255,209,102,.45)}
-.card.c-caldari::before{background:#4aa8ff;box-shadow:0 0 16px rgba(74,168,255,.45)}
-.card.c-gallente::before{background:#58d68d;box-shadow:0 0 16px rgba(88,214,141,.45)}
-.card.c-minmatar::before{background:#ff7a59;box-shadow:0 0 16px rgba(255,122,89,.45)}
-.card.c-angel::before{background:#ff4d6d;box-shadow:0 0 16px rgba(255,77,109,.45)}
-.card.c-blood::before,.card.c-blood-raider::before{background:#c0392b;box-shadow:0 0 16px rgba(192,57,43,.5)}
-.card.c-guristas::before{background:#b48cff;box-shadow:0 0 16px rgba(180,140,255,.45)}
-.card.c-serpentis::before{background:#2ed3c6;box-shadow:0 0 16px rgba(46,211,198,.45)}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 18px rgba(255,255,255,.22)}
 .card h3{margin:0;font-size:21px;line-height:1.15;letter-spacing:.03em;text-transform:uppercase;color:#eaf5fc;font-weight:600}
 .card h3 span{color:var(--cyan);font-weight:400}
 .card .loc{margin:0;color:var(--dim);font-size:12.5px;line-height:1.5}
@@ -294,14 +287,96 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
 .card .stats b{color:#eaf5fc;font-weight:600}
 .card .btn{margin-top:auto;align-self:flex-start}
 .card .flag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.pill{display:inline-block;padding:1px 7px;border:1px solid var(--line2);font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#9db4c6}
-.pill.high{color:var(--cyan);border-color:rgba(53,201,255,.35)}
-.pill.low{color:var(--amber);border-color:rgba(255,182,72,.4)}
-.pill.null{color:var(--violet);border-color:rgba(180,140,255,.4)}
-.pill.pirate{color:var(--red);border-color:rgba(255,95,112,.4)}
+.pill{display:inline-block;padding:1px 7px;border:1px solid #5f5f5f;font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#cfcfcf}
+.pill.high,.pill.low,.pill.null,.pill.pirate{color:#cfcfcf;border-color:#5f5f5f}
+:root{--accent-rgb:255,255,255;--cyan:#ffffff;--cyan2:#d8d8d8;}
+html[data-theme="light"]{--cyan:#111111;--cyan2:#333333;--accent-rgb:0,0,0;}
+
+/* ---------- light theme ---------- */
+html[data-theme="light"]{
+  --bg:#f3f3f0;--bg2:#e9e9e4;--panel:#ffffff;--panel2:#f7f7f3;
+  --line:#d2d2ca;--line2:#b6b6ac;--text:#1c1c1a;--dim:#5f5f58;
+}
+html[data-theme="light"] body{background:var(--bg);color:var(--text)}
+html[data-theme="light"] body::before{
+  background:
+    radial-gradient(1100px 620px at 12% -12%,rgba(var(--accent-rgb),.13),transparent 62%),
+    radial-gradient(900px 520px at 96% -4%,rgba(var(--accent-rgb),.07),transparent 60%),
+    linear-gradient(rgba(0,0,0,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.035) 1px,transparent 1px);
+  background-size:auto,auto,46px 46px,46px 46px;
+}
+html[data-theme="light"] .nav{background:rgba(243,243,240,.9)}
+html[data-theme="light"] a:hover{color:#000}
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] .hud-stat b,
+html[data-theme="light"] td.main{color:#111}
+html[data-theme="light"] h1{text-shadow:0 0 42px rgba(var(--accent-rgb),.18)}
+html[data-theme="light"] .btn{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.25)}
+html[data-theme="light"] .btn:hover{background:rgba(0,0,0,.08);color:#000;box-shadow:none}
+html[data-theme="light"] .btn.danger{background:rgba(255,95,112,.08)}
+html[data-theme="light"] .nav a:hover{background:rgba(0,0,0,.05)}
+html[data-theme="light"] .meter{background:#e2e2dc}
+html[data-theme="light"] .search,
+html[data-theme="light"] .toggle .sw{background:#fff}
+html[data-theme="light"] .search input{color:var(--text)}
+html[data-theme="light"] .search input::placeholder{color:#888}
+html[data-theme="light"] .toggle .sw::after{background:#8a8a82}
+html[data-theme="light"] .tbl-wrap{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(248,248,245,.92))}
+html[data-theme="light"] thead th{background:#e9e9e4;color:#4b4b45;border-bottom-color:var(--line2)}
+html[data-theme="light"] tbody td{border-bottom-color:rgba(0,0,0,.08)}
+html[data-theme="light"] tbody tr:hover{background:rgba(var(--accent-rgb),.07)}
+html[data-theme="light"] .standing{color:#38454c}
+html[data-theme="light"] .standing.none{color:#888}
+html[data-theme="light"] .chk .box{background:#fff;border-color:#9a9a92}
+html[data-theme="light"] .chip{color:#333;border-color:#c0c0b8}
+html[data-theme="light"] .type{color:#444;border-color:#c0c0b8}
+html[data-theme="light"] footer{color:#666}
+html[data-theme="light"] .note{background:rgba(255,182,72,.14);color:#76541c}
+html[data-theme="light"] .danger-note{background:rgba(255,95,112,.1);color:#7d2330}
+html[data-theme="light"] .danger-note strong{color:#b21f34}
+html[data-theme="light"] .theme-switch{background:rgba(255,255,255,.88);border-color:#b6b6ac}
+html[data-theme="light"] tbody tr{background:rgba(255,255,255,.82)}
+html[data-theme="light"] .card{
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(247,247,243,.96));
+}
+html[data-theme="light"] .card::before{background:#111;box-shadow:none}
+html[data-theme="light"] .card h3{color:#111}
+html[data-theme="light"] .card h3 span{color:#555}
+html[data-theme="light"] .card .loc,
+html[data-theme="light"] .card .stats,
+html[data-theme="light"] .card .flag{color:#5f5f58}
+html[data-theme="light"] .card .stats b{color:#111}
+html[data-theme="light"] .pill{color:#444;border-color:#b6b6ac}
+
+/* ---------- color theme switch ---------- */
+.theme-switch{
+  position:absolute;top:14px;right:16px;z-index:90;display:flex;
+  border:1px solid var(--line2);background:rgba(5,9,14,.78);
+  backdrop-filter:blur(10px);
+}
+.theme-switch button{
+  appearance:none;background:none;border:0;color:var(--dim);font-family:var(--mono);
+  font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 10px;cursor:pointer;transition:background .15s,color .15s;
+}
+.theme-switch button + button{border-left:1px solid var(--line)}
+.theme-switch button:hover{color:var(--cyan2)}
+.theme-switch button[aria-pressed="true"]{color:var(--bg);background:var(--cyan)}
+.theme-switch button:focus-visible{outline:2px solid var(--cyan2);outline-offset:2px}
+@media (max-width:820px){
+  .theme-switch{top:10px;right:10px}
+  .theme-switch button{padding:6px 8px;font-size:9px}
+  .top{padding-top:48px}
+}
 </style>
 </head>
 <body>
+<div class="theme-switch" role="group" aria-label="Color theme">
+  <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+  <button type="button" data-theme-set="dark" aria-pressed="true">Dark</button>
+</div>
 
 <header class="top">
   <div class="wrap">
@@ -322,7 +397,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
     <div class="sec-head"><h2>Empire COSMOS</h2></div>
     <p class="muted">The four empire COSMOS constellations in high security space, plus their low and null security agents.</p>
     <div class="cards">
-      <article class="card c-amarr">
+      <article class="card">
         <div class="flag">Empire</div>
         <h3>Amarr <span>COSMOS</span></h3>
         <p class="loc">Araz, Domain &middot; Kenobanala &middot; 9HXQ-G, Catch</p>
@@ -330,7 +405,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>42</b> agents</span><span><b>15</b> sites</span><span><b>26</b> items</span></div>
         <a class="btn" href="amarr-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-caldari">
+      <article class="card">
         <div class="flag">Empire</div>
         <h3>Caldari <span>COSMOS</span></h3>
         <p class="loc">Okkelen, The Forge &middot; 09-4XW, Tenal</p>
@@ -338,7 +413,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>58</b> agents</span><span><b>17</b> sites</span><span><b>62</b> items</span></div>
         <a class="btn" href="caldari-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-gallente">
+      <article class="card">
         <div class="flag">Empire</div>
         <h3>Gallente <span>COSMOS</span></h3>
         <p class="loc">Algintal, Sinq Laison &middot; Assilot, Cloud Ring</p>
@@ -346,7 +421,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>34</b> agents</span><span><b>12</b> sites</span><span><b>10</b> items</span></div>
         <a class="btn" href="gallente-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-minmatar">
+      <article class="card">
         <div class="flag">Empire</div>
         <h3>Minmatar <span>COSMOS</span></h3>
         <p class="loc">Ani, Metropolis &middot; Tartatven &middot; 760-9C, Wicked Creek</p>
@@ -361,7 +436,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
     <div class="sec-head"><h2>Pirate COSMOS</h2></div>
     <p class="muted">Null security COSMOS constellations controlled by pirate factions.</p>
     <div class="cards">
-      <article class="card c-angel">
+      <article class="card">
         <div class="flag">Pirate</div>
         <h3>Angel <span>COSMOS</span></h3>
         <p class="loc">I-3ODK &middot; Feythabolis</p>
@@ -369,7 +444,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>13</b> agents</span><span><b>3</b> sites</span></div>
         <a class="btn" href="angel-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-blood-raider">
+      <article class="card">
         <div class="flag">Pirate</div>
         <h3>Blood Raider <span>COSMOS</span></h3>
         <p class="loc">OK-FEM &middot; Delve</p>
@@ -377,7 +452,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>9</b> agents</span><span><b>0</b> sites</span></div>
         <a class="btn" href="blood-raider-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-guristas">
+      <article class="card">
         <div class="flag">Pirate</div>
         <h3>Guristas <span>COSMOS</span></h3>
         <p class="loc">E-8CSQ &middot; Vale of the Silent</p>
@@ -385,7 +460,7 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
         <div class="stats"><span><b>14</b> agents</span><span><b>13</b> sites</span></div>
         <a class="btn" href="guristas-cosmos.html">Open tracker</a>
       </article>
-      <article class="card c-serpentis">
+      <article class="card">
         <div class="flag">Pirate</div>
         <h3>Serpentis <span>COSMOS</span></h3>
         <p class="loc">Pegasus &middot; Fountain</p>
@@ -410,5 +485,30 @@ footer a{border-bottom-color:rgba(53,201,255,.15)}
   </div>
 </footer>
 
+<script>
+(function () {
+  "use strict";
+  var KEY = "evetools.theme";
+  var root = document.documentElement;
+  var buttons = document.querySelectorAll("[data-theme-set]");
+
+  function setTheme(theme) {
+    if (theme !== "light") theme = "dark";
+    if (theme === "light") root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    buttons.forEach(function (button) {
+      button.setAttribute("aria-pressed", button.getAttribute("data-theme-set") === theme ? "true" : "false");
+    });
+    try { localStorage.setItem(KEY, theme); } catch (e) { /* ignore */ }
+  }
+
+  var saved = "dark";
+  try { saved = localStorage.getItem(KEY) === "light" ? "light" : "dark"; } catch (e) { /* ignore */ }
+  setTheme(saved);
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () { setTheme(button.getAttribute("data-theme-set")); });
+  });
+})();
+</script>
 </body>
 </html>
