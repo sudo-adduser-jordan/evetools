@@ -121,12 +121,20 @@
     });
   }
 
+  var DEFAULT_SORT = "Standing req";
+
   Array.prototype.forEach.call(document.querySelectorAll("table"), function (table) {
     var head = table.tHead;
     if (!head || !head.rows.length) return;
     var headerRow = head.rows[head.rows.length - 1];
+    var defaultHeader = null;
     Array.prototype.forEach.call(headerRow.cells, function (header) {
       makeSortable(header, table);
+      if (!defaultHeader && normalize(header.textContent) === DEFAULT_SORT) {
+        defaultHeader = header;
+      }
     });
+    /* Agent tables start with the lowest standing requirement first. */
+    if (defaultHeader) sortTable(table, defaultHeader, "asc");
   });
 })();
