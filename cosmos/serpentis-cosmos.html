@@ -179,6 +179,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
   color:var(--cyan);background:rgba(46,211,198,.08);border:1px solid rgba(46,211,198,.3);
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.badge.chain{color:var(--violet);background:rgba(180,140,255,.08);border-color:rgba(180,140,255,.32)}
 .tag{
   display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -474,14 +475,14 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Hara Lafleur" data-system="MN5N-X On D-Q04X gate" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hara Lafleur done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Hara_Lafleur">Hara Lafleur</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Hara_Lafleur">Hara Lafleur</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing max">9.90</span></td>
             <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
             <td data-label="Location">MN5N-X On D-Q04X gate</td>
           </tr>
           <tr data-name="Jaquon Jalibar" data-system="MN5N-X On D-Q04X gate" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Jaquon Jalibar done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Jaquon_Jalibar">Jaquon Jalibar</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Jaquon_Jalibar">Jaquon Jalibar</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing high">8.50</span></td>
             <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
             <td data-label="Location">MN5N-X On D-Q04X gate</td>
@@ -509,7 +510,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Luthetion Preque" data-system="MN5N-X On D-Q04X gate" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Luthetion Preque done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Luthetion_Preque">Luthetion Preque</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Luthetion_Preque">Luthetion Preque</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing max">9.20</span></td>
             <td data-label="Faction"><span class="chip f-serpentis">Serpentis</span></td>
             <td data-label="Location">MN5N-X On D-Q04X gate</td>
@@ -727,7 +728,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
 
   /* ---------- render ---------- */
   function setBadge(row, text, cls) {
-    var badge = row.main.querySelector(".badge");
+    var badge = row.main.querySelector(".badge.derived");
     if (!text) {
       if (badge) badge.remove();
       return;
@@ -736,7 +737,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
       badge = document.createElement("span");
       row.main.appendChild(badge);
     }
-    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.className = "badge derived" + (cls ? " " + cls : "");
     badge.textContent = text;
   }
 

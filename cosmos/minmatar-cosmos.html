@@ -179,6 +179,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
   color:var(--cyan);background:rgba(255,122,89,.08);border:1px solid rgba(255,122,89,.3);
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.badge.chain{color:var(--violet);background:rgba(180,140,255,.08);border-color:rgba(180,140,255,.32)}
 .tag{
   display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -452,7 +453,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
         <tbody>
           <tr data-name="Abotur Kverkinn" data-system="Hjoramold" data-site="Lord Bastion">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Abotur Kverkinn done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Abotur_Kverkinn">Abotur Kverkinn</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Abotur_Kverkinn">Abotur Kverkinn</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Too Good to be True">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
             <td data-label="Location">Hjoramold - Lord Bastion</td>
@@ -461,7 +462,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Akraun Maertigor" data-system="Barkrik" data-site="The Hyperbole Nexus">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Akraun Maertigor done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Akraun_Maertigor">Akraun Maertigor</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Akraun_Maertigor">Akraun Maertigor</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission The Lullaby">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
             <td data-label="Location">Barkrik - The Hyperbole Nexus</td>
@@ -542,7 +543,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Eutor Jogmundt" data-system="Traun" data-site="Thin Red Line">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Eutor Jogmundt done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Eutor_Jogmundt">Eutor Jogmundt</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Eutor_Jogmundt">Eutor Jogmundt</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Secrets For Sale">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
             <td data-label="Location">Traun - Thin Red Line</td>
@@ -551,7 +552,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Fara Bokh" data-system="Lanngisi" data-site="Sanctum Psychosis">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Fara Bokh done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Fara_Bokh">Fara Bokh</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Fara_Bokh">Fara Bokh</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Curiosity">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing none">none</span></td>
             <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
             <td data-label="Location">Lanngisi - Sanctum Psychosis</td>
@@ -695,7 +696,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Nafrid Sharum" data-system="Uriok" data-site="Assassin&#x27;s Overhang">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nafrid Sharum done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nafrid_Sharum">Nafrid Sharum</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nafrid_Sharum">Nafrid Sharum</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Information at a Cost">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Uriok - Assassin's Overhang</td>
@@ -839,7 +840,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Tauma Rikkiryo" data-system="Inder" data-site="Rich Man&#x27;s Run">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tauma Rikkiryo done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Tauma_Rikkiryo">Tauma Rikkiryo</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Tauma_Rikkiryo">Tauma Rikkiryo</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Hacker Ethics">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing none">none</span></td>
             <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
             <td data-label="Location">Inder - Rich Man's Run</td>
@@ -848,7 +849,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Temer Rugaert" data-system="Tvink" data-site="Margin of Error">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Temer Rugaert done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Temer_Rugaert">Temer Rugaert</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Temer_Rugaert">Temer Rugaert</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Partners in Crime">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-minmatar">Minmatar Republic</span></td>
             <td data-label="Location">Tvink - Margin of Error</td>
@@ -875,7 +876,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Tzumi Pokkolen" data-system="Nakugard" data-site="Reactor Factory">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Tzumi Pokkolen done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Tzumi_Pokkolen">Tzumi Pokkolen</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Tzumi_Pokkolen">Tzumi Pokkolen</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Ripple Effects">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing none">none</span></td>
             <td data-label="Faction"><span class="chip f-caldari">Caldari State</span></td>
             <td data-label="Location">Nakugard - Reactor Factory</td>
@@ -1102,7 +1103,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Angel Simple Trigger Mechanisms (3) done"><span class="box"></span></label></td>
             <td class="main" data-label="Item">Angel Simple Trigger Mechanisms (3)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Contested_Minmatar_Army_Complex">Contested Minmatar Army Complex</a></td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Secrets_For_Sale">Secrets For Sale</a></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Secrets_For_Sale">Secrets For Sale</a> <span class="tags"><span class="tag rep" title="Repeatable mission">Repeatable</span></span></td>
             <td data-label="Notes">&mdash;</td>
           </tr>
           <tr data-name="Bono Zakan Corpse" data-source="Maekor&#x27;s Plantation" data-required-for="Mwaku Ristiger">
@@ -1762,7 +1763,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
 
   /* ---------- render ---------- */
   function setBadge(row, text, cls) {
-    var badge = row.main.querySelector(".badge");
+    var badge = row.main.querySelector(".badge.derived");
     if (!text) {
       if (badge) badge.remove();
       return;
@@ -1771,7 +1772,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
       badge = document.createElement("span");
       row.main.appendChild(badge);
     }
-    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.className = "badge derived" + (cls ? " " + cls : "");
     badge.textContent = text;
   }
 

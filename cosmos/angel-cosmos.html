@@ -179,6 +179,7 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
   color:var(--cyan);background:rgba(255,77,109,.08);border:1px solid rgba(255,77,109,.3);
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
+.badge.chain{color:var(--violet);background:rgba(180,140,255,.08);border-color:rgba(180,140,255,.32)}
 .tag{
   display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -496,7 +497,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Kardimo Menka" data-system="Jorund" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Kardimo Menka done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Kardimo_Menka">Kardimo Menka</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Kardimo_Menka">Kardimo Menka</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing high">7.00</span></td>
             <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
             <td data-label="Location">Jorund</td>
@@ -512,7 +513,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Numa Fashit" data-system="Jorund" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Numa Fashit done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Numa_Fashit">Numa Fashit</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Numa_Fashit">Numa Fashit</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing high">7.00</span></td>
             <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
             <td data-label="Location">Jorund</td>
@@ -520,7 +521,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Skami Zarton" data-system="Jorund" data-site="">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Skami Zarton done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Skami_Zarton">Skami Zarton</a></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Skami_Zarton">Skami Zarton</a> <span class="tags"><span class="tag rep" title="Offers the repeatable mission Improving Relations">Repeatable</span></span></td>
             <td data-label="Standing"><span class="num standing high">7.00</span></td>
             <td data-label="Faction"><span class="chip f-angel">Angel Cartel</span></td>
             <td data-label="Location">Jorund</td>
@@ -742,7 +743,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
 
   /* ---------- render ---------- */
   function setBadge(row, text, cls) {
-    var badge = row.main.querySelector(".badge");
+    var badge = row.main.querySelector(".badge.derived");
     if (!text) {
       if (badge) badge.remove();
       return;
@@ -751,7 +752,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
       badge = document.createElement("span");
       row.main.appendChild(badge);
     }
-    badge.className = "badge" + (cls ? " " + cls : "");
+    badge.className = "badge derived" + (cls ? " " + cls : "");
     badge.textContent = text;
   }
 
