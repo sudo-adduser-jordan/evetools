@@ -14,10 +14,10 @@
 
   function formatIsk(value) {
     if (!isFinite(value) || value <= 0) return "\u2014";
-    if (value >= 1e9) return (value / 1e9).toFixed(2) + "B ISK";
-    if (value >= 1e6) return (value / 1e6).toFixed(2) + "M ISK";
-    if (value >= 1e3) return (value / 1e3).toFixed(1) + "K ISK";
-    return Math.round(value).toLocaleString("en-US") + " ISK";
+    if (value >= 1e9) return (value / 1e9).toFixed(2) + "b isk";
+    if (value >= 1e6) return (value / 1e6).toFixed(2) + "m isk";
+    if (value >= 1e3) return (value / 1e3).toFixed(1) + "k isk";
+    return Math.round(value).toLocaleString("en-US") + " isk";
   }
 
   function formatDate(value) {
@@ -44,18 +44,17 @@
       var priced = Number(section.pricedItems || 0);
       var count = Number(section.totalItems || 0);
       var unpriced = Array.isArray(section.unpriced) ? section.unpriced : [];
+      var complete = unpriced.length === 0 && (count === 0 || priced >= count);
 
       if (valueEl) {
-        valueEl.textContent = priced > 0 ? formatIsk(total) : "\u2014";
-        valueEl.title = priced > 0 ? Math.round(total).toLocaleString("en-US") + " ISK" : "";
+        valueEl.textContent = complete && priced > 0 ? formatIsk(total) : "\u2014";
+        valueEl.title = complete && priced > 0 ? Math.round(total).toLocaleString("en-US") + " isk" : "";
       }
 
       if (metaEl) {
         var bits = [];
-        if (count > 0) bits.push(priced + " / " + count + " items priced");
         var updated = formatDate(section.updated || data.generatedAt);
         if (updated) bits.push("updated " + updated);
-        if (unpriced.length) bits.push(unpriced.length + " unpriced");
         metaEl.textContent = bits.join(" \u00b7 ");
         var sourceTitle =
           "Estimated from Fuzzwork Jita 4-4 market aggregates and EVE Ref public contracts.";
@@ -67,7 +66,7 @@
         metaEl.title = sourceTitle;
       }
 
-      bar.classList.toggle("partial", count > 0 && priced < count);
+      bar.classList.toggle("partial", !complete);
     })
     .catch(function () {
       if (valueEl) valueEl.textContent = "\u2014";
