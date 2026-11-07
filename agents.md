@@ -19,19 +19,19 @@
 
 ## Amarr missions
 
-- [King of the Hill (9 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(9_of_13))
-- [King of the Hill (10 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(10_of_13))
-- [Clear Head (1 of 5) - Throwing Down the Gauntlet](https://wiki.eveuniversity.org/Thumal_Ebotiz#Clear_Head_(1_of_5)_-_Throwing_Down_the_Gauntlet)
+- [King of the Hill (9 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(9_of_13)) [Chain]
+- [King of the Hill (10 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(10_of_13)) [Chain]
+- [Clear Head (1 of 5) - Throwing Down the Gauntlet](https://wiki.eveuniversity.org/Thumal_Ebotiz#Clear_Head_(1_of_5)_-_Throwing_Down_the_Gauntlet) [Chain]
 - [Pawns on the Board (2 of 5)](https://wiki.eveuniversity.org/Pawns_on_the_Board_(2_of_5))
 - [Arming Araz (2 of 5)](https://wiki.eveuniversity.org/Amir_Arshah#Arming_Araz_(2_of_5))
 - [Blood Hunt - Symptoms (1 of 5)](https://wiki.eveuniversity.org/Sheroz_Amokin#Blood_Hunt_-_Symptoms_(1_of_5))
-- [Governor's Aide (4 of 5)](https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(4_of_5))
-- [Governor's Aide (5 of 5)](https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(5_of_5))
-- [Neutralizing the Threat (1 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(1_of_3))
-- [Neutralizing the Threat (2 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(2_of_3))
-- [Neutralizing the Threat (3 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(3_of_3))
+- [Governor's Aide (4 of 5)](https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(4_of_5)) [Chain]
+- [Governor's Aide (5 of 5)](https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(5_of_5)) [Chain]
+- [Neutralizing the Threat (1 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(1_of_3)) [Chain]
+- [Neutralizing the Threat (2 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(2_of_3)) [Chain]
+- [Neutralizing the Threat (3 of 3)](https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(3_of_3)) [Chain]
 - [Guild Wars (4 of 4)](https://wiki.eveuniversity.org/Bartezo_Maphante#Guild_Wars_(4_of_4))
-- [King of the Hill (5 of 13)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(5_of_13))
+- [King of the Hill (5 of 13)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(5_of_13)) [Chain]
 - [Kofur Karveran](https://wiki.eveuniversity.org/Kofur_Karveran)
 - [Clean Hands – Blood Trail (1 of 5)](https://wiki.eveuniversity.org/Clean_Hands_%E2%80%93_Blood_Trail_(1_of_5))
 - [Blood Hunt - Morbid Burden (2 of 5)](https://wiki.eveuniversity.org/Sheroz_Amokin#Blood_Hunt_-_Morbid_Burden_(2_of_5))
@@ -42,10 +42,10 @@
 - [Unearthing the Ancients (1 of 3)](https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(1_of_3))
 - [Unearthing the Ancients (2 of 3)](https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(2_of_3))
 - [Unearthing the Ancients (3 of 3)](https://wiki.eveuniversity.org/The_Curator#Unearthing_the_Ancients_(3_of_3))
-- [King of the Hill (3 of 13)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13))
-- [King of the Hill (3 of 13) (part 2)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_2))
-- [King of the Hill (3 of 13) (part 3)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3))
-- [King of the Hill (12 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13))
+- [King of the Hill (3 of 13)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)) [Chain]
+- [King of the Hill (3 of 13) (part 2)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_2)) [Chain]
+- [King of the Hill (3 of 13) (part 3)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3)) [Chain]
+- [King of the Hill (12 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13)) [Chain]
 
 ## Angel missions
 
@@ -55,11 +55,11 @@
 - [Little Sister (2 of 2)](https://wiki.eveuniversity.org/Henara_Vern#Little_Sister_(2_of_2))
 - [Minecore Rescue (1 of 2)](https://wiki.eveuniversity.org/Kanmilia_Oldit#Minecore_Rescue_(1_of_2))
 - [Minecore Rescue (2 of 2)](https://wiki.eveuniversity.org/Kanmilia_Oldit#Minecore_Rescue_(2_of_2))
-- [Improving Relations](https://wiki.eveuniversity.org/Kardimo_Menka#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Kardimo_Menka#Improving_Relations) [Repeatable]
 - [The Wind Chimes (1 of 2)](https://wiki.eveuniversity.org/Lunuin_Eurek#The_Wind_Chimes_(1_of_2))
 - [The Wind Chimes (2 of 2)](https://wiki.eveuniversity.org/Lunuin_Eurek#The_Wind_Chimes_(2_of_2))
-- [Improving Relations](https://wiki.eveuniversity.org/Numa_Fashit#Improving_Relations)
-- [Improving Relations](https://wiki.eveuniversity.org/Skami_Zarton#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Numa_Fashit#Improving_Relations) [Repeatable]
+- [Improving Relations](https://wiki.eveuniversity.org/Skami_Zarton#Improving_Relations) [Repeatable]
 - [For Fear of Akrada (1 of 2)](https://wiki.eveuniversity.org/Urandi_Krilin#For_Fear_of_Akrada_(1_of_2))
 - [For Fear of Akrada (2 of 2)](https://wiki.eveuniversity.org/Urandi_Krilin#For_Fear_of_Akrada_(2_of_2))
 
@@ -81,46 +81,46 @@
 - [Wiyrkomi Freelancing - Unsuccessful Excavation (4 of 4)](https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_-_Unsuccessful_Excavation_(4_of_4))
 - [The Break In Expert - Keychain (3 of 3)](https://wiki.eveuniversity.org/Anou_Dechien#The_Break_In_Expert_-_Keychain_(3_of_3))
 - [Protecting the Vault - Bad Money (2 of 4)](https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Bad_Money_(2_of_4))
-- [Wrongfully Accused - Last Hindrance (4 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Last_Hindrance_(4_of_4))
+- [Wrongfully Accused - Last Hindrance (4 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Last_Hindrance_(4_of_4)) [Chain]
 - [Artifact Excavations – Final Blow (4 of 5)](https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Final_Blow_(4_of_5))
 - [Station In Crisis - Caldari Troublemakers (1 of 3)](https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Caldari_Troublemakers_(1_of_3))
 - [The Bank Heist - Good To Go (1 of 5)](https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Good_To_Go_(1_of_5))
 - [Bank Security – Bug Error (2 of 3)](https://wiki.eveuniversity.org/Jali_Tanaka#Bank_Security_%E2%80%93_Bug_Error_(2_of_3))
 - [Interception - Data Miner (1 of 2)](https://wiki.eveuniversity.org/Yka_Katori#Interception_-_Data_Miner_(1_of_2))
-- [A Mad Scientists Dream – Transportation (3 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Transportation_(3_of_5))
+- [A Mad Scientists Dream – Transportation (3 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Transportation_(3_of_5)) [Chain]
 - [Community Service – Cheri Mirei (4 of 4)](https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Cheri_Mirei_(4_of_4))
 - [Pit Stop Slash Saloon - The Construction Tools (3 of 4)](https://wiki.eveuniversity.org/Midoki_Urigamu#Pit_Stop_Slash_Saloon_-_The_Construction_Tools_(3_of_4))
 - [Community Service – Pirates at Large (1 of 4)](https://wiki.eveuniversity.org/Kaiya_Tuuri#Community_Service_%E2%80%93_Pirates_at_Large_(1_of_4))
 - [Protecting the Vault - Stirring the Nest (1 of 4)](https://wiki.eveuniversity.org/Mika_Etsuya#Protecting_the_Vault_-_Stirring_the_Nest_(1_of_4))
-- [A Mad Scientists Dream – The Drill (4 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_The_Drill_(4_of_5))
+- [A Mad Scientists Dream – The Drill (4 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_The_Drill_(4_of_5)) [Chain]
 - [Look, I Need Your Help (1 of 3)](https://wiki.eveuniversity.org/Oniya_Arkimo#Look,_I_Need_Your_Help_(1_of_3))
 - [Time For Payback (3 of 3)](https://wiki.eveuniversity.org/Oniya_Arkimo#Time_For_Payback_(3_of_3))
 - [Artifact Excavations – Food for the Needy (1 of 5)](https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Food_for_the_Needy_(1_of_5))
 - [Hotaru's Dilemma - Trespasser (1 of 4)](https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Trespasser_(1_of_4))
-- [Gambler's Debt - The Stolen Shuttle (1 of 3)](https://wiki.eveuniversity.org/Goru_Nikainen#Gambler's_Debt_-_The_Stolen_Shuttle_(1_of_3))
+- [Gambler's Debt - The Stolen Shuttle (1 of 3)](https://wiki.eveuniversity.org/Goru_Nikainen#Gambler's_Debt_-_The_Stolen_Shuttle_(1_of_3)) [Chain]
 - [Station In Crisis - Hooligan Gang Leaders (3 of 3)](https://wiki.eveuniversity.org/Varma_Fujimo#Station_In_Crisis_-_Hooligan_Gang_Leaders_(3_of_3))
-- [Improving Relations](https://wiki.eveuniversity.org/Zoun_Makui#Improving_Relations)
-- [Improving Relations](https://wiki.eveuniversity.org/Emma_Tharkin#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Zoun_Makui#Improving_Relations) [Repeatable]
+- [Improving Relations](https://wiki.eveuniversity.org/Emma_Tharkin#Improving_Relations) [Repeatable]
 - [Pirates Brought to Justice (4 of 5)](https://wiki.eveuniversity.org/Tekirye_Awazhen#Pirates_Brought_to_Justice_(4_of_5))
 - [Training Ground Destruction (4 of 4)](https://wiki.eveuniversity.org/Yru_Hatamei#Training_Ground_Destruction_(4_of_4))
 - [Escape From The Lion's Den - The Getaway (3 of 3)](https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_The_Getaway_(3_of_3))
-- [Improving Relations](https://wiki.eveuniversity.org/Kaiko_Maina#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Kaiko_Maina#Improving_Relations) [Repeatable]
 - [Lookin' For Work? (1 of 2)](https://wiki.eveuniversity.org/Kusan_Niemenen#Lookin'_For_Work?_(1_of_2))
 - [Escape From The Lion's Den - Mission Impossible (1 of 3)](https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Mission_Impossible_(1_of_3))
 - [Banker's Stash - Stolen Goods (1 of 3)](https://wiki.eveuniversity.org/Ikimara_Hochi#Banker's_Stash_-_Stolen_Goods_(1_of_3))
-- [Mercantile Settlers - Jorek Lephny (2 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Jorek_Lephny_(2_of_5))
-- [Hidden Treasure - Retrieve The Keycard (3 of 4)](https://wiki.eveuniversity.org/Mintu_Oshima#Hidden_Treasure_-_Retrieve_The_Keycard_(3_of_4))
+- [Mercantile Settlers - Jorek Lephny (2 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Jorek_Lephny_(2_of_5)) [Chain]
+- [Hidden Treasure - Retrieve The Keycard (3 of 4)](https://wiki.eveuniversity.org/Mintu_Oshima#Hidden_Treasure_-_Retrieve_The_Keycard_(3_of_4)) [Chain]
 - [Cattle Thieves - Revenge Is Sweet (3 of 3)](https://wiki.eveuniversity.org/Ratan_Saturi#Cattle_Thieves_-_Revenge_Is_Sweet_(3_of_3))
 - [Artifact Excavations – Bandits Beware (3 of 5)](https://wiki.eveuniversity.org/Arvo_Watanen#Artifact_Excavations_%E2%80%93_Bandits_Beware_(3_of_5))
 - [Lost Love - Manchura The Pirate (1 of 3)](https://wiki.eveuniversity.org/Zabonn_Michi#Lost_Love_-_Manchura_The_Pirate_(1_of_3))
-- [The Test of Competence – The Roaming Brigands (2 of 2)](https://wiki.eveuniversity.org/Kochi_Utrainen#The_Test_of_Competence_%E2%80%93_The_Roaming_Brigands_(2_of_2))
+- [The Test of Competence – The Roaming Brigands (2 of 2)](https://wiki.eveuniversity.org/Kochi_Utrainen#The_Test_of_Competence_%E2%80%93_The_Roaming_Brigands_(2_of_2)) [Chain]
 - [Troubles With Outlaws (2 of 5)](https://wiki.eveuniversity.org/Tekirye_Awazhen#Troubles_With_Outlaws_(2_of_5))
-- [Mercantile Settlers - Laser Shortage (4 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Laser_Shortage_(4_of_5))
+- [Mercantile Settlers - Laser Shortage (4 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Laser_Shortage_(4_of_5)) [Chain]
 - [Escape From The Lion's Den - Key To Survival (2 of 3)](https://wiki.eveuniversity.org/Akemon_Tolan#Escape_From_The_Lion's_Den_-_Key_To_Survival_(2_of_3))
 - [Will You Help? (1 of 2)](https://wiki.eveuniversity.org/Will_You_Help%3F_(1_of_2))
 - [Nefarious Business – Songbird (2 of 4)](https://wiki.eveuniversity.org/Aisha_Gojivi#Nefarious_Business_%E2%80%93_Songbird_(2_of_4))
 - [The Lai Dai Research Project - A Little More For My Friends (2 of 3)](https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_A_Little_More_For_My_Friends_(2_of_3))
-- [Mercantile Settlers - Outlaws (5 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Outlaws_(5_of_5))
+- [Mercantile Settlers - Outlaws (5 of 5)](https://wiki.eveuniversity.org/Hitami_Magye#Mercantile_Settlers_-_Outlaws_(5_of_5)) [Chain]
 - [Nugoeihuvi Freelancer – Workers Need Air… (3 of 4)](https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Workers_Need_Air%E2%80%A6_(3_of_4))
 - [The Bank Heist - Inside Track (5 of 5)](https://wiki.eveuniversity.org/Krakan_Rost#The_Bank_Heist_-_Inside_Track_(5_of_5))
 - [The Regiment – Unforgiving (4 of 4)](https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Unforgiving_(4_of_4))
@@ -128,18 +128,18 @@
 - [Hotaru's Dilemma - Break The Blockade (3 of 4)](https://wiki.eveuniversity.org/Hotaru_Ahti#Hotaru's_Dilemma_-_Break_The_Blockade_(3_of_4))
 - [The Medicine Man – A Pinch of Spice (1 of 3)](https://wiki.eveuniversity.org/Mirmon_Gorgoz#The_Medicine_Man_%E2%80%93_A_Pinch_of_Spice_(1_of_3))
 - [Nugoeihuvi Freelancer – Bad News (4 of 4)](https://wiki.eveuniversity.org/Istei_Poyri#Nugoeihuvi_Freelancer_%E2%80%93_Bad_News_(4_of_4))
-- [Wrongfully Accused - The Cloaking Device (3 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_The_Cloaking_Device_(3_of_4))
+- [Wrongfully Accused - The Cloaking Device (3 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_The_Cloaking_Device_(3_of_4)) [Chain]
 - [The Caldari Migrants - Quao (4 of 5)](https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Quao_(4_of_5))
-- [A Mad Scientists Dream – Last Hindrance (5 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Last_Hindrance_(5_of_5))
+- [A Mad Scientists Dream – Last Hindrance (5 of 5)](https://wiki.eveuniversity.org/Akira_Helkelen#A_Mad_Scientists_Dream_%E2%80%93_Last_Hindrance_(5_of_5)) [Chain]
 - [Wagon Christ - Lost Supplies (2 of 3)](https://wiki.eveuniversity.org/Tamoko_Raytio#Wagon_Christ_-_Lost_Supplies_(2_of_3))
 - [Foul Play - Finding Ryoke (3 of 3)](https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Finding_Ryoke_(3_of_3))
 - [The Caldari Migrants - Reconnaissance Point 2 (2 of 5)](https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_-_Reconnaissance_Point_2_(2_of_5))
 - [The Caldari Migrants – Reconnaissance Point 3 (3 of 5)](https://wiki.eveuniversity.org/Raidon_Setala#The_Caldari_Migrants_%E2%80%93_Reconnaissance_Point_3_(3_of_5))
 - [Designated Driver - The Garage (1 of 4)](https://wiki.eveuniversity.org/Skurk_Tekkurs#Designated_Driver_-_The_Garage_(1_of_4))
 - [The Regiment – Stolen Deed (1 of 4)](https://wiki.eveuniversity.org/Chichiro_Rati#The_Regiment_%E2%80%93_Stolen_Deed_(1_of_4))
-- [Wrongfully Accused - Who Shot the Sheriff (2 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Who_Shot_the_Sheriff_(2_of_4))
+- [Wrongfully Accused - Who Shot the Sheriff (2 of 4)](https://wiki.eveuniversity.org/Ryoke_Aura#Wrongfully_Accused_-_Who_Shot_the_Sheriff_(2_of_4)) [Chain]
 - [Edge of Reason](https://wiki.eveuniversity.org/Edge_of_Reason)
-- [Deadly Diploma](https://wiki.eveuniversity.org/Fumiku_Viljanen#Deadly_Diploma)
+- [Deadly Diploma](https://wiki.eveuniversity.org/Fumiku_Viljanen#Deadly_Diploma) [Repeatable]
 - [The Lai Dai Research Project - Ore Shipment (1 of 3)](https://wiki.eveuniversity.org/Matani_Jitainen#The_Lai_Dai_Research_Project_-_Ore_Shipment_(1_of_3))
 - [Wiyrkomi Freelancing – Missing Weapon Stash (1 of 4)](https://wiki.eveuniversity.org/Retin_Ariato#Wiyrkomi_Freelancing_%E2%80%93_Missing_Weapon_Stash_(1_of_4))
 - [Foul Play - Ryoke's Friend (2 of 3)](https://wiki.eveuniversity.org/Eteri_Tazaki#Foul_Play_-_Ryoke's_Friend_(2_of_3))
@@ -152,22 +152,22 @@
 - [Path to Enlightenment - Discovery (3 of 3)](https://wiki.eveuniversity.org/Path_to_Enlightenment_-_Discovery_(3_of_3))
 - [Rogue Crop - Neither Safe nor Sorry (2 of 4)](https://wiki.eveuniversity.org/Wrtuk_Formur#Rogue_Crop_-_Neither_Safe_nor_Sorry_(2_of_4))
 - [Activist Fuel (1 of 4)](https://wiki.eveuniversity.org/Activist_Fuel_(1_of_4))
-- [Business Associates - Prologue/Prelude](https://wiki.eveuniversity.org/Iliere_Angetyn#Business_Associates_-_Prologue/Prelude)
-- [Federal Inspection (3 of 5)](https://wiki.eveuniversity.org/Onreun_Coen#Federal_Inspection_(3_of_5))
+- [Business Associates - Prologue/Prelude](https://wiki.eveuniversity.org/Iliere_Angetyn#Business_Associates_-_Prologue/Prelude) [Chain]
+- [Federal Inspection (3 of 5)](https://wiki.eveuniversity.org/Onreun_Coen#Federal_Inspection_(3_of_5)) [Chain]
 - [Maschteri Markan](https://wiki.eveuniversity.org/Maschteri_Markan)
-- [The Wiyrkomi Operation (3 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(3_of_6))
-- [The Wiyrkomi Operation (1 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(1_of_6))
+- [The Wiyrkomi Operation (3 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(3_of_6)) [Chain]
+- [The Wiyrkomi Operation (1 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(1_of_6)) [Chain]
 
 ## Guristas missions
 
-- [Improving Relations](https://wiki.eveuniversity.org/Ippana_Maltyr#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Ippana_Maltyr#Improving_Relations) [Repeatable]
 - [Pirate Dealings (1 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(1_of_3))
 - [Pirate Dealings (2 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(2_of_3))
 - [Pirate Dealings (3 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(3_of_3))
-- [Improving Relations](https://wiki.eveuniversity.org/Jakuzi_Makar#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Jakuzi_Makar#Improving_Relations) [Repeatable]
 - [Pirate Escapade (3 of 4)](https://wiki.eveuniversity.org/Knaaninn_Aranuri#Pirate_Escapade_(3_of_4))
 - [Pirate Escapade (4 of 4)](https://wiki.eveuniversity.org/Knaaninn_Aranuri#Pirate_Escapade_(4_of_4))
-- [Improving Relations](https://wiki.eveuniversity.org/Pol_Pat#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Pol_Pat#Improving_Relations) [Repeatable]
 - [All Things Come to an End (Part 1 of 2)](https://wiki.eveuniversity.org/Rakka_Tahiri#All_Things_Come_to_an_End_(Part_1_of_2))
 - [All Things Come to an End (Part 2 of 2)](https://wiki.eveuniversity.org/Rakka_Tahiri#All_Things_Come_to_an_End_(Part_2_of_2))
 
@@ -179,7 +179,7 @@
 - [Godun's Flunky - Listen and Learn (1 of 4)](https://wiki.eveuniversity.org/Godun%27s_Flunky_-_Listen_and_Learn_(1_of_4))
 - [Thora Desto](https://wiki.eveuniversity.org/Thora_Desto)
 - [Mutama Czeik](https://wiki.eveuniversity.org/Mutama_Czeik)
-- [Secrets For Sale](https://wiki.eveuniversity.org/Secrets_For_Sale)
+- [Secrets For Sale](https://wiki.eveuniversity.org/Secrets_For_Sale) [Repeatable]
 - [Scandal In Barkrik - The Final Inspection (4 of 4)](https://wiki.eveuniversity.org/Scandal_In_Barkrik_-_The_Final_Inspection_(4_of_4))
 - [Transputer Orb - The Rap (2 of 3)](https://wiki.eveuniversity.org/Transputer_Orb_-_The_Rap_(2_of_3))
 - [Blind Seer - Bones (1 of 4)](https://wiki.eveuniversity.org/Blind_Seer_-_Bones_(1_of_4))
@@ -228,12 +228,12 @@
 - [CTF Crackdown (2 of 2)](https://wiki.eveuniversity.org/Bley_Oreriel#CTF_Crackdown_(2_of_2))
 - [Fixing the Problem (1 of 2)](https://wiki.eveuniversity.org/Cliene_Veine#Fixing_the_Problem_(1_of_2))
 - [Fixing the Problem (2 of 2)](https://wiki.eveuniversity.org/Cliene_Veine#Fixing_the_Problem_(2_of_2))
-- [Improving Relations](https://wiki.eveuniversity.org/Hara_Lafleur#Improving_Relations)
-- [Improving Relations](https://wiki.eveuniversity.org/Jaquon_Jalibar#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Hara_Lafleur#Improving_Relations) [Repeatable]
+- [Improving Relations](https://wiki.eveuniversity.org/Jaquon_Jalibar#Improving_Relations) [Repeatable]
 - [Besieged (1 of 2)](https://wiki.eveuniversity.org/Jarvas_Ladier#Besieged_(1_of_2))
 - [Besieged (2 of 2)](https://wiki.eveuniversity.org/Jarvas_Ladier#Besieged_(2_of_2))
 - [Gas Cloud Survey (1 of 2)](https://wiki.eveuniversity.org/Kaymotin_Gradance#Gas_Cloud_Survey_(1_of_2))
 - [Remove The Miners (2 of 2)](https://wiki.eveuniversity.org/Kaymotin_Gradance#Remove_The_Miners_(2_of_2))
-- [Improving Relations](https://wiki.eveuniversity.org/Luthetion_Preque#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Luthetion_Preque#Improving_Relations) [Repeatable]
 - [Making It So (1 of 2)](https://wiki.eveuniversity.org/Wessette_Gauze#Making_It_So_(1_of_2))
 - [Making It So (2 of 2)](https://wiki.eveuniversity.org/Wessette_Gauze#Making_It_So_(2_of_2))
