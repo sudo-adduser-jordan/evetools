@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-11-07T22:34:30Z",
+  "sources": {
+    "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
+    "contracts": "EVE Ref public contract snapshot",
+    "types": "Fuzzwork SDE invTypes.csv"
+  },
+  "snapshot": {
+    "lastRunDate": "2026-11-07",
+    "everefLastModified": "Sat, 07 Nov 2026 22:34:22 GMT",
+    "everefScrapeEnd": "2026-11-07T22:30:45Z",
+    "fuzzworkOrderset": 176268
+  },
+  "lines": {
+    "amarr": {
+      "shopping": {
+        "total": 342434687.22,
+        "pricedItems": 13,
+        "totalItems": 26,
+        "unpriced": [
+          "Amolah Kesti's Data Fragment I",
+          "Amolah Kesti's Data Fragment II",
+          "Amolah Kesti's Data Fragment III",
+          "Anema Bluechip",
+          "Blood Grunt Tag",
+          "Blood Lower-Tier Tag",
+          "Blood Raider Scientist",
+          "Blood Raider Squad Leader's Head",
+          "Bug-Ridden Corpse",
+          "Generator Debris",
+          "Manel's Servant",
+          "Runic Inscription",
+          "Yamia Mida's Remains"
+        ],
+        "updated": "2026-11-07T22:34:30Z"
+      }
+    },
+    "caldari": {
+      "shopping": {
+        "total": 3693356486.78,
+        "pricedItems": 60,
+        "totalItems": 62,
+        "unpriced": [
+          "User Manual",
+          "Zvarin Karsha"
+        ],
+        "updated": "2026-11-07T22:34:30Z"
+      }
+    },
+    "gallente": {
+      "shopping": {
+        "total": 114256999.0,
+        "pricedItems": 8,
+        "totalItems": 10,
+        "unpriced": [
+          "Jark Makon",
+          "Trust Partners Business Card"
+        ],
+        "updated": "2026-11-07T22:34:30Z"
+      }
+    },
+    "minmatar": {
+      "shopping": {
+        "total": 381731331.39,
+        "pricedItems": 16,
+        "totalItems": 42,
+        "unpriced": [
+          "Angel Cartel Scanner Data",
+          "Angel Drug Addict Tag",
+          "Bono Zakan Corpse",
+          "Cracked Keycard",
+          "Destroyed ComLink Scanner",
+          "Gist Database Codes",
+          "Godun Sakt's Diamond Drill",
+          "Godun Sakt's Questionable Holoreel",
+          "Hacker ID Slice",
+          "Kardimo Palettan",
+          "Kutill's Data Chip",
+          "Lagaster Malotoff's Tag",
+          "Machul's Head",
+          "Minmatar Republic Narcotic Officer's Tag",
+          "Mysterious Portal Parts",
+          "Nanom Basskel's Ship Logs",
+          "Navy Issue Amplifier",
+          "Okham's Head",
+          "Red Hammer's Personal Effects",
+          "Rekker's Keycard",
+          "Republic Pilot",
+          "Sadry Damoklet's Head",
+          "Sample of Septicemic Agent",
+          "Sispur's Security Camera Logs",
+          "Sniper ID Slice",
+          "Vanir Makono's DNA"
+        ],
+        "updated": "2026-11-07T22:34:30Z"
+      }
+    }
+  }
+}

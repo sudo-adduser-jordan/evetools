@@ -1,0 +1,61 @@
+name: Update COSMOS cost estimates
+
+on:
+  schedule:
+    - cron: "5 4 * * *" # 04:05 UTC daily
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Ignore the once-per-day / snapshot guard
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cosmos-costs
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache Fuzzwork SDE
+        uses: actions/cache@v4
+        with:
+          path: .cache/invTypes.csv
+          key: cosmos-costs-sde-${{ github.run_id }}
+          restore-keys: |
+            cosmos-costs-sde-
+
+      - name: Update cost estimates
+        env:
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.force }}
+        run: |
+          if [ "$FORCE" = "true" ]; then
+            python scripts/update_cosmos_costs.py --force
+          else
+            python scripts/update_cosmos_costs.py
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cosmos/data/costs.json
+          if git diff --cached --quiet -- cosmos/data/costs.json; then
+            echo "No cost changes to commit."
+            exit 0
+          fi
+          git commit -m "Update COSMOS cost estimates [skip ci]"
+          git push
