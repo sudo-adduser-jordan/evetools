@@ -47,6 +47,33 @@
 - [King of the Hill (3 of 13) (part 3)](https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3))
 - [King of the Hill (12 of 13)](https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13))
 
+## Angel missions
+
+- [The Flags of Blood (1 of 2)](https://wiki.eveuniversity.org/Bleur_Hein#The_Flags_of_Blood_(1_of_2))
+- [The Flags of Blood (2 of 2)](https://wiki.eveuniversity.org/Bleur_Hein#The_Flags_of_Blood_(2_of_2))
+- [Little Sister (1 of 2)](https://wiki.eveuniversity.org/Henara_Vern#Little_Sister_(1_of_2))
+- [Little Sister (2 of 2)](https://wiki.eveuniversity.org/Henara_Vern#Little_Sister_(2_of_2))
+- [Minecore Rescue (1 of 2)](https://wiki.eveuniversity.org/Kanmilia_Oldit#Minecore_Rescue_(1_of_2))
+- [Minecore Rescue (2 of 2)](https://wiki.eveuniversity.org/Kanmilia_Oldit#Minecore_Rescue_(2_of_2))
+- [Improving Relations](https://wiki.eveuniversity.org/Kardimo_Menka#Improving_Relations)
+- [The Wind Chimes (1 of 2)](https://wiki.eveuniversity.org/Lunuin_Eurek#The_Wind_Chimes_(1_of_2))
+- [The Wind Chimes (2 of 2)](https://wiki.eveuniversity.org/Lunuin_Eurek#The_Wind_Chimes_(2_of_2))
+- [Improving Relations](https://wiki.eveuniversity.org/Numa_Fashit#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Skami_Zarton#Improving_Relations)
+- [For Fear of Akrada (1 of 2)](https://wiki.eveuniversity.org/Urandi_Krilin#For_Fear_of_Akrada_(1_of_2))
+- [For Fear of Akrada (2 of 2)](https://wiki.eveuniversity.org/Urandi_Krilin#For_Fear_of_Akrada_(2_of_2))
+
+## Blood Raider missions
+
+- [Clone Escapade (1 of 2)](https://wiki.eveuniversity.org/Charit_Rish#Clone_Escapade_(1_of_2))
+- [Clone Escapade (2 of 2)](https://wiki.eveuniversity.org/Charit_Rish#Clone_Escapade_(2_of_2))
+- [Death's Door (1 of 2)](https://wiki.eveuniversity.org/Dalitat_Dakpor#Death's_Door_(1_of_2))
+- [Death's Door (2 of 2)](https://wiki.eveuniversity.org/Dalitat_Dakpor#Death's_Door_(2_of_2))
+- [Slaves To The Slaughter (1 of 2)](https://wiki.eveuniversity.org/Neyan_Khahsel#Slaves_To_The_Slaughter_(1_of_2))
+- [Slaves To The Slaughter (2 of 2)](https://wiki.eveuniversity.org/Neyan_Khahsel#Slaves_To_The_Slaughter_(2_of_2))
+- [Threat From Abroad (1 of 2)](https://wiki.eveuniversity.org/Yekti_Kimebu#Threat_From_Abroad_(1_of_2))
+- [Threat From Abroad (2 of 2)](https://wiki.eveuniversity.org/Yekti_Kimebu#Threat_From_Abroad_(2_of_2))
+
 ## Caldari missions
 
 - [Ancient Weaponry (3 of 4)](https://wiki.eveuniversity.org/Yru_Hatamei#Ancient_Weaponry_(3_of_4))
@@ -131,6 +158,19 @@
 - [The Wiyrkomi Operation (3 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(3_of_6))
 - [The Wiyrkomi Operation (1 of 6)](https://wiki.eveuniversity.org/Veko_Tallaja#The_Wiyrkomi_Operation_(1_of_6))
 
+## Guristas missions
+
+- [Improving Relations](https://wiki.eveuniversity.org/Ippana_Maltyr#Improving_Relations)
+- [Pirate Dealings (1 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(1_of_3))
+- [Pirate Dealings (2 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(2_of_3))
+- [Pirate Dealings (3 of 3)](https://wiki.eveuniversity.org/Isana_Dagin#Pirate_Dealings_(3_of_3))
+- [Improving Relations](https://wiki.eveuniversity.org/Jakuzi_Makar#Improving_Relations)
+- [Pirate Escapade (3 of 4)](https://wiki.eveuniversity.org/Knaaninn_Aranuri#Pirate_Escapade_(3_of_4))
+- [Pirate Escapade (4 of 4)](https://wiki.eveuniversity.org/Knaaninn_Aranuri#Pirate_Escapade_(4_of_4))
+- [Improving Relations](https://wiki.eveuniversity.org/Pol_Pat#Improving_Relations)
+- [All Things Come to an End (Part 1 of 2)](https://wiki.eveuniversity.org/Rakka_Tahiri#All_Things_Come_to_an_End_(Part_1_of_2))
+- [All Things Come to an End (Part 2 of 2)](https://wiki.eveuniversity.org/Rakka_Tahiri#All_Things_Come_to_an_End_(Part_2_of_2))
+
 ## Minmatar missions
 
 - [The Ani Build-Up - Carrot on a Stick (2 of 3)](https://wiki.eveuniversity.org/The_Ani_Build-Up_-_Carrot_on_a_Stick_(2_of_3))
@@ -178,3 +218,22 @@
 - [Cyberganker – Kael Nutan (3 of 3)](https://wiki.eveuniversity.org/Cyberganker_%E2%80%93_Kael_Nutan_(3_of_3))
 - [Transputer Orb - The Redemption (3 of 3)](https://wiki.eveuniversity.org/Transputer_Orb_-_The_Redemption_(3_of_3))
 - [Caldari Incursion - The Thukker Tribe Envoy (3 of 3)](https://wiki.eveuniversity.org/Caldari_Incursion_-_The_Thukker_Tribe_Envoy_(3_of_3))
+
+## Serpentis missions
+
+- [Serpentis Gansters - Enemies of the Federation (1 of 3)](https://wiki.eveuniversity.org/Barou_Lardoss#Serpentis_Gansters_-_Enemies_of_the_Federation_(1_of_3))
+- [Serpentis Gansters - Clear The Way (2 of 3)](https://wiki.eveuniversity.org/Barou_Lardoss#Serpentis_Gansters_-_Clear_The_Way_(2_of_3))
+- [Serpentis Gansters - The Serpentis Officer (3 of 3)](https://wiki.eveuniversity.org/Barou_Lardoss#Serpentis_Gansters_-_The_Serpentis_Officer_(3_of_3))
+- [CTF Crackdown (1 of 2)](https://wiki.eveuniversity.org/Bley_Oreriel#CTF_Crackdown_(1_of_2))
+- [CTF Crackdown (2 of 2)](https://wiki.eveuniversity.org/Bley_Oreriel#CTF_Crackdown_(2_of_2))
+- [Fixing the Problem (1 of 2)](https://wiki.eveuniversity.org/Cliene_Veine#Fixing_the_Problem_(1_of_2))
+- [Fixing the Problem (2 of 2)](https://wiki.eveuniversity.org/Cliene_Veine#Fixing_the_Problem_(2_of_2))
+- [Improving Relations](https://wiki.eveuniversity.org/Hara_Lafleur#Improving_Relations)
+- [Improving Relations](https://wiki.eveuniversity.org/Jaquon_Jalibar#Improving_Relations)
+- [Besieged (1 of 2)](https://wiki.eveuniversity.org/Jarvas_Ladier#Besieged_(1_of_2))
+- [Besieged (2 of 2)](https://wiki.eveuniversity.org/Jarvas_Ladier#Besieged_(2_of_2))
+- [Gas Cloud Survey (1 of 2)](https://wiki.eveuniversity.org/Kaymotin_Gradance#Gas_Cloud_Survey_(1_of_2))
+- [Remove The Miners (2 of 2)](https://wiki.eveuniversity.org/Kaymotin_Gradance#Remove_The_Miners_(2_of_2))
+- [Improving Relations](https://wiki.eveuniversity.org/Luthetion_Preque#Improving_Relations)
+- [Making It So (1 of 2)](https://wiki.eveuniversity.org/Wessette_Gauze#Making_It_So_(1_of_2))
+- [Making It So (2 of 2)](https://wiki.eveuniversity.org/Wessette_Gauze#Making_It_So_(2_of_2))
