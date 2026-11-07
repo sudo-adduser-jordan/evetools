@@ -16,7 +16,7 @@
     <meta property="og:type" content="website" />
     <title>EVE Tools — LP Store Calculator, Janice, EVE Market Browser, EVE Industry, Marketmailer &amp; COSMOS Tracker</title>
     <link rel="icon" type="image/svg+xml" href="https://eve.ayokei.to/lp/favicon.svg" />
-    <!-- Single-request doorway page: styles inline, no JS. -->
+    <!-- Single-file doorway page: styles and the ESI status poll inline. -->
     <style>
       @font-face {
         font-family: "Inter";
@@ -61,12 +61,19 @@
       }
 
       .site-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        padding: 18px 28px;
+        border-bottom: 1px solid var(--line);
+      }
+      .site-head .brand {
+        grid-column: 2;
         display: flex;
         align-items: baseline;
         justify-content: center;
         gap: 10px;
-        padding: 18px 28px;
-        border-bottom: 1px solid var(--line);
       }
       .site-head h1 {
         font-size: 14px;
@@ -77,6 +84,67 @@
       .site-head .domain {
         font-size: 11.5px;
         color: var(--subtle);
+      }
+
+      /* Live ESI status, pinned to the top-left of the header. */
+      .esi-status {
+        grid-column: 1;
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .esi-status .esi-mark {
+        font-size: 12px;
+        line-height: 1;
+      }
+      .esi-status .esi-sep {
+        color: var(--subtle);
+      }
+      .esi-status[data-state="live"] .esi-mark,
+      .esi-status[data-state="live"] .esi-state {
+        color: var(--green);
+      }
+      .esi-status[data-state="live"] .esi-mark {
+        text-shadow: 0 0 10px color-mix(in srgb, var(--green) 70%, transparent);
+        animation: esi-pulse 2s ease-in-out infinite;
+      }
+      .esi-status[data-state="live"] .esi-count {
+        color: var(--text);
+      }
+      .esi-status[data-state="offline"] .esi-mark,
+      .esi-status[data-state="offline"] .esi-state {
+        color: var(--red);
+      }
+      .esi-status[data-state="loading"] .esi-mark {
+        color: var(--subtle);
+      }
+      .esi-status[data-state="loading"] .esi-sep,
+      .esi-status[data-state="loading"] .esi-count,
+      .esi-status[data-state="loading"] .esi-online,
+      .esi-status[data-state="offline"] .esi-sep,
+      .esi-status[data-state="offline"] .esi-count,
+      .esi-status[data-state="offline"] .esi-online {
+        display: none;
+      }
+      @keyframes esi-pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.45;
+        }
       }
 
       /* 1:list gate: the COSMOS tracker is the featured "1" panel at 3/7 width;
@@ -408,6 +476,24 @@
         fill: currentColor;
       }
 
+      @media (max-width: 720px) {
+        .site-head {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          gap: 10px;
+          padding: 14px 20px;
+        }
+        .site-head .brand,
+        .esi-status {
+          grid-column: 1;
+        }
+        .esi-status {
+          justify-self: start;
+          font-size: 9.5px;
+          letter-spacing: 0.1em;
+        }
+      }
+
       @media (max-width: 1024px) {
         .gate {
           grid-template-columns: 1fr;
@@ -480,14 +566,25 @@
       @media (prefers-reduced-motion: reduce) {
         * {
           transition: none !important;
+          animation: none !important;
         }
       }
     </style>
   </head>
   <body>
     <header class="site-head">
-      <h1>EVE Tools</h1>
-      <span class="domain">evetools</span>
+      <p class="esi-status" data-state="loading" title="Checking EVE ESI…">
+        <span class="esi-mark" aria-hidden="true">◈</span>
+        <span class="esi-label">ESI</span>
+        <span class="esi-state" role="status" aria-live="polite">CONNECTING</span>
+        <span class="esi-sep" aria-hidden="true">·</span>
+        <span class="esi-count"></span>
+        <span class="esi-online"></span>
+      </p>
+      <div class="brand">
+        <h1>EVE Tools</h1>
+        <span class="domain">evetools</span>
+      </div>
     </header>
 
     <main class="gate">
@@ -646,5 +743,67 @@
         ><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a
       >
     </footer>
+
+    <script>
+      (() => {
+        const status = document.querySelector(".esi-status");
+        if (!status) return;
+
+        const countEl = status.querySelector(".esi-count");
+        const stateEl = status.querySelector(".esi-state");
+        const onlineEl = status.querySelector(".esi-online");
+        const numberFormat = new Intl.NumberFormat("en-US");
+        let timer = null;
+
+        const render = (state, players) => {
+          status.dataset.state = state;
+
+          if (state === "live" && Number.isFinite(players)) {
+            const count = numberFormat.format(players);
+            countEl.textContent = count;
+            stateEl.textContent = "LIVE";
+            onlineEl.textContent = "ONLINE";
+            status.title = `Live player count from EVE ESI: ${count} online`;
+            return;
+          }
+
+          const offline = state === "offline";
+          stateEl.textContent = offline ? "OFFLINE" : "CONNECTING";
+          status.title = offline ? "EVE ESI is unreachable" : "Checking EVE ESI…";
+        };
+
+        const poll = async () => {
+          try {
+            const response = await fetch("https://esi.evetech.net/latest/status/", {
+              headers: { Accept: "application/json" },
+            });
+            if (!response.ok) throw new Error(`ESI status ${response.status}`);
+            const data = await response.json();
+            const players = Number(data.players);
+            render(Number.isFinite(players) ? "live" : "offline", players);
+          } catch {
+            render("offline");
+          }
+        };
+
+        const start = () => {
+          if (timer) return;
+          poll();
+          timer = window.setInterval(poll, 60000);
+        };
+
+        const stop = () => {
+          window.clearInterval(timer);
+          timer = null;
+        };
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") start();
+          else stop();
+        });
+
+        if (document.visibilityState === "visible") start();
+      })();
+    </script>
   </body>
 </html>
