@@ -180,6 +180,11 @@ tr.derived .chk input:checked + .box::after{border-color:var(--cyan)}
 }
 .badge.manual{color:var(--green);background:rgba(72,224,138,.07);border-color:rgba(72,224,138,.3)}
 .badge.chain{color:var(--violet);background:rgba(180,140,255,.08);border-color:rgba(180,140,255,.32)}
+.badge.chain.c1{color:#b48cff;background:rgba(180,140,255,.08);border-color:rgba(180,140,255,.32)}
+.badge.chain.c2{color:#57c7ff;background:rgba(87,199,255,.08);border-color:rgba(87,199,255,.32)}
+.badge.chain.c3{color:#48e08a;background:rgba(72,224,138,.08);border-color:rgba(72,224,138,.32)}
+.badge.chain.c4{color:#ffb648;background:rgba(255,182,72,.08);border-color:rgba(255,182,72,.32)}
+.badge.chain.c5{color:#ff6b8a;background:rgba(255,107,138,.08);border-color:rgba(255,107,138,.32)}
 .tag{
   display:inline-block;padding:1px 6px;font-size:9.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -452,7 +457,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
         <tbody>
           <tr data-name="Ader Finn" data-system="Munory" data-site="Munory 5 Moon 3">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ader Finn done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ader_Finn">Ader Finn</a> <span class="badge chain">Chain 3</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ader_Finn">Ader Finn</a> <span class="badge chain c1">Chain 3</span></td>
             <td data-label="Standing"><span class="num standing">4.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Munory - Munory 5 Moon 3</td>
@@ -468,7 +473,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Ammargal Detrone" data-system="Nidupad" data-site="Imperial Palace Complex">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Ammargal Detrone done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone">Ammargal Detrone</a> <span class="badge chain">Chain 2</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone">Ammargal Detrone</a> <span class="badge chain c2">Chain 2</span></td>
             <td data-label="Standing"><span class="num standing high">6.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Nidupad - Imperial Palace Complex</td>
@@ -492,7 +497,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Hetras Dakumon" data-system="Munory" data-site="The Bonfire">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Hetras Dakumon done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Hetras_Dakumon">Hetras Dakumon</a> <span class="badge chain">Chain 1</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Hetras_Dakumon">Hetras Dakumon</a> <span class="badge chain c3">Chain 1</span></td>
             <td data-label="Standing"><span class="num standing">2.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Munory - The Bonfire</td>
@@ -516,7 +521,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Manel Kador" data-system="Chanoun" data-site="Lord Manel&#x27;s Mansion">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Manel Kador done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador">Manel Kador</a> <span class="badge chain">Chain 3</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador">Manel Kador</a> <span class="badge chain c1">Chain 3</span></td>
             <td data-label="Standing"><span class="num standing">4.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Chanoun - Lord Manel's Mansion</td>
@@ -532,7 +537,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Nossa Farad" data-system="Chanoun" data-site="Governor&#x27;s Audience Chamber">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Nossa Farad done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad">Nossa Farad</a> <span class="badge chain">Chain 1</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad">Nossa Farad</a> <span class="badge chain c1">Chain 1</span></td>
             <td data-label="Standing"><span class="num standing">4.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Chanoun - Governor's Audience Chamber</td>
@@ -540,7 +545,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Odan Poun" data-system="Chanoun" data-site="Governor&#x27;s Audience Chamber">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Odan Poun done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> <span class="badge chain">Chain 2</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> <span class="badge chain c1">Chain 2</span></td>
             <td data-label="Standing"><span class="num standing">4.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Chanoun - Governor's Audience Chamber</td>
@@ -588,7 +593,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Thumal Ebotiz" data-system="Koona" data-site="Contested Amarr Bastion of Blood">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Thumal Ebotiz done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Thumal_Ebotiz">Thumal Ebotiz</a> <span class="badge chain">Chain 2</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Thumal_Ebotiz">Thumal Ebotiz</a> <span class="badge chain c3">Chain 2</span></td>
             <td data-label="Standing"><span class="num standing">4.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Koona - <a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Contested_Amarr_Bastion_of_Blood">Contested Amarr Bastion of Blood</a></td>
@@ -604,7 +609,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
           </tr>
           <tr data-name="Zach Himun" data-system="Zimse" data-site="Imperial Administration Complex">
             <td class="chk-cell"><label class="chk"><input type="checkbox" aria-label="Zach Himun done"><span class="box"></span></label></td>
-            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun">Zach Himun</a> <span class="badge chain">Chain 1</span></td>
+            <td class="main" data-label="Agent"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun">Zach Himun</a> <span class="badge chain c2">Chain 1</span></td>
             <td data-label="Standing"><span class="num standing high">6.00</span></td>
             <td data-label="Faction"><span class="chip f-amarr">Amarr Empire</span></td>
             <td data-label="Location">Zimse - Imperial Administration Complex</td>
@@ -789,7 +794,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Enigma Cypher Book</td>
             <td data-label="Source">Warrior rats</td>
             <td data-label="Dropped by">&mdash;</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(9_of_13)">King of the Hill (9 of 13)</a> <span class="badge chain">Chain 2</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(9_of_13)">King of the Hill (9 of 13)</a> <span class="badge chain c2">Chain 2</span></td>
             <td data-label="Notes">Araz constellation - Asteroid belts</td>
           </tr>
           <tr data-name="Encoding Matrix Component (10)" data-source="Warrior rats" data-required-for="Ammargal Detrone">
@@ -797,7 +802,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Encoding Matrix Component (10)</td>
             <td data-label="Source">Warrior rats</td>
             <td data-label="Dropped by">&mdash;</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(10_of_13)">King of the Hill (10 of 13)</a> <span class="badge chain">Chain 2</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(10_of_13)">King of the Hill (10 of 13)</a> <span class="badge chain c2">Chain 2</span></td>
             <td data-label="Notes">Araz constellation - Asteroid belts</td>
           </tr>
           <tr data-name="Dynasty Ring (2)" data-source="Warrior rats" data-required-for="Thumal Ebotiz">
@@ -805,7 +810,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Dynasty Ring (2)</td>
             <td data-label="Source">Warrior rats</td>
             <td data-label="Dropped by">&mdash;</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Thumal_Ebotiz#Clear_Head_(1_of_5)_-_Throwing_Down_the_Gauntlet">Clear Head (1 of 5) - Throwing Down the Gauntlet</a> <span class="badge chain">Chain 2</span> (1)<br><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Pawns_on_the_Board_(2_of_5)">Pawns on the Board (2 of 5)</a> (1)</td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Thumal_Ebotiz#Clear_Head_(1_of_5)_-_Throwing_Down_the_Gauntlet">Clear Head (1 of 5) - Throwing Down the Gauntlet</a> <span class="badge chain c3">Chain 2</span> (1)<br><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Pawns_on_the_Board_(2_of_5)">Pawns on the Board (2 of 5)</a> (1)</td>
             <td data-label="Notes">Araz constellation - Asteroid belts</td>
           </tr>
           <tr data-name="Bug-Ridden Corpse (7)" data-source="Contested Amarr Sanguine Vaults Contested Amarr Bastion of Blood" data-required-for="Amir Arshah|Sheroz Amokin">
@@ -821,7 +826,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Amarr Light Marines (50)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Kador_Military_Outpost">Kador Military Outpost</a></td>
             <td data-label="Dropped by">Kador Bunker</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(4_of_5)">Governor's Aide (4 of 5)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(4_of_5)">Governor's Aide (4 of 5)</a> <span class="badge chain c1">Chain 1</span></td>
             <td data-label="Notes">(5th stage)</td>
           </tr>
           <tr data-name="Manel&#x27;s Servant (14)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Nossa Farad">
@@ -829,7 +834,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Manel's Servant (14)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
             <td data-label="Dropped by">Stranded Personnel Transport</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(5_of_5)">Governor's Aide (5 of 5)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Nossa_Farad#Governor%27s_Aide_(5_of_5)">Governor's Aide (5 of 5)</a> <span class="badge chain c1">Chain 1</span></td>
             <td data-label="Notes">(entrance)</td>
           </tr>
           <tr data-name="Blood Grunt Tag (10)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
@@ -837,7 +842,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Blood Grunt Tag (10)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
             <td data-label="Dropped by">Blood Phantom/Templar</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(1_of_3)">Neutralizing the Threat (1 of 3)</a> <span class="badge chain">Chain 3</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(1_of_3)">Neutralizing the Threat (1 of 3)</a> <span class="badge chain c1">Chain 3</span></td>
             <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
           </tr>
           <tr data-name="Blood Lower-Tier Tag (5)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
@@ -845,7 +850,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Blood Lower-Tier Tag (5)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
             <td data-label="Dropped by">Blood Arch Sage</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(2_of_3)">Neutralizing the Threat (2 of 3)</a> <span class="badge chain">Chain 3</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(2_of_3)">Neutralizing the Threat (2 of 3)</a> <span class="badge chain c1">Chain 3</span></td>
             <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
           </tr>
           <tr data-name="Blood Raider Squad Leader&#x27;s Head (2)" data-source="Lord Manel&#x27;s Mansion" data-required-for="Manel Kador">
@@ -853,7 +858,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Blood Raider Squad Leader's Head (2)</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Lord_Manel%27s_Mansion">Lord Manel's Mansion</a></td>
             <td data-label="Dropped by">Dark Blood Arch Templar</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(3_of_3)">Neutralizing the Threat (3 of 3)</a> <span class="badge chain">Chain 3</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Manel_Kador#Neutralizing_the_Threat_(3_of_3)">Neutralizing the Threat (3 of 3)</a> <span class="badge chain c1">Chain 3</span></td>
             <td data-label="Notes">(1st and 2nd stage) Key needed,<br> given by <a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Odan_Poun">Odan Poun</a> (mission 4 of 5)</td>
           </tr>
           <tr data-name="Blood Raider Scientist (5)" data-source="Contested Amarr Crimson Keep" data-required-for="">
@@ -877,7 +882,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Corpum Commander Medallion</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Contested_Amarr_Crimson_Keep">Contested Amarr Crimson Keep</a></td>
             <td data-label="Dropped by">Corpum Blood Duke</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(5_of_13)">King of the Hill (5 of 13)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(5_of_13)">King of the Hill (5 of 13)</a> <span class="badge chain c2">Chain 1</span></td>
             <td data-label="Notes">(2nd and 3rd stage)</td>
           </tr>
           <tr data-name="Anema Bluechip" data-source="Contested Amarr Crimson Keep" data-required-for="Kofur Karveran">
@@ -965,7 +970,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Amolah Kesti's Data Fragment I</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
             <td data-label="Dropped by">Drifting Cask</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)">King of the Hill (3 of 13)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)">King of the Hill (3 of 13)</a> <span class="badge chain c2">Chain 1</span></td>
             <td data-label="Notes">Signature near Zimse I – Asteroid Belt II</td>
           </tr>
           <tr data-name="Amolah Kesti&#x27;s Data Fragment II" data-source="Drifting Cask" data-required-for="Zach Himun">
@@ -973,7 +978,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Amolah Kesti's Data Fragment II</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
             <td data-label="Dropped by">Drifting Cask</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_2)">King of the Hill (3 of 13) (part 2)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_2)">King of the Hill (3 of 13) (part 2)</a> <span class="badge chain c2">Chain 1</span></td>
             <td data-label="Notes">Signature near Zimse V. L4 defense fleet.</td>
           </tr>
           <tr data-name="Amolah Kesti&#x27;s Data Fragment III" data-source="Drifting Cask" data-required-for="Zach Himun">
@@ -981,7 +986,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Amolah Kesti's Data Fragment III</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Drifting_Cask">Drifting Cask</a></td>
             <td data-label="Dropped by">Drifting Cask</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3)">King of the Hill (3 of 13) (part 3)</a> <span class="badge chain">Chain 1</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Zach_Himun#King_of_the_Hill_(3_of_13)_(part_3)">King of the Hill (3 of 13) (part 3)</a> <span class="badge chain c2">Chain 1</span></td>
             <td data-label="Notes">Signature near Zimse VI – Moon 6</td>
           </tr>
           <tr data-name="Yamia Mida&#x27;s Remains" data-source="Yamia Mida" data-required-for="Ammargal Detrone">
@@ -989,7 +994,7 @@ html[data-theme="light"] .card.c-serpentis{--card:#0b7d75;--card-rgb:11,125,117}
             <td class="main" data-label="Item">Yamia Mida's Remains</td>
             <td data-label="Source"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Yamia_Mida">Yamia Mida</a></td>
             <td data-label="Dropped by">Yamia Mida's Residence</td>
-            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13)">King of the Hill (12 of 13)</a> <span class="badge chain">Chain 2</span></td>
+            <td data-label="Required for"><a rel="noopener noreferrer" target="_blank" href="https://wiki.eveuniversity.org/Ammargal_Detrone#King_of_the_Hill_(12_of_13)">King of the Hill (12 of 13)</a> <span class="badge chain c2">Chain 2</span></td>
             <td data-label="Notes">L4 defense fleet</td>
           </tr>
         </tbody></table></div></section>
