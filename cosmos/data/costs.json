@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-07T22:34:30Z",
+  "generatedAt": "2026-11-08T11:13:30Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-07",
-    "everefLastModified": "Sat, 07 Nov 2026 22:34:22 GMT",
-    "everefScrapeEnd": "2026-11-07T22:30:45Z",
-    "fuzzworkOrderset": 176268
+    "lastRunDate": "2026-11-08",
+    "everefLastModified": "Sun, 08 Nov 2026 11:13:24 GMT",
+    "everefScrapeEnd": "2026-11-08T11:04:18Z",
+    "fuzzworkOrderset": 176293
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 342434687.22,
+        "total": 342433058.93,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,36 +32,35 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-07T22:34:30Z"
+        "updated": "2026-11-08T11:13:30Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3693356486.78,
-        "pricedItems": 60,
+        "total": 3744545924.96,
+        "pricedItems": 61,
         "totalItems": 62,
         "unpriced": [
-          "User Manual",
-          "Zvarin Karsha"
+          "User Manual"
         ],
-        "updated": "2026-11-07T22:34:30Z"
+        "updated": "2026-11-08T11:13:30Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 114256999.0,
+        "total": 114249688.86,
         "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
           "Jark Makon",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-07T22:34:30Z"
+        "updated": "2026-11-08T11:13:30Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 381731331.39,
+        "total": 417471698.72,
         "pricedItems": 16,
         "totalItems": 42,
         "unpriced": [
@@ -92,7 +91,7 @@
           "Sniper ID Slice",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-07T22:34:30Z"
+        "updated": "2026-11-08T11:13:30Z"
       }
     }
   }
