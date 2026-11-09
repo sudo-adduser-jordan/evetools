@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-08T11:13:30Z",
+  "generatedAt": "2026-11-09T12:44:33Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-08",
-    "everefLastModified": "Sun, 08 Nov 2026 11:13:24 GMT",
-    "everefScrapeEnd": "2026-11-08T11:04:18Z",
-    "fuzzworkOrderset": 176293
+    "lastRunDate": "2026-11-09",
+    "everefLastModified": "Mon, 09 Nov 2026 12:44:28 GMT",
+    "everefScrapeEnd": "2026-11-09T12:30:47Z",
+    "fuzzworkOrderset": 176343
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 342433058.93,
+        "total": 341429876.78,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,35 +32,40 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-08T11:13:30Z"
+        "updated": "2026-11-09T12:44:33Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3744545924.96,
-        "pricedItems": 61,
+        "total": 7926036381.95,
+        "pricedItems": 56,
         "totalItems": 62,
         "unpriced": [
-          "User Manual"
+          "Encoded Lai Dai Reports",
+          "Jorek Lephny",
+          "Nugoeihuvi Dogtag",
+          "Scanner Data II",
+          "User Manual",
+          "Zvarin Karsha"
         ],
-        "updated": "2026-11-08T11:13:30Z"
+        "updated": "2026-11-09T12:44:33Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 114249688.86,
+        "total": 109217737.25,
         "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
           "Jark Makon",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-08T11:13:30Z"
+        "updated": "2026-11-09T12:44:33Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 417471698.72,
+        "total": 395732270.05,
         "pricedItems": 16,
         "totalItems": 42,
         "unpriced": [
@@ -91,7 +96,7 @@
           "Sniper ID Slice",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-08T11:13:30Z"
+        "updated": "2026-11-09T12:44:33Z"
       }
     }
   }
