@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-09T12:44:33Z",
+  "generatedAt": "2026-11-10T12:27:43Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-09",
-    "everefLastModified": "Mon, 09 Nov 2026 12:44:28 GMT",
-    "everefScrapeEnd": "2026-11-09T12:30:47Z",
-    "fuzzworkOrderset": 176343
+    "lastRunDate": "2026-11-10",
+    "everefLastModified": "Tue, 10 Nov 2026 12:27:38 GMT",
+    "everefScrapeEnd": "2026-11-10T12:00:46Z",
+    "fuzzworkOrderset": 176389
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 341429876.78,
+        "total": 341594300.0,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,41 +32,36 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-09T12:44:33Z"
+        "updated": "2026-11-10T12:27:43Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 7926036381.95,
-        "pricedItems": 56,
+        "total": 3784324923.71,
+        "pricedItems": 61,
         "totalItems": 62,
         "unpriced": [
-          "Encoded Lai Dai Reports",
-          "Jorek Lephny",
-          "Nugoeihuvi Dogtag",
-          "Scanner Data II",
-          "User Manual",
-          "Zvarin Karsha"
+          "User Manual"
         ],
-        "updated": "2026-11-09T12:44:33Z"
+        "updated": "2026-11-10T12:27:43Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 109217737.25,
+        "total": 109236274.95,
         "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
           "Jark Makon",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-09T12:44:33Z"
+        "updated": "2026-11-10T12:27:43Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 395732270.05,
-        "pricedItems": 16,
+        "total": 209497566.55,
+        "pricedItems": 15,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -92,11 +87,12 @@
           "Republic Pilot",
           "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
+          "Searcher Drone's Memory Chip",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-09T12:44:33Z"
+        "updated": "2026-11-10T12:27:43Z"
       }
     }
   }
