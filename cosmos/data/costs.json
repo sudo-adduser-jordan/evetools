@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-10T12:27:43Z",
+  "generatedAt": "2026-11-11T11:48:30Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-10",
-    "everefLastModified": "Tue, 10 Nov 2026 12:27:38 GMT",
-    "everefScrapeEnd": "2026-11-10T12:00:46Z",
-    "fuzzworkOrderset": 176389
+    "lastRunDate": "2026-11-11",
+    "everefLastModified": "Wed, 11 Nov 2026 11:48:25 GMT",
+    "everefScrapeEnd": "2026-11-11T11:30:48Z",
+    "fuzzworkOrderset": 176435
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 341594300.0,
+        "total": 341592993.7,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,36 +32,35 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-10T12:27:43Z"
+        "updated": "2026-11-11T11:48:30Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3784324923.71,
+        "total": 3779121262.4,
         "pricedItems": 61,
         "totalItems": 62,
         "unpriced": [
           "User Manual"
         ],
-        "updated": "2026-11-10T12:27:43Z"
+        "updated": "2026-11-11T11:48:30Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 109236274.95,
-        "pricedItems": 8,
+        "total": 124215783.87,
+        "pricedItems": 9,
         "totalItems": 10,
         "unpriced": [
-          "Jark Makon",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-10T12:27:43Z"
+        "updated": "2026-11-11T11:48:30Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 209497566.55,
-        "pricedItems": 15,
+        "total": 254909312.99,
+        "pricedItems": 16,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -85,14 +84,13 @@
           "Red Hammer's Personal Effects",
           "Rekker's Keycard",
           "Republic Pilot",
-          "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
           "Searcher Drone's Memory Chip",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-10T12:27:43Z"
+        "updated": "2026-11-11T11:48:30Z"
       }
     }
   }
