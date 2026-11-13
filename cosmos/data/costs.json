@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-12T12:30:54Z",
+  "generatedAt": "2026-11-13T12:03:50Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-12",
-    "everefLastModified": "Thu, 12 Nov 2026 12:30:49 GMT",
-    "everefScrapeEnd": "2026-11-12T12:00:48Z",
-    "fuzzworkOrderset": 176483
+    "lastRunDate": "2026-11-13",
+    "everefLastModified": "Fri, 13 Nov 2026 12:03:45 GMT",
+    "everefScrapeEnd": "2026-11-13T12:00:47Z",
+    "fuzzworkOrderset": 176529
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 339593389.81,
+        "total": 339591987.67,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,34 +32,35 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-12T12:30:54Z"
+        "updated": "2026-11-13T12:03:50Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3767301245.23,
+        "total": 3769658154.74,
         "pricedItems": 61,
         "totalItems": 62,
         "unpriced": [
           "User Manual"
         ],
-        "updated": "2026-11-12T12:30:54Z"
+        "updated": "2026-11-13T12:03:50Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 124255000.0,
-        "pricedItems": 9,
+        "total": 114232121.82,
+        "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
+          "Neural Bio Link",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-12T12:30:54Z"
+        "updated": "2026-11-13T12:03:50Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 354000002.7,
+        "total": 359631983.2,
         "pricedItems": 14,
         "totalItems": 42,
         "unpriced": [
@@ -92,7 +93,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-12T12:30:54Z"
+        "updated": "2026-11-13T12:03:50Z"
       }
     }
   }
