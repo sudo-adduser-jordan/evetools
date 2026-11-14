@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-13T12:03:50Z",
+  "generatedAt": "2026-11-14T11:22:27Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-13",
-    "everefLastModified": "Fri, 13 Nov 2026 12:03:45 GMT",
-    "everefScrapeEnd": "2026-11-13T12:00:47Z",
-    "fuzzworkOrderset": 176529
+    "lastRunDate": "2026-11-14",
+    "everefLastModified": "Sat, 14 Nov 2026 11:22:00 GMT",
+    "everefScrapeEnd": "2026-11-14T11:03:28Z",
+    "fuzzworkOrderset": 176575
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 339591987.67,
+        "total": 339590958.25,
         "pricedItems": 13,
         "totalItems": 26,
         "unpriced": [
@@ -32,36 +32,37 @@
           "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-13T12:03:50Z"
+        "updated": "2026-11-14T11:22:27Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3769658154.74,
-        "pricedItems": 61,
+        "total": 3736759499.94,
+        "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
-          "User Manual"
+          "User Manual",
+          "Zvarin Karsha"
         ],
-        "updated": "2026-11-13T12:03:50Z"
+        "updated": "2026-11-14T11:22:27Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 114232121.82,
+        "total": 114219862.39,
         "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
           "Neural Bio Link",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-13T12:03:50Z"
+        "updated": "2026-11-14T11:22:27Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 359631983.2,
-        "pricedItems": 14,
+        "total": 369489767.66,
+        "pricedItems": 15,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -87,13 +88,12 @@
           "Rekker's Keycard",
           "Republic Pilot",
           "Sample of Septicemic Agent",
-          "Searcher Drone's Memory Chip",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-13T12:03:50Z"
+        "updated": "2026-11-14T11:22:27Z"
       }
     }
   }
