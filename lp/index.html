@@ -57,6 +57,21 @@ a{color:var(--cyan)}
 h1{font-size:16px;margin:0;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
 h1::before{content:"";display:inline-block;width:8px;height:8px;background:var(--cyan);margin-right:10px;vertical-align:1px}
 h1 .sub{display:block;font-size:12px;color:var(--dim);font-weight:400;margin-top:4px;letter-spacing:0;text-transform:none}
+/* Highlights strip */
+.stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px;
+}
+.stat{
+  background:var(--glass);border:1px solid var(--line);border-radius:2px;
+  padding:10px 12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  display:flex;flex-direction:column;gap:3px;min-width:0;
+}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim)}
+.stat-value{font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-value .num{font-family:var(--mono);color:var(--cyan)}
+.stat-sub{font-size:11.5px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}}
 /* Window glass panes: dark, translucent, square, hairline borders */
 .panel{
   background:var(--glass);border:1px solid var(--line);border-radius:2px;
@@ -157,6 +172,13 @@ td.store .icon.corp{width:24px;height:24px;border-radius:2px;margin-right:8px}
       <span class="sub">Every loyalty point offer in New Eden, ranked by return. Prices via the Fuzzwork LP Store API (Jita 5% depth).</span>
     </h1>
   </div>
+
+  <section class="stats" id="stats" aria-label="LP store highlights">
+    <div class="stat"><span class="stat-label">Highest LP item</span><span class="stat-value" id="statHiLp">—</span><span class="stat-sub" id="statHiLpSub"></span></div>
+    <div class="stat"><span class="stat-label">Worst ISK/LP item</span><span class="stat-value" id="statWorst">—</span><span class="stat-sub" id="statWorstSub"></span></div>
+    <div class="stat"><span class="stat-label">Best avg ISK/LP store</span><span class="stat-value" id="statHiAvg">—</span><span class="stat-sub" id="statHiAvgSub"></span></div>
+    <div class="stat"><span class="stat-label">Lowest avg ISK/LP store</span><span class="stat-value" id="statLoAvg">—</span><span class="stat-sub" id="statLoAvgSub"></span></div>
+  </section>
 
   <section class="panel">
     <div class="controls">
@@ -556,6 +578,7 @@ function applyView(extraStatus) {
   if (state.page >= pages) state.page = pages - 1;
   renderHead();
   renderPage();
+  renderStats(rows);
 
   const dates = rows.map((o) => o["Price Date"]).filter(Boolean).sort();
   const when = dates.length ? ` · prices <b>${esc(dates[dates.length - 1].replace("T", " ").replace("Z", " UTC"))}</b>` : "";
@@ -565,6 +588,54 @@ function applyView(extraStatus) {
     : `<b>${esc(state.corpName[state.corpId] || state.corpId)}</b>`;
   setStatus(`${scope} · ${esc(state.regions[state.regionId] || "")} ${esc(state.mode)} prices — ` +
     `<b>${numFmt.format(shown)}</b> of ${numFmt.format(total)} offers${when}${extraStatus || ""}`);
+}
+
+/* Top highlights, computed over the currently filtered rows in the active price mode. */
+function renderStats(rows) {
+  const rk = ratioKey();
+  let hiLp = null, worst = null;
+  const byStore = new Map();
+  for (const o of rows) {
+    if (o.LPCost != null && (!hiLp || o.LPCost > hiLp.LPCost)) hiLp = o;
+    const r = o[rk];
+    if (r != null && !isNaN(r)) {
+      if (!worst || r < worst[rk]) worst = o;
+      let s = byStore.get(o.storeId);
+      if (!s) { s = { store: o.store, sum: 0, n: 0 }; byStore.set(o.storeId, s); }
+      s.sum += r; s.n++;
+    }
+  }
+  let hiAvg = null, loAvg = null;
+  for (const s of byStore.values()) {
+    if (!s.n) continue;
+    s.avg = s.sum / s.n;
+    if (!hiAvg || s.avg > hiAvg.avg) hiAvg = s;
+    if (!loAvg || s.avg < loAvg.avg) loAvg = s;
+  }
+  const set = (vId, sId, value, sub, title) => {
+    $(vId).innerHTML = value;
+    $(vId).title = title || "";
+    $(sId).textContent = sub || "";
+    $(sId).title = sub || "";
+  };
+  if (hiLp) set("statHiLp", "statHiLpSub",
+    `${esc(hiLp.Item)} · <span class="num">${fmt0(hiLp.LPCost)} LP</span>`,
+    hiLp.store, `${hiLp.Item} — ${fmt0(hiLp.LPCost)} LP @ ${hiLp.store}`);
+  else set("statHiLp", "statHiLpSub", "—", "");
+  if (worst) set("statWorst", "statWorstSub",
+    `${esc(worst.Item)} · <span class="num">${fmt2(worst[rk])}</span>`,
+    worst.store, `${worst.Item} — ${fmt2(worst[rk])} ISK/LP @ ${worst.store}`);
+  else set("statWorst", "statWorstSub", "—", "");
+  if (hiAvg) set("statHiAvg", "statHiAvgSub",
+    `<span class="num">${fmt2(hiAvg.avg)}</span>`,
+    `${hiAvg.store} · ${hiAvg.n} offer${hiAvg.n === 1 ? "" : "s"}`,
+    `${hiAvg.store} — avg ${fmt2(hiAvg.avg)} ISK/LP over ${hiAvg.n} offers`);
+  else set("statHiAvg", "statHiAvgSub", "—", "");
+  if (loAvg) set("statLoAvg", "statLoAvgSub",
+    `<span class="num">${fmt2(loAvg.avg)}</span>`,
+    `${loAvg.store} · ${loAvg.n} offer${loAvg.n === 1 ? "" : "s"}`,
+    `${loAvg.store} — avg ${fmt2(loAvg.avg)} ISK/LP over ${loAvg.n} offers`);
+  else set("statLoAvg", "statLoAvgSub", "—", "");
 }
 
 function renderHead() {
