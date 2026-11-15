@@ -86,6 +86,9 @@ td.item .bp-tag{
   display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;font-size:10.5px;
   border:1px solid rgba(255,182,72,.5);color:var(--amber);vertical-align:middle;
 }
+td .icon{width:32px;height:32px;border-radius:6px;background:var(--bg2);vertical-align:middle}
+td.store{white-space:nowrap}
+td.store .icon.corp{width:24px;height:24px;border-radius:50%;margin-right:8px}
 .req-table{border-collapse:collapse;font-size:12px;margin:0 0 6px;min-width:0;width:100%}
 .req-table caption{text-align:left;color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:0 0 3px}
 .req-table td{border:0;padding:1px 6px 1px 0;vertical-align:top}
@@ -96,8 +99,10 @@ td.item .bp-tag{
 .ratio.bad{background:rgba(255,95,112,.10);color:var(--red)}
 .pager{display:flex;align-items:center;gap:12px;margin:12px 2px;font-size:13px;color:var(--dim);flex-wrap:wrap}
 .pager b{color:var(--text)}
-.note{font-size:12.5px;color:var(--dim);margin-top:14px;max-width:100ch}
-.note code{font-family:var(--mono);color:var(--text);font-size:12px}
+.legal{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:11px;line-height:1.6;color:var(--dim);
+}
 @media (max-width:640px){
   .filters .field.search input{width:100%}
   #corpSel{max-width:100%}
@@ -163,14 +168,17 @@ td.item .bp-tag{
     <button type="button" class="btn ghost" id="nextPage">Next &#8594;</button>
   </div>
 
-  <p class="note">
-    Same offer layout as <a href="https://www.fuzzwork.co.uk/lpstore/" target="_blank" rel="noopener">fuzzwork.co.uk/lpstore</a>:
-    <b>ID</b>, store, region, LP cost, ISK cost, item, other requirements, other cost, quantity,
-    market price, 5% volume and ISK/LP.
-    Figures are a guide, not gospel — check depth before spending LP; manipulated markets happen.
-    Blueprint profitability assumes Production Efficiency 5.
-    Data: <code>https://www.fuzzwork.co.uk/lpstore/api.php</code> (cached hourly upstream, CORS-open).
-  </p>
+  <footer class="legal">
+    EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide.
+    All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all
+    associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters,
+    vehicles, storylines, world facts or other recognizable features of the intellectual property relating to
+    these trademarks are likewise the intellectual property of CCP hf. CCP hf. has granted permission to
+    fuzzwork.co.uk to use EVE Online and all associated logos and designs for promotional and information purposes
+    on its website but does not endorse, and is not in any way affiliated with, fuzzwork.co.uk. CCP is in no way
+    responsible for the content on or functioning of this website, nor can it be liable for any damage arising from
+    the use of this website.
+  </footer>
 </div>
 
 <script>
@@ -460,7 +468,13 @@ function renderPage() {
   for (const o of slice) {
     html += "<tr>";
     for (const c of cols) {
-      if (c.key === "Item") {
+      if (c.key === "img") {
+        html += `<td><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32"></td>`;
+      } else if (c.key === "store") {
+        html += `<td class="store"><img class="icon corp" loading="lazy" width="24" height="24" alt="" ` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/corporations/${encodeURIComponent(o.storeId)}/logo?size=32">${esc(o.store)}</td>`;
+      } else if (c.key === "Item") {
         const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
         html += `<td class="item"><a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a>` +
           (o.bp ? '<span class="bp-tag">BP</span>' : "") + "</td>";
