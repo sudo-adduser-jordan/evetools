@@ -221,7 +221,7 @@ td.store .icon.corp{width:24px;height:24px;border-radius:2px;margin-right:8px}
   </div>
 
   <section class="stats" id="stats" aria-label="LP store highlights">
-    <div class="stat"><span class="stat-label">Highest LP item</span><span class="stat-value" id="statHiLp">—</span><span class="stat-sub" id="statHiLpSub"></span></div>
+    <div class="stat"><span class="stat-label">Highest ISK/LP item</span><span class="stat-value" id="statBest">—</span><span class="stat-sub" id="statBestSub"></span></div>
     <div class="stat"><span class="stat-label">Worst ISK/LP item</span><span class="stat-value" id="statWorst">—</span><span class="stat-sub" id="statWorstSub"></span></div>
     <div class="stat"><span class="stat-label">Best avg ISK/LP store</span><span class="stat-value" id="statHiAvg">—</span><span class="stat-sub" id="statHiAvgSub"></span></div>
     <div class="stat"><span class="stat-label">Lowest avg ISK/LP store</span><span class="stat-value" id="statLoAvg">—</span><span class="stat-sub" id="statLoAvgSub"></span></div>
@@ -640,12 +640,12 @@ function applyView(extraStatus) {
 /* Top highlights, computed over the currently filtered rows in the active price mode. */
 function renderStats(rows) {
   const rk = ratioKey();
-  let hiLp = null, worst = null;
+  let best = null, worst = null;
   const byStore = new Map();
   for (const o of rows) {
-    if (o.LPCost != null && (!hiLp || o.LPCost > hiLp.LPCost)) hiLp = o;
     const r = o[rk];
     if (r != null && !isNaN(r)) {
+      if (!best || r > best[rk]) best = o;
       if (!worst || r < worst[rk]) worst = o;
       let s = byStore.get(o.storeId);
       if (!s) { s = { store: o.store, sum: 0, n: 0 }; byStore.set(o.storeId, s); }
@@ -668,10 +668,10 @@ function renderStats(rows) {
     $(sId).textContent = sub || "";
     $(sId).title = sub || "";
   };
-  if (hiLp) set("statHiLp", "statHiLpSub",
-    `${esc(hiLp.Item)}<br><span class="num">${fmt0(hiLp.LPCost)} LP</span>`,
-    hiLp.store, `${hiLp.Item} — ${fmt0(hiLp.LPCost)} LP @ ${hiLp.store}`, "good");
-  else set("statHiLp", "statHiLpSub", "—", "");
+  if (best) set("statBest", "statBestSub",
+    `${esc(best.Item)}<br><span class="num">${fmt2(best[rk])}</span>`,
+    best.store, `${best.Item} — ${fmt2(best[rk])} ISK/LP @ ${best.store}`, "good");
+  else set("statBest", "statBestSub", "—", "");
   if (worst) set("statWorst", "statWorstSub",
     `${esc(worst.Item)}<br><span class="num">${fmt2(worst[rk])}</span>`,
     worst.store, `${worst.Item} — ${fmt2(worst[rk])} ISK/LP @ ${worst.store}`, "bad");
