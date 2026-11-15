@@ -529,8 +529,10 @@ function renderPage() {
     for (const c of cols) {
       if (c.key === "Item") {
         const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
+        // Blueprints have no art of their own — show the icon of the item they build.
+        const iconID = (o.bp && o.productTypeID) ? o.productTypeID : o.typeID;
         html += `<td class="item"><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
-          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32">` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(iconID)}/icon?size=32">` +
           `<a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a>` +
           (o.bp ? '<span class="bp-tag">BP</span>' : "") + "</td>";
       } else if (c.key === "store") {
