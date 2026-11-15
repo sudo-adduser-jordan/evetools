@@ -86,6 +86,7 @@ tbody tr:nth-child(even){background:rgba(255,255,255,.012)}
 tbody tr:hover{background:rgba(45,212,191,.05)}
 td.item a{color:var(--text);text-decoration:none}
 td.item a:hover{color:var(--teal);text-decoration:underline}
+td.item .icon{margin-right:8px}
 td.item .bp-tag{
   display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;font-size:10.5px;
   border:1px solid rgba(255,182,72,.5);color:var(--amber);vertical-align:middle;
@@ -251,19 +252,17 @@ function enrich(offer, corpId, regionId) {
    Item ID is shown as the in-game item icon (images.evetech.net). */
 function columns() {
   return [
-    { key: "img", label: "Icon", get: (o) => o.typeID },
+    { key: "Item", label: "Item", get: (o) => o.Item },
     { key: "store", label: "Store", get: (o) => o.store },
     { key: "region", label: "Region", get: (o) => o.region },
     { key: "ratio", label: "ISK/LP", num: true, get: (o) => o[ratioKey()] },
     { key: "LPCost", label: "LP", num: true, get: (o) => o.LPCost, fmt: fmt0 },
     { key: "IskCost", label: "ISK", num: true, get: (o) => o.IskCost, fmt: fmt0 },
-    { key: "Item", label: "Item", get: (o) => o.Item },
     { key: "req", label: "Other Requirements", get: null },
     { key: "OtherCostIsk", label: "Other Cost", num: true, get: (o) => o.OtherCostIsk, fmt: fmt0 },
     { key: "Quantity", label: "Qty", num: true, get: (o) => o.Quantity, fmt: fmt0 },
     { key: "price", label: state.mode === "sell" ? "Sell Price" : "Buy Price", num: true, get: (o) => o[priceKey()], fmt: fmt2 },
     { key: "vol", label: "5% Volume", num: true, get: (o) => o[volKey()], fmt: fmt0 },
-    { key: "ratio", label: "ISK/LP", num: true, get: (o) => o[ratioKey()] },
   ];
 }
 
@@ -528,16 +527,15 @@ function renderPage() {
   for (const o of slice) {
     html += "<tr>";
     for (const c of cols) {
-      if (c.key === "img") {
-        html += `<td><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
-          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32"></td>`;
+      if (c.key === "Item") {
+        const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
+        html += `<td class="item"><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32">` +
+          `<a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a>` +
+          (o.bp ? '<span class="bp-tag">BP</span>' : "") + "</td>";
       } else if (c.key === "store") {
         html += `<td class="store"><img class="icon corp" loading="lazy" width="24" height="24" alt="" ` +
           `onerror="this.style.display='none'" src="https://images.evetech.net/corporations/${encodeURIComponent(o.storeId)}/logo?size=32">${esc(o.store)}</td>`;
-      } else if (c.key === "Item") {
-        const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
-        html += `<td class="item"><a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a>` +
-          (o.bp ? '<span class="bp-tag">BP</span>' : "") + "</td>";
       } else if (c.key === "req") {
         html += `<td>${reqCell(o)}</td>`;
       } else if (c.key === "ratio") {
