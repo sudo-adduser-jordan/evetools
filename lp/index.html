@@ -60,15 +60,15 @@ body{
 }
 /* Hero loop docked right, like eveonline.com: scaled down, blended at its left edge */
 .eve-bg video{
-  position:absolute;top:0;right:0;
-  width:min(58vw,1100px);height:auto;max-height:94vh;
-  object-fit:contain;object-position:center;
+  position:absolute;top:0;right:0;bottom:0;
+  width:min(58vw,1100px);height:100%;
+  object-fit:cover;object-position:center top;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 22%);
   mask-image:linear-gradient(to right,transparent 0,#000 22%);
 }
 @media (max-width:900px){
   .eve-bg video{
-    top:0;right:0;transform:none;width:100%;height:auto;max-height:62vh;
+    top:0;right:0;bottom:auto;transform:none;width:100%;height:auto;max-height:62vh;
     object-fit:contain;
     -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);
     mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);
