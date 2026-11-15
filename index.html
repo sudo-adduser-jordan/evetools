@@ -14,8 +14,8 @@
       content="LP store calculator with live Jita pricing, Janice item appraisal, the EVE Market Browser, EVE Industry, Marketmailer, and COSMOS trackers."
     />
     <meta property="og:type" content="website" />
-    <title>EVE Tools — LP Store Calculator, Janice, EVE Market Browser, EVE Industry, Marketmailer &amp; COSMOS Tracker</title>
-    <link rel="icon" type="image/svg+xml" href="https://eve.ayokei.to/lp/favicon.svg" />
+    <title>eve tools</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='black'/%3E%3Ctext x='16' y='23' font-family='Arial,sans-serif' font-size='22' font-weight='bold' text-anchor='middle' fill='white'%3EE%3C/text%3E%3C/svg%3E" />
     <!-- Single-file doorway page: styles and the ESI status poll inline. -->
     <style>
       @font-face {
@@ -36,7 +36,6 @@
         --gold: #d9b85c;
         --violet: #c084fc;
         --green: #4ade80;
-        --sky: #57c7ff;
         --orange: #ff8a5c;
         --red: #f87171;
         --focus: #67e8f9;
@@ -150,12 +149,12 @@
       /* 1:list gate: the COSMOS tracker is the featured "1" panel at 3/7 width;
          the remaining tools form the stacked list. Each tool keeps its own
          accent: LP teal, Janice gold, market violet, industry orange, gatecamp
-         red, mail sky, COSMOS green. */
+         red, COSMOS green. */
       .gate {
         flex: 1;
         display: grid;
         grid-template-columns: 3fr 4fr;
-        grid-template-rows: repeat(6, 1fr);
+        grid-template-rows: repeat(5, 1fr);
       }
       .gate-panel.gate-cosmos {
         grid-column: 1;
@@ -167,8 +166,7 @@
       .gate-janice,
       .gate-market,
       .gate-industry,
-      .gate-gatecamp,
-      .gate-mail {
+      .gate-gatecamp {
         grid-column: 2;
       }
       .gate-janice {
@@ -185,9 +183,6 @@
       }
       .gate-lp {
         grid-row: 5;
-      }
-      .gate-mail {
-        grid-row: 6;
       }
       .gate-panel {
         --accent: var(--teal);
@@ -210,8 +205,7 @@
       .gate-market,
       .gate-industry,
       .gate-gatecamp,
-      .gate-lp,
-      .gate-mail {
+      .gate-lp {
         border-top: 1px solid var(--line);
       }
       .gate-janice {
@@ -225,9 +219,6 @@
       }
       .gate-gatecamp {
         --accent: var(--red);
-      }
-      .gate-mail {
-        --accent: var(--sky);
       }
       .gate-cosmos {
         --accent: var(--green);
@@ -506,7 +497,6 @@
         .gate-market,
         .gate-industry,
         .gate-gatecamp,
-        .gate-mail,
         .gate-cosmos {
           grid-column: 1;
           grid-row: auto;
@@ -524,8 +514,7 @@
         .gate-market,
         .gate-industry,
         .gate-gatecamp,
-        .gate-lp,
-        .gate-mail {
+        .gate-lp {
           border-top: 1px solid var(--line);
         }
         .gate-panel.list-item {
@@ -704,34 +693,15 @@
         </div>
       </article>
 
-      <article class="gate-panel list-item gate-mail">
-        <a rel="noopener noreferrer" target="_blank" class="panel-icon" href="https://sudo-adduser-jordan.github.io/marketmailer/" aria-label="Open Marketmailer">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2" />
-            <path d="m3 7 9 6 9-6" />
-          </svg>
-        </a>
-        <div class="list-body">
-          <div class="list-copy">
-            <h2>Marketmailer <span class="beta-tag">Beta</span></h2>
-            <p class="lead">
-              An EVE Online market watcher that polls ESI market orders and surfaces arbitrage
-              opportunities against the Jita buy wall.
-            </p>
-          </div>
-          <a rel="noopener noreferrer" target="_blank" class="panel-cta" href="https://sudo-adduser-jordan.github.io/marketmailer/" aria-label="Open Marketmailer">Open <span class="arrow">&#8594;</span></a>
-        </div>
-      </article>
     </main>
 
     <footer class="site-foot">
       <span>Market data from EVE ESI · Static data © Fenris Creations (formerly CCP Games) · Not affiliated with Fenris Creations</span>
-      <a rel="noopener noreferrer" target="_blank" href="https://eve.ayokei.to/lp/about.html">Methodology</a>
       <a rel="noopener noreferrer" target="_blank" href="https://janice.e-351.com/">Janice</a>
       <a rel="noopener noreferrer" target="_blank" href="https://evemarketbrowser.com/">EVE Market Browser</a>
       <a rel="noopener noreferrer" target="_blank" href="https://github.com/sudo-adduser-jordan/eveindustry">EVE Industry</a>
       <a rel="noopener noreferrer" target="_blank" href="https://eve-gatecheck.space/eve/">EVE Gatecamp Check</a>
-      <a rel="noopener noreferrer" target="_blank" href="https://sudo-adduser-jordan.github.io/marketmailer/">Marketmailer</a>
+      <a href="lp/index.html">LP Store</a>
       <a href="cosmos/index.html">COSMOS tracker</a>
       <a
         class="github-link"
