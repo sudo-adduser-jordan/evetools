@@ -77,6 +77,10 @@ thead th{
 thead th:hover{color:var(--teal)}
 thead th.num,tbody td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
 thead th .arrow{color:var(--teal)}
+thead th[draggable="true"]{cursor:grab}
+thead th.dragging{opacity:.35;cursor:grabbing}
+thead th.drop-before{box-shadow:inset 2px 0 0 var(--teal)}
+thead th.drop-after{box-shadow:inset -2px 0 0 var(--teal)}
 tbody td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 tbody tr:nth-child(even){background:rgba(255,255,255,.012)}
 tbody tr:hover{background:rgba(45,212,191,.05)}
@@ -204,6 +208,7 @@ const state = {
   filtered: [],
   sortKey: "ratio",
   sortDir: -1,
+  order: null,          // user-reordered column keys; null = default order
   page: 0,
   loading: 0,           // request generation guard
 };
@@ -249,6 +254,7 @@ function columns() {
     { key: "img", label: "Icon", get: (o) => o.typeID },
     { key: "store", label: "Store", get: (o) => o.store },
     { key: "region", label: "Region", get: (o) => o.region },
+    { key: "ratio", label: "ISK/LP", num: true, get: (o) => o[ratioKey()] },
     { key: "LPCost", label: "LP", num: true, get: (o) => o.LPCost, fmt: fmt0 },
     { key: "IskCost", label: "ISK", num: true, get: (o) => o.IskCost, fmt: fmt0 },
     { key: "Item", label: "Item", get: (o) => o.Item },
@@ -259,6 +265,31 @@ function columns() {
     { key: "vol", label: "5% Volume", num: true, get: (o) => o[volKey()], fmt: fmt0 },
     { key: "ratio", label: "ISK/LP", num: true, get: (o) => o[ratioKey()] },
   ];
+}
+
+/* Column order is user-reorderable via header drag-and-drop (persisted). */
+function orderedColumns() {
+  const cols = columns();
+  if (!Array.isArray(state.order) || !state.order.length) return cols;
+  const byKey = new Map(cols.map((c) => [c.key, c]));
+  const out = [];
+  for (const k of state.order) {
+    if (byKey.has(k)) { out.push(byKey.get(k)); byKey.delete(k); }
+  }
+  for (const c of cols) if (byKey.has(c.key)) out.push(c);
+  return out;
+}
+
+function moveColumn(from, to, after) {
+  const order = orderedColumns().map((c) => c.key).filter((k) => k !== from);
+  let i = order.indexOf(to);
+  if (i === -1) return;
+  if (after) i++;
+  order.splice(i, 0, from);
+  state.order = order;
+  persist();
+  renderHead();
+  renderPage();
 }
 
 function reqCell(o) {
@@ -441,19 +472,48 @@ function applyView(extraStatus) {
 }
 
 function renderHead() {
-  const cols = columns();
+  const cols = orderedColumns();
   headRow.innerHTML = cols.map((c) => {
     const arrow = c.key === state.sortKey
       ? ` <span class="arrow">${state.sortDir === 1 ? "▲" : "▼"}</span>` : "";
-    return `<th data-key="${c.key}" class="${c.num ? "num" : ""}" title="Sort by ${esc(c.label)}">${esc(c.label)}${arrow}</th>`;
+    return `<th draggable="true" data-key="${c.key}" class="${c.num ? "num" : ""}" title="Drag to reorder · click to sort by ${esc(c.label)}">${esc(c.label)}${arrow}</th>`;
   }).join("");
+  let dragKey = null;
   headRow.querySelectorAll("th").forEach((th) => {
+    const k = th.getAttribute("data-key");
     th.addEventListener("click", () => {
-      const k = th.getAttribute("data-key");
       if (state.sortKey === k) state.sortDir *= -1;
       else { state.sortKey = k; state.sortDir = (k === "Item" || k === "store" || k === "region") ? 1 : -1; }
       state.page = 0;
       applyView();
+    });
+    th.addEventListener("dragstart", (e) => {
+      dragKey = k;
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", k); } catch (err) { /* IE */ }
+      th.classList.add("dragging");
+    });
+    th.addEventListener("dragend", () => {
+      dragKey = null;
+      headRow.querySelectorAll("th").forEach((t) => t.classList.remove("dragging", "drop-before", "drop-after"));
+    });
+    th.addEventListener("dragover", (e) => {
+      if (!dragKey || dragKey === k) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      const r = th.getBoundingClientRect();
+      const after = (e.clientX - r.left) > r.width / 2;
+      th.classList.toggle("drop-before", !after);
+      th.classList.toggle("drop-after", after);
+      th._dropAfter = after;
+    });
+    th.addEventListener("dragleave", () => th.classList.remove("drop-before", "drop-after"));
+    th.addEventListener("drop", (e) => {
+      e.preventDefault();
+      let from = dragKey;
+      if (!from) { try { from = e.dataTransfer.getData("text/plain"); } catch (err) { from = null; } }
+      if (!from || from === k) return;
+      moveColumn(from, k, th._dropAfter === true);
     });
   });
 }
@@ -463,7 +523,7 @@ function renderPage() {
   const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const start = state.page * PAGE_SIZE;
   const slice = rows.slice(start, start + PAGE_SIZE);
-  const cols = columns();
+  const cols = orderedColumns();
   let html = "";
   for (const o of slice) {
     html += "<tr>";
@@ -501,6 +561,7 @@ function persist() {
   try {
     localStorage.setItem("evetools.lp", JSON.stringify({
       corpId: state.corpId, regionId: state.regionId, mode: state.mode, hideBp: hideBp.checked,
+      order: state.order || null,
     }));
   } catch (e) { /* private mode */ }
 }
@@ -512,6 +573,7 @@ function restore() {
     if (s.corpId) state.corpId = s.corpId;
     if (s.mode === "buy" || s.mode === "sell") state.mode = s.mode;
     if (typeof s.hideBp === "boolean") hideBp.checked = s.hideBp;
+    if (Array.isArray(s.order) && s.order.length) state.order = s.order.filter((k) => typeof k === "string");
   } catch (e) { /* ignore */ }
 }
 
