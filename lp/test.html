@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LP Store — ISK per LP | EVE Tools</title>
+<meta name="description" content="Every EVE Online loyalty point store offer, ranked by ISK per LP. Live Fuzzwork pricing, blueprint filter, all stores and regions.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305090e'/%3E%3Cpath d='M6 24h20M9 20v-6m5 6V8m5 12v-8m5 8v-5' fill='none' stroke='%232dd4bf' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#05090e;--bg2:#080e15;--panel:#0b131c;--panel2:#0e1823;
+  --line:#1a2a39;--line2:#26415a;--text:#c6d7e4;--dim:#7b93a7;
+  --teal:#2dd4bf;--green:#48e08a;--amber:#ffb648;--red:#ff5f70;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+html{scroll-padding-top:16px}
+body{
+  margin:0;font-family:"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(1000px 500px at 20% -5%,rgba(45,212,191,.06),transparent 60%);
+}
+a{color:var(--teal)}
+.wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:20px 20px 60px}
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.topbar .back{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--dim);
+  border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;background:var(--panel);
+}
+.topbar .back:hover{color:var(--teal);border-color:var(--line2)}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h1 .sub{display:block;font-size:13px;color:var(--dim);font-weight:400;margin-top:2px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}
+.field select,.field input[type="text"],.field input[type="number"]{
+  background:var(--bg2);border:1px solid var(--line2);color:var(--text);
+  border-radius:8px;padding:7px 10px;font-size:13.5px;max-width:100%;
+}
+.field select:focus,.field input:focus{outline:2px solid var(--teal);outline-offset:1px}
+#corpSel{max-width:320px}
+.seg{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg button{
+  background:var(--bg2);color:var(--dim);border:0;padding:7px 16px;font-size:13.5px;cursor:pointer;
+}
+.seg button+button{border-left:1px solid var(--line2)}
+.seg button[aria-pressed="true"]{background:rgba(45,212,191,.15);color:var(--teal);font-weight:600}
+.check{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text);padding-bottom:8px;cursor:pointer;user-select:none}
+.check input{width:16px;height:16px;accent-color:var(--teal);cursor:pointer}
+.filters{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.filters .field input{width:110px}
+.filters .field.search input{width:220px}
+.btn{
+  background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.4);color:var(--teal);
+  border-radius:8px;padding:7px 14px;font-size:13.5px;cursor:pointer;font-weight:600;
+}
+.btn:hover{background:rgba(45,212,191,.22)}
+.btn.ghost{background:transparent;border-color:var(--line2);color:var(--dim);font-weight:400}
+.btn.ghost:hover{color:var(--text);border-color:var(--dim)}
+#status{font-size:13px;color:var(--dim);margin:10px 2px;min-height:20px}
+#status .bar{height:4px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden;max-width:420px}
+#status .bar i{display:block;height:100%;background:var(--teal);width:0;transition:width .2s}
+#status.error{color:var(--red)}
+#status b{color:var(--text)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:1080px}
+thead th{
+  position:sticky;top:0;z-index:2;background:var(--panel2);color:var(--dim);
+  font-size:11px;text-transform:uppercase;letter-spacing:.06em;text-align:left;
+  padding:10px 10px;border-bottom:1px solid var(--line2);white-space:nowrap;cursor:pointer;user-select:none;
+}
+thead th:hover{color:var(--teal)}
+thead th.num,tbody td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+thead th .arrow{color:var(--teal)}
+thead th[draggable="true"]{cursor:grab}
+thead th.dragging{opacity:.35;cursor:grabbing}
+thead th.drop-before{box-shadow:inset 2px 0 0 var(--teal)}
+thead th.drop-after{box-shadow:inset -2px 0 0 var(--teal)}
+tbody td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(255,255,255,.012)}
+tbody tr:hover{background:rgba(45,212,191,.05)}
+td.item a{color:var(--text);text-decoration:none}
+td.item a:hover{color:var(--teal);text-decoration:underline}
+td.item .icon{margin-right:8px}
+td.item .bp-tag{
+  display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;font-size:10.5px;
+  border:1px solid rgba(255,182,72,.5);color:var(--amber);vertical-align:middle;
+}
+td .icon{width:32px;height:32px;border-radius:6px;background:var(--bg2);vertical-align:middle}
+td.store{white-space:nowrap}
+td.store .icon.corp{width:24px;height:24px;border-radius:50%;margin-right:8px}
+.req-table{border-collapse:collapse;font-size:12px;margin:0 0 6px;min-width:0;width:100%}
+.req-table caption{text-align:left;color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding:0 0 3px}
+.req-table td{border:0;padding:1px 6px 1px 0;vertical-align:top}
+.req-table td:first-child{font-family:var(--mono);text-align:right;white-space:nowrap;color:var(--dim)}
+.ratio{display:inline-block;min-width:78px;text-align:right;font-family:var(--mono);font-weight:600;padding:2px 8px;border-radius:6px}
+.ratio.good{background:rgba(72,224,138,.13);color:var(--green)}
+.ratio.ok{background:rgba(255,182,72,.13);color:var(--amber)}
+.ratio.bad{background:rgba(255,95,112,.10);color:var(--red)}
+.pager{display:flex;align-items:center;gap:12px;margin:12px 2px;font-size:13px;color:var(--dim);flex-wrap:wrap}
+.pager b{color:var(--text)}
+.legal{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:11px;line-height:1.6;color:var(--dim);
+}
+@media (max-width:640px){
+  .filters .field.search input{width:100%}
+  #corpSel{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="../index.html">&#8592; EVE Tools</a>
+    <h1>LP Store — ISK per LP
+      <span class="sub">Every loyalty point offer in New Eden, ranked by return. Prices via the Fuzzwork LP Store API (Jita 5% depth).</span>
+    </h1>
+  </div>
+
+  <section class="panel">
+    <div class="controls">
+      <div class="field">
+        <label for="corpSel">Store (corporation)</label>
+        <select id="corpSel"><option value="">Loading stores…</option></select>
+      </div>
+      <div class="field">
+        <label for="regionSel">Price region</label>
+        <select id="regionSel"><option value="">Loading regions…</option></select>
+      </div>
+      <div class="field">
+        <label>Price basis</label>
+        <div class="seg" role="group" aria-label="Price basis">
+          <button type="button" id="modeSell" aria-pressed="true">Sell</button>
+          <button type="button" id="modeBuy" aria-pressed="false">Buy</button>
+        </div>
+      </div>
+      <label class="check" for="hideBp">
+        <input type="checkbox" id="hideBp" checked> Hide blueprints
+      </label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="filters">
+      <div class="field"><label for="fRatioMin">ISK/LP min</label><input type="number" id="fRatioMin" placeholder="min"></div>
+      <div class="field"><label for="fRatioMax">ISK/LP max</label><input type="number" id="fRatioMax" placeholder="max"></div>
+      <div class="field"><label for="fLpMin">LP min</label><input type="number" id="fLpMin" placeholder="min" min="0"></div>
+      <div class="field"><label for="fLpMax">LP max</label><input type="number" id="fLpMax" placeholder="max" min="0"></div>
+      <div class="field"><label for="fVolMin">5% vol min</label><input type="number" id="fVolMin" placeholder="min" min="0"></div>
+      <div class="field"><label for="fVolMax">5% vol max</label><input type="number" id="fVolMax" placeholder="max" min="0"></div>
+      <div class="field search"><label for="fSearch">Search item / store</label><input type="text" id="fSearch" placeholder="e.g. Raven, Caldari Navy…"></div>
+      <button type="button" class="btn ghost" id="clearFilters">Clear filters</button>
+    </div>
+  </section>
+
+  <div id="status" role="status" aria-live="polite">Loading store list…</div>
+
+  <div class="tablewrap">
+    <table id="lp" aria-label="LP store offers">
+      <thead><tr id="headRow"></tr></thead>
+      <tbody id="bodyRows"></tbody>
+    </table>
+  </div>
+  <div class="pager">
+    <button type="button" class="btn ghost" id="prevPage">&#8592; Prev</button>
+    <span id="pageInfo"></span>
+    <button type="button" class="btn ghost" id="nextPage">Next &#8594;</button>
+  </div>
+
+  <footer class="legal">
+    EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide.
+    All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all
+    associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters,
+    vehicles, storylines, world facts or other recognizable features of the intellectual property relating to
+    these trademarks are likewise the intellectual property of CCP hf. CCP hf. has granted permission to
+    fuzzwork.co.uk to use EVE Online and all associated logos and designs for promotional and information purposes
+    on its website but does not endorse, and is not in any way affiliated with, fuzzwork.co.uk. CCP is in no way
+    responsible for the content on or functioning of this website, nor can it be liable for any damage arising from
+    the use of this website.
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* LP Store viewer — same table layout as fuzzwork's listcorp page, fed by its public JSON API. */
+const API = "https://www.fuzzwork.co.uk/lpstore/api.php";
+const PAGE_SIZE = 100;
+const ALL = "__ALL__";
+const FORGE = 10000002;
+
+const $ = (id) => document.getElementById(id);
+const corpSel = $("corpSel"), regionSel = $("regionSel"), hideBp = $("hideBp");
+const statusEl = $("status"), headRow = $("headRow"), bodyRows = $("bodyRows"), pageInfo = $("pageInfo");
+
+const state = {
+  corps: [],            // [{corporationID, Corporation}]
+  corpName: {},         // id -> name
+  regions: {},          // id -> name
+  corpId: "1000035",    // default: Caldari Navy (single-store keeps first paint fast)
+  regionId: FORGE,
+  mode: "sell",         // 'sell' | 'buy'
+  offers: [],           // enriched rows for the current view
+  filtered: [],
+  sortKey: "ratio",
+  sortDir: -1,
+  order: null,          // user-reordered column keys; null = default order
+  page: 0,
+  loading: 0,           // request generation guard
+};
+
+const singleCache = new Map();  // `${corpId}|${regionId}` -> offers
+const allCache = new Map();     // `${regionId}` -> Map(corpId -> offers)
+
+const numFmt = new Intl.NumberFormat("en-US");
+const num2Fmt = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt0 = (v) => (v == null || isNaN(v) ? "—" : numFmt.format(Math.round(v)));
+const fmt2 = (v) => (v == null || isNaN(v) ? "—" : num2Fmt.format(v));
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+}
+
+function priceKey() { return state.mode === "sell" ? "Sell Price" : "Buy Price"; }
+function volKey() { return state.mode === "sell" ? "Sell 5% Volume" : "Buy 5% Volume"; }
+function ratioKey() { return state.mode === "sell" ? "isk/lp sell" : "isk/lp buy"; }
+
+function isBlueprint(o) {
+  return Boolean(o.productTypeID) ||
+    (Array.isArray(o.Materials) && o.Materials.length > 0) ||
+    /blueprint/i.test(o.Item || "");
+}
+
+function enrich(offer, corpId, regionId) {
+  return Object.assign({}, offer, {
+    storeId: corpId,
+    store: state.corpName[corpId] || ("#" + corpId),
+    regionID: regionId,
+    region: state.regions[regionId] || ("#" + regionId),
+    bp: isBlueprint(offer),
+  });
+}
+
+/* Columns mirror fuzzwork's listcorp table; Store added so "all stores" stays readable.
+   Item ID is shown as the in-game item icon (images.evetech.net). */
+function columns() {
+  return [
+    { key: "Item", label: "Item", get: (o) => o.Item },
+    { key: "store", label: "Store", get: (o) => o.store },
+    { key: "region", label: "Region", get: (o) => o.region },
+    { key: "ratio", label: "ISK/LP", num: true, get: (o) => o[ratioKey()] },
+    { key: "LPCost", label: "LP", num: true, get: (o) => o.LPCost, fmt: fmt0 },
+    { key: "IskCost", label: "ISK", num: true, get: (o) => o.IskCost, fmt: fmt0 },
+    { key: "req", label: "Other Requirements", get: null },
+    { key: "OtherCostIsk", label: "Other Cost", num: true, get: (o) => o.OtherCostIsk, fmt: fmt0 },
+    { key: "Quantity", label: "Qty", num: true, get: (o) => o.Quantity, fmt: fmt0 },
+    { key: "price", label: state.mode === "sell" ? "Sell Price" : "Buy Price", num: true, get: (o) => o[priceKey()], fmt: fmt2 },
+    { key: "vol", label: "5% Volume", num: true, get: (o) => o[volKey()], fmt: fmt0 },
+  ];
+}
+
+/* Column order is user-reorderable via header drag-and-drop (persisted). */
+function orderedColumns() {
+  const cols = columns();
+  if (!Array.isArray(state.order) || !state.order.length) return cols;
+  const byKey = new Map(cols.map((c) => [c.key, c]));
+  const out = [];
+  for (const k of state.order) {
+    if (byKey.has(k)) { out.push(byKey.get(k)); byKey.delete(k); }
+  }
+  for (const c of cols) if (byKey.has(c.key)) out.push(c);
+  return out;
+}
+
+function moveColumn(from, to, after) {
+  const order = orderedColumns().map((c) => c.key).filter((k) => k !== from);
+  let i = order.indexOf(to);
+  if (i === -1) return;
+  if (after) i++;
+  order.splice(i, 0, from);
+  state.order = order;
+  persist();
+  renderHead();
+  renderPage();
+}
+
+function reqCell(o) {
+  const block = (title, items) => {
+    if (!items || !items.length) return "";
+    let h = `<table class="req-table"><caption>${esc(title)}</caption><tbody>`;
+    for (const it of items) {
+      h += `<tr><td>${fmt0(it.Quantity)}</td><td>${esc(it.Item)}</td></tr>`;
+    }
+    return h + "</tbody></table>";
+  };
+  const html = block("LP Store", o["Other Requirements"]) + block("Materials to build", o.Materials);
+  return html || '<span style="color:var(--dim)">—</span>';
+}
+
+function ratioClass(v) {
+  if (v == null || isNaN(v)) return "bad";
+  return v > 1000 ? "good" : (v > 500 ? "ok" : "bad");
+}
+
+function setStatus(html, isError) {
+  statusEl.classList.toggle("error", Boolean(isError));
+  statusEl.innerHTML = html;
+}
+
+function progress(done, total, label) {
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  setStatus(`${esc(label)} — <b>${done}/${total}</b><div class="bar"><i style="width:${pct}%"></i></div>`);
+}
+
+async function fetchJSON(url) {
+  const res = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!res.ok) {
+    let msg = `HTTP ${res.status}`;
+    try { const j = await res.json(); if (j && j.error) msg = j.error; } catch (e) { /* plain error */ }
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+function offerURL(corpId, regionId) {
+  return `${API}?corpid=${encodeURIComponent(corpId)}&region=${encodeURIComponent(regionId)}&blueprints=1`;
+}
+
+/* Bounded-parallel fan-out so "all stores" doesn't fire ~190 requests at once. */
+async function pool(items, limit, fn, onStep) {
+  const results = new Array(items.length);
+  let next = 0, done = 0;
+  async function worker() {
+    while (next < items.length) {
+      const i = next++;
+      try { results[i] = { ok: true, value: await fn(items[i]) }; }
+      catch (err) { results[i] = { ok: false, error: err }; }
+      done++;
+      if (onStep) onStep(done, items.length);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+async function loadSingle(corpId, regionId, gen) {
+  const key = `${corpId}|${regionId}`;
+  if (singleCache.has(key)) return singleCache.get(key);
+  const data = await fetchJSON(offerURL(corpId, regionId));
+  if (gen !== state.loading) throw new Error("stale");
+  const rows = (Array.isArray(data) ? data : []).map((o) => enrich(o, corpId, regionId));
+  singleCache.set(key, rows);
+  return rows;
+}
+
+async function loadAll(regionId, gen) {
+  if (allCache.has(regionId)) {
+    const byCorp = allCache.get(regionId);
+    return [].concat(...byCorp.values());
+  }
+  const ids = state.corps.map((c) => String(c.corporationID));
+  progress(0, ids.length, `Loading all ${ids.length} LP stores`);
+  const byCorp = new Map();
+  const results = await pool(ids, 8, (id) => fetchJSON(offerURL(id, regionId)),
+    (done, total) => {
+      if (gen === state.loading) progress(done, total, `Loading all ${total} LP stores`);
+    });
+  if (gen !== state.loading) throw new Error("stale");
+  let failed = 0;
+  results.forEach((r, i) => {
+    if (r.ok && Array.isArray(r.value)) {
+      byCorp.set(ids[i], r.value.map((o) => enrich(o, ids[i], regionId)));
+    } else {
+      failed++;
+    }
+  });
+  allCache.set(regionId, byCorp);
+  state.lastFailures = failed;
+  return [].concat(...byCorp.values());
+}
+
+async function reload() {
+  const gen = ++state.loading;
+  const corpId = state.corpId, regionId = state.regionId;
+  bodyRows.innerHTML = "";
+  try {
+    let rows;
+    if (corpId === ALL) {
+      rows = await loadAll(regionId, gen);
+    } else {
+      setStatus("Loading offers…");
+      rows = await loadSingle(corpId, regionId, gen);
+    }
+    if (gen !== state.loading) return;
+    state.offers = rows;
+    state.page = 0;
+    const fails = state.lastFailures || 0;
+    state.lastFailures = 0;
+    applyView(fails ? ` <span>(${fails} store${fails === 1 ? "" : "s"} failed to load)</span>` : "");
+  } catch (err) {
+    if (gen !== state.loading) return;
+    if (String(err && err.message) === "stale") return;
+    setStatus(`Could not load LP store data: ${esc(err.message || err)}`, true);
+  }
+}
+
+function readFilters() {
+  const num = (id) => {
+    const v = $(id).value.trim();
+    return v === "" ? null : parseFloat(v);
+  };
+  return {
+    ratioMin: num("fRatioMin"), ratioMax: num("fRatioMax"),
+    lpMin: num("fLpMin"), lpMax: num("fLpMax"),
+    volMin: num("fVolMin"), volMax: num("fVolMax"),
+    q: $("fSearch").value.trim().toLowerCase(),
+    hideBp: hideBp.checked,
+  };
+}
+
+function applyView(extraStatus) {
+  const f = readFilters();
+  const rk = ratioKey(), vk = volKey();
+  let rows = state.offers;
+  if (f.hideBp) rows = rows.filter((o) => !o.bp);
+  rows = rows.filter((o) => {
+    const r = o[rk], lp = o.LPCost, v = o[vk];
+    if (f.ratioMin != null && !(r >= f.ratioMin)) return false;
+    if (f.ratioMax != null && !(r <= f.ratioMax)) return false;
+    if (f.lpMin != null && !(lp >= f.lpMin)) return false;
+    if (f.lpMax != null && !(lp <= f.lpMax)) return false;
+    if (f.volMin != null && !(v >= f.volMin)) return false;
+    if (f.volMax != null && !(v <= f.volMax)) return false;
+    if (f.q && !((o.Item || "").toLowerCase().includes(f.q) || (o.store || "").toLowerCase().includes(f.q))) return false;
+    return true;
+  });
+
+  const col = columns().find((c) => c.key === state.sortKey) || columns()[0];
+  const dir = state.sortDir;
+  rows = rows.slice().sort((a, b) => {
+    const va = col.get(a), vb = col.get(b);
+    if (typeof va === "string" || typeof vb === "string") {
+      return dir * String(va == null ? "" : va).localeCompare(String(vb == null ? "" : vb));
+    }
+    const na = (va == null || isNaN(va)) ? -Infinity : va;
+    const nb = (vb == null || isNaN(vb)) ? -Infinity : vb;
+    return dir * (na - nb);
+  });
+  state.filtered = rows;
+
+  const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  if (state.page >= pages) state.page = pages - 1;
+  renderHead();
+  renderPage();
+
+  const dates = rows.map((o) => o["Price Date"]).filter(Boolean).sort();
+  const when = dates.length ? ` · prices <b>${esc(dates[dates.length - 1].replace("T", " ").replace("Z", " UTC"))}</b>` : "";
+  const shown = rows.length, total = state.offers.length;
+  const scope = state.corpId === ALL
+    ? `<b>All stores</b> (${state.corps.length} corporations)`
+    : `<b>${esc(state.corpName[state.corpId] || state.corpId)}</b>`;
+  setStatus(`${scope} · ${esc(state.regions[state.regionId] || "")} ${esc(state.mode)} prices — ` +
+    `<b>${numFmt.format(shown)}</b> of ${numFmt.format(total)} offers${when}${extraStatus || ""}`);
+}
+
+function renderHead() {
+  const cols = orderedColumns();
+  headRow.innerHTML = cols.map((c) => {
+    const arrow = c.key === state.sortKey
+      ? ` <span class="arrow">${state.sortDir === 1 ? "▲" : "▼"}</span>` : "";
+    return `<th draggable="true" data-key="${c.key}" class="${c.num ? "num" : ""}" title="Drag to reorder · click to sort by ${esc(c.label)}">${esc(c.label)}${arrow}</th>`;
+  }).join("");
+  let dragKey = null;
+  headRow.querySelectorAll("th").forEach((th) => {
+    const k = th.getAttribute("data-key");
+    th.addEventListener("click", () => {
+      if (state.sortKey === k) state.sortDir *= -1;
+      else { state.sortKey = k; state.sortDir = (k === "Item" || k === "store" || k === "region") ? 1 : -1; }
+      state.page = 0;
+      applyView();
+    });
+    th.addEventListener("dragstart", (e) => {
+      dragKey = k;
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", k); } catch (err) { /* IE */ }
+      th.classList.add("dragging");
+    });
+    th.addEventListener("dragend", () => {
+      dragKey = null;
+      headRow.querySelectorAll("th").forEach((t) => t.classList.remove("dragging", "drop-before", "drop-after"));
+    });
+    th.addEventListener("dragover", (e) => {
+      if (!dragKey || dragKey === k) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      const r = th.getBoundingClientRect();
+      const after = (e.clientX - r.left) > r.width / 2;
+      th.classList.toggle("drop-before", !after);
+      th.classList.toggle("drop-after", after);
+      th._dropAfter = after;
+    });
+    th.addEventListener("dragleave", () => th.classList.remove("drop-before", "drop-after"));
+    th.addEventListener("drop", (e) => {
+      e.preventDefault();
+      let from = dragKey;
+      if (!from) { try { from = e.dataTransfer.getData("text/plain"); } catch (err) { from = null; } }
+      if (!from || from === k) return;
+      moveColumn(from, k, th._dropAfter === true);
+    });
+  });
+}
+
+function renderPage() {
+  const rows = state.filtered;
+  const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const start = state.page * PAGE_SIZE;
+  const slice = rows.slice(start, start + PAGE_SIZE);
+  const cols = orderedColumns();
+  let html = "";
+  for (const o of slice) {
+    html += "<tr>";
+    for (const c of cols) {
+      if (c.key === "Item") {
+        const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
+        html += `<td class="item"><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32">` +
+          `<a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a>` +
+          (o.bp ? '<span class="bp-tag">BP</span>' : "") + "</td>";
+      } else if (c.key === "store") {
+        html += `<td class="store"><img class="icon corp" loading="lazy" width="24" height="24" alt="" ` +
+          `onerror="this.style.display='none'" src="https://images.evetech.net/corporations/${encodeURIComponent(o.storeId)}/logo?size=32">${esc(o.store)}</td>`;
+      } else if (c.key === "req") {
+        html += `<td>${reqCell(o)}</td>`;
+      } else if (c.key === "ratio") {
+        const v = o[ratioKey()];
+        html += `<td class="num"><span class="ratio ${ratioClass(v)}">${fmt2(v)}</span></td>`;
+      } else {
+        html += `<td class="${c.num ? "num" : ""}">${esc(c.fmt ? c.fmt(c.get(o)) : (c.get(o) == null ? "—" : c.get(o)))}</td>`;
+      }
+    }
+    html += "</tr>";
+  }
+  bodyRows.innerHTML = html || `<tr><td colspan="${cols.length}" style="text-align:center;color:var(--dim);padding:24px">No offers match the current filters.</td></tr>`;
+  pageInfo.innerHTML = rows.length
+    ? `Page <b>${state.page + 1}</b> of <b>${pages}</b> · rows ${numFmt.format(start + 1)}–${numFmt.format(Math.min(start + PAGE_SIZE, rows.length))} of <b>${numFmt.format(rows.length)}</b>`
+    : "No rows";
+  $("prevPage").disabled = state.page <= 0;
+  $("nextPage").disabled = state.page >= pages - 1;
+}
+
+function persist() {
+  try {
+    localStorage.setItem("evetools.lp", JSON.stringify({
+      corpId: state.corpId, regionId: state.regionId, mode: state.mode, hideBp: hideBp.checked,
+      order: state.order || null,
+    }));
+  } catch (e) { /* private mode */ }
+}
+
+function restore() {
+  try {
+    const s = JSON.parse(localStorage.getItem("evetools.lp") || "{}");
+    if (s.regionId) state.regionId = Number(s.regionId) || FORGE;
+    if (s.corpId) state.corpId = s.corpId;
+    if (s.mode === "buy" || s.mode === "sell") state.mode = s.mode;
+    if (typeof s.hideBp === "boolean") hideBp.checked = s.hideBp;
+    if (Array.isArray(s.order) && s.order.length) state.order = s.order.filter((k) => typeof k === "string");
+  } catch (e) { /* ignore */ }
+}
+
+async function init() {
+  restore();
+  $("modeSell").setAttribute("aria-pressed", String(state.mode === "sell"));
+  $("modeBuy").setAttribute("aria-pressed", String(state.mode === "buy"));
+  try {
+    const [corps, regions] = await Promise.all([
+      fetchJSON(`${API}?list=corporations`),
+      fetchJSON(`${API}?list=regions`),
+    ]);
+    state.corps = corps.slice().sort((a, b) => a.Corporation.localeCompare(b.Corporation));
+    for (const c of state.corps) state.corpName[String(c.corporationID)] = c.Corporation;
+    for (const r of regions) state.regions[r.regionID] = r.Region;
+
+    corpSel.innerHTML = `<option value="${ALL}">★ All stores (combined)</option>` +
+      state.corps.map((c) =>
+        `<option value="${c.corporationID}">${esc(c.Corporation)}</option>`).join("");
+    if (!state.corpName[state.corpId] && state.corpId !== ALL) state.corpId = "1000035";
+    corpSel.value = state.corpId;
+
+    regionSel.innerHTML = regions.slice()
+      .sort((a, b) => a.Region.localeCompare(b.Region))
+      .map((r) => `<option value="${r.regionID}">${esc(r.Region)}</option>`).join("");
+    if (!state.regions[state.regionId]) state.regionId = FORGE;
+    regionSel.value = String(state.regionId);
+
+    await reload();
+  } catch (err) {
+    setStatus(`Could not load the corporation and region lists: ${esc(err.message || err)}`, true);
+  }
+}
+
+corpSel.addEventListener("change", () => { state.corpId = corpSel.value; persist(); reload(); });
+regionSel.addEventListener("change", () => { state.regionId = Number(regionSel.value); persist(); reload(); });
+$("modeSell").addEventListener("click", () => {
+  state.mode = "sell";
+  $("modeSell").setAttribute("aria-pressed", "true");
+  $("modeBuy").setAttribute("aria-pressed", "false");
+  persist(); state.page = 0; applyView();
+});
+$("modeBuy").addEventListener("click", () => {
+  state.mode = "buy";
+  $("modeBuy").setAttribute("aria-pressed", "true");
+  $("modeSell").setAttribute("aria-pressed", "false");
+  persist(); state.page = 0; applyView();
+});
+hideBp.addEventListener("change", () => { persist(); state.page = 0; applyView(); });
+
+for (const id of ["fRatioMin", "fRatioMax", "fLpMin", "fLpMax", "fVolMin", "fVolMax", "fSearch"]) {
+  $(id).addEventListener("input", () => { state.page = 0; applyView(); });
+}
+$("clearFilters").addEventListener("click", () => {
+  for (const id of ["fRatioMin", "fRatioMax", "fLpMin", "fLpMax", "fVolMin", "fVolMax", "fSearch"]) $(id).value = "";
+  state.page = 0; applyView();
+});
+$("prevPage").addEventListener("click", () => {
+  if (state.page > 0) { state.page--; renderPage(); }
+});
+$("nextPage").addEventListener("click", () => {
+  if ((state.page + 1) * PAGE_SIZE < state.filtered.length) { state.page++; renderPage(); }
+});
+
+init();
+</script>
+</body>
+</html>

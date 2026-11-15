@@ -273,6 +273,67 @@ function isBlueprint(o) {
     /blueprint/i.test(o.Item || "");
 }
 
+function isSkin(o) {
+  return /skin/i.test(o.Item || "");
+}
+
+/* SKINs have no art on the image server. Resolve the hull ship behind the SKIN
+   ("Tempest Penumbral Shadows SKIN" -> "Tempest") via ESI and show its render. */
+const SKIN_CACHE_KEY = "evetools.lp.skins";
+const skinHulls = new Map(); // skin typeID -> hull typeID (0 = no hull found)
+try {
+  const saved = JSON.parse(localStorage.getItem(SKIN_CACHE_KEY) || "{}");
+  for (const [k, v] of Object.entries(saved)) skinHulls.set(Number(k), v);
+} catch (e) { /* private mode */ }
+
+function saveSkinHulls() {
+  try {
+    localStorage.setItem(SKIN_CACHE_KEY, JSON.stringify(Object.fromEntries(skinHulls)));
+  } catch (e) { /* private mode */ }
+}
+
+function hullCandidates(name) {
+  const words = name.replace(/\s+SKIN\s*$/i, "").trim().split(/\s+/).filter(Boolean);
+  const out = [];
+  for (let n = words.length; n >= 1; n--) out.push(words.slice(0, n).join(" "));
+  return out;
+}
+
+async function resolveSkinHulls(gen) {
+  const skins = state.offers.filter((o) => isSkin(o) && !skinHulls.has(o.typeID));
+  if (!skins.length) return;
+  const wanted = new Map(); // candidate name -> skin typeIDs needing it
+  for (const o of skins) {
+    for (const c of hullCandidates(o.Item)) {
+      if (!wanted.has(c)) wanted.set(c, []);
+      wanted.get(c).push(o.typeID);
+    }
+  }
+  let resolved = {};
+  try {
+    const res = await fetch("https://esi.evetech.net/latest/universe/ids/?datasource=tranquility", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify([...wanted.keys()].slice(0, 1000)),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    resolved = Object.fromEntries((data.inventory_types || []).map((t) => [t.name, t.id]));
+  } catch (e) { return; /* ESI unreachable: leave SKIN cells blank */ }
+  if (gen !== state.loading) return;
+  let changed = false;
+  for (const o of skins) {
+    // Longest candidate that resolves wins ("Republic Fleet Firetail" beats "Republic").
+    const hit = hullCandidates(o.Item).find((c) => resolved[c] && resolved[c] !== o.typeID);
+    if (skinHulls.get(o.typeID) !== (hit ? resolved[hit] : 0)) changed = true;
+    skinHulls.set(o.typeID, hit ? resolved[hit] : 0);
+  }
+  if (changed) {
+    saveSkinHulls();
+    if (gen === state.loading) renderPage();
+  }
+}
+
 function enrich(offer, corpId, regionId) {
   return Object.assign({}, offer, {
     storeId: corpId,
@@ -439,6 +500,7 @@ async function reload() {
     const fails = state.lastFailures || 0;
     state.lastFailures = 0;
     applyView(fails ? ` <span>(${fails} store${fails === 1 ? "" : "s"} failed to load)</span>` : "");
+    resolveSkinHulls(gen); // async: fills in SKIN hull renders, then repaints
   } catch (err) {
     if (gen !== state.loading) return;
     if (String(err && err.message) === "stale") return;
@@ -564,10 +626,16 @@ function renderPage() {
     for (const c of cols) {
       if (c.key === "Item") {
         const link = `https://market.fuzzwork.co.uk/region/${encodeURIComponent(o.regionID)}/type/${encodeURIComponent(o.typeID)}/`;
-        // The image server has no /icon art for blueprints, but serves them via the /bp variation.
-        const iconURL = o.bp
-          ? `https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/bp?size=32`
-          : `https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32`;
+        // The image server has no /icon art for blueprints (served via /bp) or
+        // SKINs (shown as the hull ship's render, resolved via ESI).
+        let iconURL;
+        if (o.bp) {
+          iconURL = `https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/bp?size=32`;
+        } else if (skinHulls.get(o.typeID)) {
+          iconURL = `https://images.evetech.net/types/${encodeURIComponent(skinHulls.get(o.typeID))}/render?size=32`;
+        } else {
+          iconURL = `https://images.evetech.net/types/${encodeURIComponent(o.typeID)}/icon?size=32`;
+        }
         html += `<td class="item"><img class="icon" loading="lazy" width="32" height="32" alt="" ` +
           `onerror="this.style.display='none'" src="${iconURL}">` +
           `<a href="${link}" target="_blank" rel="noopener">${esc(o.Item)}</a></td>`;
