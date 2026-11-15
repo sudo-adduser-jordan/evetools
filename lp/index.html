@@ -7,6 +7,17 @@
 <meta name="description" content="Every EVE Online loyalty point store offer, ranked by ISK per LP. Live Fuzzwork pricing, blueprint filter, all stores and regions.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305090e'/%3E%3Cpath d='M6 24h20M9 20v-6m5 6V8m5 12v-8m5 8v-5' fill='none' stroke='%232dd4bf' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
+/* EVE Online brand type, served from CCP's own CDN (as on eveonline.com) */
+@font-face{font-family:"Shentox";font-display:swap;font-weight:600;font-style:normal;
+  src:url("https://web.ccpgamescdn.com/aws/webfonts/shentox/webfonts-2.0/Shentox-SemiBold.woff2") format("woff2")}
+@font-face{font-family:"Shentox";font-display:swap;font-weight:500;font-style:normal;
+  src:url("https://web.ccpgamescdn.com/aws/webfonts/shentox/webfonts-2.0/Shentox-Medium.woff2") format("woff2")}
+@font-face{font-family:"Shentox";font-display:swap;font-weight:400;font-style:normal;
+  src:url("https://web.ccpgamescdn.com/aws/webfonts/shentox/webfonts-2.0/Shentox-Regular.woff2") format("woff2")}
+@font-face{font-family:"Rogan";font-display:swap;font-weight:500;font-style:normal;
+  src:url("https://web.ccpgamescdn.com/aws/webfonts/shentox/webfonts-2.0/Rogan-Medium.woff2") format("woff2")}
+@font-face{font-family:"Rogan";font-display:swap;font-weight:400;font-style:normal;
+  src:url("https://web.ccpgamescdn.com/aws/webfonts/shentox/webfonts-2.0/Rogan-Regular.woff2") format("woff2")}
 *,*::before,*::after{box-sizing:border-box}
 :root{
   /* New Eden neocom: black void, deep-navy glass, restrained cyan */
@@ -24,7 +35,8 @@
   --teal:#7fd4ef;
   --gold:#c8a75a;
   --green:#8fd6a8;--amber:#d8a75a;--red:#e06a6a;
-  --sans:"Shentai","EVE Sans","Segoe UI",Verdana,"Helvetica Neue",Arial,sans-serif;
+  --sans:"Rogan","Shentai","EVE Sans","Segoe UI",Verdana,"Helvetica Neue",Arial,sans-serif;
+  --head:"Shentox","Rogan","Segoe UI",Verdana,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
 }
 *{scrollbar-width:thin;scrollbar-color:#22384c #04070b}
@@ -36,13 +48,23 @@ html{scroll-padding-top:16px}
 body{
   margin:0;font-family:var(--sans);
   color:var(--text);font-size:13px;line-height:1.5;
-  background:
-    radial-gradient(1200px 600px at 12% -10%,rgba(38,80,110,.20),transparent 60%),
-    radial-gradient(900px 500px at 88% 8%,rgba(30,60,90,.14),transparent 60%),
-    radial-gradient(1400px 900px at 50% 115%,rgba(20,40,60,.16),transparent 60%),
-    var(--void);
-  background-attachment:fixed;
+  background:var(--void);
   -webkit-font-smoothing:antialiased;
+}
+/* eveonline.com hero: Fractured Skies loop over its still, dimmed for readability */
+.eve-bg{
+  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#010204;
+}
+.eve-bg img,.eve-bg video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;
+}
+.eve-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(rgba(1,2,4,.66),rgba(1,2,4,.58) 35%,rgba(1,2,4,.82));
+}
+@media (prefers-reduced-motion:reduce){.eve-bg video{display:none}}
+h1,.topbar .back,.field label,.seg button,.btn,thead th,.stat-label,.req-table caption{
+  font-family:var(--head);
 }
 ::selection{background:rgba(127,212,239,.28);color:#fff}
 a{color:var(--cyan)}
@@ -167,6 +189,13 @@ td.store .icon.corp{width:24px;height:24px;border-radius:2px;margin-right:8px}
 </style>
 </head>
 <body>
+<div class="eve-bg" aria-hidden="true">
+  <img src="https://web.ccpgamescdn.com/aws/eveonline/images/FracturedSkies-bg.jpg?w=1920&q=75" alt="">
+  <video autoplay muted loop playsinline preload="auto"
+    poster="https://web.ccpgamescdn.com/aws/eveonline/images/FracturedSkies-bg.jpg?w=1920&q=75">
+    <source src="https://web.ccpgamescdn.com/aws/eveonline/videos/FracturedSkies-WH.webm" type="video/webm">
+  </video>
+</div>
 <div class="wrap">
   <div class="topbar">
     <a class="back" href="../index.html">&#8592; EVE Tools</a>
