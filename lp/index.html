@@ -63,8 +63,19 @@ body{
   position:absolute;top:0;right:0;bottom:0;
   width:min(58vw,1100px);height:100%;
   object-fit:cover;object-position:center top;
+  pointer-events:none;
   -webkit-mask-image:linear-gradient(to right,transparent 0,#000 22%);
   mask-image:linear-gradient(to right,transparent 0,#000 22%);
+}
+/* Never show native playback chrome on this decorative loop (mobile
+   overlays block autoplay and leave a stuck play button). */
+.eve-bg video::-webkit-media-controls,
+.eve-bg video::-webkit-media-controls-enclosure,
+.eve-bg video::-webkit-media-controls-panel,
+.eve-bg video::-webkit-media-controls-play-button,
+.eve-bg video::-webkit-media-controls-start-playback-button,
+.eve-bg video::-webkit-media-controls-overlay-play-button{
+  display:none !important;-webkit-appearance:none;
 }
 @media (max-width:900px){
   .eve-bg video{
@@ -207,7 +218,7 @@ td.store .icon.corp{width:24px;height:24px;border-radius:2px;margin-right:8px}
 <body>
 <div class="eve-bg" aria-hidden="true">
   <img src="https://web.ccpgamescdn.com/aws/eveonline/images/FracturedSkies-bg.jpg?w=1920&q=75" alt="">
-  <video autoplay muted playsinline preload="auto"
+  <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback preload="auto"
     poster="https://web.ccpgamescdn.com/aws/eveonline/images/FracturedSkies-bg.jpg?w=1920&q=75">
     <source src="https://web.ccpgamescdn.com/aws/eveonline/videos/FracturedSkies-WH.webm" type="video/webm">
   </video>
