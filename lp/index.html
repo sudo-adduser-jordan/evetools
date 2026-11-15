@@ -55,12 +55,28 @@ body{
 .eve-bg{
   position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#010204;
 }
-.eve-bg img,.eve-bg video{
+.eve-bg img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;
+}
+/* Hero loop docked right, like eveonline.com: scaled down, blended at its left edge */
+.eve-bg video{
+  position:absolute;top:0;right:0;
+  width:min(58vw,1100px);height:auto;max-height:94vh;
+  object-fit:contain;object-position:center;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 22%);
+  mask-image:linear-gradient(to right,transparent 0,#000 22%);
+}
+@media (max-width:900px){
+  .eve-bg video{
+    top:0;right:0;transform:none;width:100%;height:auto;max-height:62vh;
+    object-fit:contain;
+    -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);
+  }
 }
 .eve-bg::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(rgba(1,2,4,.66),rgba(1,2,4,.58) 35%,rgba(1,2,4,.82));
+  background:linear-gradient(to right,rgba(1,2,4,.82) 0,rgba(1,2,4,.62) 45%,rgba(1,2,4,.34) 100%);
 }
 @media (prefers-reduced-motion:reduce){.eve-bg video{display:none}}
 h1,.topbar .back,.field label,.seg button,.btn,thead th,.stat-label,.req-table caption{
