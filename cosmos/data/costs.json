@@ -1,68 +1,67 @@
 {
-  "generatedAt": "2026-11-15T11:52:37Z",
+  "generatedAt": "2026-11-16T12:37:50Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-15",
-    "everefLastModified": "Sun, 15 Nov 2026 11:52:29 GMT",
-    "everefScrapeEnd": "2026-11-15T11:31:13Z",
-    "fuzzworkOrderset": 176623
+    "lastRunDate": "2026-11-16",
+    "everefLastModified": "Mon, 16 Nov 2026 12:37:09 GMT",
+    "everefScrapeEnd": "2026-11-16T12:30:43Z",
+    "fuzzworkOrderset": 176672
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 339591327.55,
-        "pricedItems": 13,
+        "total": 360585638.96,
+        "pricedItems": 14,
         "totalItems": 26,
         "unpriced": [
+          "Amarr Light Marines",
           "Amolah Kesti's Data Fragment I",
           "Amolah Kesti's Data Fragment II",
           "Amolah Kesti's Data Fragment III",
-          "Anema Bluechip",
+          "Antiseptic Biomass",
           "Blood Grunt Tag",
           "Blood Lower-Tier Tag",
           "Blood Raider Scientist",
           "Blood Raider Squad Leader's Head",
-          "Bug-Ridden Corpse",
           "Generator Debris",
           "Manel's Servant",
-          "Runic Inscription",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-15T11:52:37Z"
+        "updated": "2026-11-16T12:37:50Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3759281725.08,
+        "total": 3726758254.47,
         "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
           "Ratei's Insignia",
           "User Manual"
         ],
-        "updated": "2026-11-15T11:52:37Z"
+        "updated": "2026-11-16T12:37:50Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 114214999.0,
+        "total": 114223852.26,
         "pricedItems": 8,
         "totalItems": 10,
         "unpriced": [
           "Neural Bio Link",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-15T11:52:37Z"
+        "updated": "2026-11-16T12:37:50Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 369597860.49,
-        "pricedItems": 15,
+        "total": 337999318.14,
+        "pricedItems": 14,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -87,13 +86,14 @@
           "Red Hammer's Personal Effects",
           "Rekker's Keycard",
           "Republic Pilot",
+          "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-15T11:52:37Z"
+        "updated": "2026-11-16T12:37:50Z"
       }
     }
   }
