@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-17T13:04:16Z",
+  "generatedAt": "2026-11-18T12:55:19Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-17",
-    "everefLastModified": "Tue, 17 Nov 2026 13:04:10 GMT",
-    "everefScrapeEnd": "2026-11-17T13:01:17Z",
-    "fuzzworkOrderset": 176719
+    "lastRunDate": "2026-11-18",
+    "everefLastModified": "Wed, 18 Nov 2026 12:55:13 GMT",
+    "everefScrapeEnd": "2026-11-18T12:30:43Z",
+    "fuzzworkOrderset": 176765
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 360590621.63,
+        "total": 360578452.67,
         "pricedItems": 14,
         "totalItems": 26,
         "unpriced": [
@@ -31,36 +31,36 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-17T13:04:16Z"
+        "updated": "2026-11-18T12:55:19Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3713699057.99,
-        "pricedItems": 60,
+        "total": 3717392116.41,
+        "pricedItems": 61,
         "totalItems": 62,
         "unpriced": [
-          "Encoded Lai Dai Reports",
           "User Manual"
         ],
-        "updated": "2026-11-17T13:04:16Z"
+        "updated": "2026-11-18T12:55:19Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 114186856.53,
-        "pricedItems": 8,
+        "total": 111183031.27,
+        "pricedItems": 7,
         "totalItems": 10,
         "unpriced": [
           "Neural Bio Link",
+          "Serpentis Data Chip Decoder",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-17T13:04:16Z"
+        "updated": "2026-11-18T12:55:19Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 337431702.06,
+        "total": 331394374.76,
         "pricedItems": 14,
         "totalItems": 42,
         "unpriced": [
@@ -93,7 +93,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-17T13:04:16Z"
+        "updated": "2026-11-18T12:55:19Z"
       }
     }
   }
