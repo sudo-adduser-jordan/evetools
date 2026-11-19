@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-18T12:55:19Z",
+  "generatedAt": "2026-11-19T12:47:46Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-18",
-    "everefLastModified": "Wed, 18 Nov 2026 12:55:13 GMT",
-    "everefScrapeEnd": "2026-11-18T12:30:43Z",
-    "fuzzworkOrderset": 176765
+    "lastRunDate": "2026-11-19",
+    "everefLastModified": "Thu, 19 Nov 2026 12:47:41 GMT",
+    "everefScrapeEnd": "2026-11-19T12:30:43Z",
+    "fuzzworkOrderset": 176812
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 360578452.67,
+        "total": 360591190.92,
         "pricedItems": 14,
         "totalItems": 26,
         "unpriced": [
@@ -31,23 +31,24 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-18T12:55:19Z"
+        "updated": "2026-11-19T12:47:46Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3717392116.41,
-        "pricedItems": 61,
+        "total": 3563287343.55,
+        "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
+          "Loki's DNA",
           "User Manual"
         ],
-        "updated": "2026-11-18T12:55:19Z"
+        "updated": "2026-11-19T12:47:46Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 111183031.27,
+        "total": 111176942.73,
         "pricedItems": 7,
         "totalItems": 10,
         "unpriced": [
@@ -55,12 +56,12 @@
           "Serpentis Data Chip Decoder",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-18T12:55:19Z"
+        "updated": "2026-11-19T12:47:46Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 331394374.76,
+        "total": 336480076.02,
         "pricedItems": 14,
         "totalItems": 42,
         "unpriced": [
@@ -93,7 +94,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-18T12:55:19Z"
+        "updated": "2026-11-19T12:47:46Z"
       }
     }
   }
