@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-19T12:47:46Z",
+  "generatedAt": "2026-11-20T12:43:13Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-19",
-    "everefLastModified": "Thu, 19 Nov 2026 12:47:41 GMT",
-    "everefScrapeEnd": "2026-11-19T12:30:43Z",
-    "fuzzworkOrderset": 176812
+    "lastRunDate": "2026-11-20",
+    "everefLastModified": "Fri, 20 Nov 2026 12:43:08 GMT",
+    "everefScrapeEnd": "2026-11-20T12:30:45Z",
+    "fuzzworkOrderset": 176859
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 360591190.92,
+        "total": 392688806.62,
         "pricedItems": 14,
         "totalItems": 26,
         "unpriced": [
@@ -31,24 +31,24 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-19T12:47:46Z"
+        "updated": "2026-11-20T12:43:13Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3563287343.55,
+        "total": 3562972183.45,
         "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
           "Loki's DNA",
           "User Manual"
         ],
-        "updated": "2026-11-19T12:47:46Z"
+        "updated": "2026-11-20T12:43:13Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 111176942.73,
+        "total": 109190989.48,
         "pricedItems": 7,
         "totalItems": 10,
         "unpriced": [
@@ -56,12 +56,12 @@
           "Serpentis Data Chip Decoder",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-19T12:47:46Z"
+        "updated": "2026-11-20T12:43:13Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 336480076.02,
+        "total": 331925961.11,
         "pricedItems": 14,
         "totalItems": 42,
         "unpriced": [
@@ -94,7 +94,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-19T12:47:46Z"
+        "updated": "2026-11-20T12:43:13Z"
       }
     }
   }
