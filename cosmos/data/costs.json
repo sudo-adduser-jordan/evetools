@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-20T12:43:13Z",
+  "generatedAt": "2026-11-21T12:25:13Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-20",
-    "everefLastModified": "Fri, 20 Nov 2026 12:43:08 GMT",
-    "everefScrapeEnd": "2026-11-20T12:30:45Z",
-    "fuzzworkOrderset": 176859
+    "lastRunDate": "2026-11-21",
+    "everefLastModified": "Sat, 21 Nov 2026 12:25:08 GMT",
+    "everefScrapeEnd": "2026-11-21T12:00:48Z",
+    "fuzzworkOrderset": 176905
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 392688806.62,
+        "total": 392660418.22,
         "pricedItems": 14,
         "totalItems": 26,
         "unpriced": [
@@ -31,24 +31,24 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-20T12:43:13Z"
+        "updated": "2026-11-21T12:25:13Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3562972183.45,
+        "total": 3569505725.09,
         "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
           "Loki's DNA",
           "User Manual"
         ],
-        "updated": "2026-11-20T12:43:13Z"
+        "updated": "2026-11-21T12:25:13Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 109190989.48,
+        "total": 109184074.73,
         "pricedItems": 7,
         "totalItems": 10,
         "unpriced": [
@@ -56,13 +56,13 @@
           "Serpentis Data Chip Decoder",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-20T12:43:13Z"
+        "updated": "2026-11-21T12:25:13Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 331925961.11,
-        "pricedItems": 14,
+        "total": 326112357.67,
+        "pricedItems": 13,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -89,12 +89,13 @@
           "Republic Pilot",
           "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
+          "Searcher Drone's Memory Chip",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-20T12:43:13Z"
+        "updated": "2026-11-21T12:25:13Z"
       }
     }
   }
