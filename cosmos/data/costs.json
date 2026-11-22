@@ -1,28 +1,27 @@
 {
-  "generatedAt": "2026-11-21T12:25:13Z",
+  "generatedAt": "2026-11-22T12:27:36Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-21",
-    "everefLastModified": "Sat, 21 Nov 2026 12:25:08 GMT",
-    "everefScrapeEnd": "2026-11-21T12:00:48Z",
-    "fuzzworkOrderset": 176905
+    "lastRunDate": "2026-11-22",
+    "everefLastModified": "Sun, 22 Nov 2026 12:27:27 GMT",
+    "everefScrapeEnd": "2026-11-22T12:00:48Z",
+    "fuzzworkOrderset": 176952
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 392660418.22,
-        "pricedItems": 14,
+        "total": 341399987.19,
+        "pricedItems": 15,
         "totalItems": 26,
         "unpriced": [
           "Amarr Light Marines",
           "Amolah Kesti's Data Fragment I",
           "Amolah Kesti's Data Fragment II",
           "Amolah Kesti's Data Fragment III",
-          "Antiseptic Biomass",
           "Blood Grunt Tag",
           "Blood Lower-Tier Tag",
           "Blood Raider Scientist",
@@ -31,38 +30,39 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-21T12:25:13Z"
+        "updated": "2026-11-22T12:27:36Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3569505725.09,
+        "total": 3543656048.66,
         "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
           "Loki's DNA",
           "User Manual"
         ],
-        "updated": "2026-11-21T12:25:13Z"
+        "updated": "2026-11-22T12:27:36Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 109184074.73,
-        "pricedItems": 7,
+        "total": 104308344.41,
+        "pricedItems": 6,
         "totalItems": 10,
         "unpriced": [
           "Neural Bio Link",
           "Serpentis Data Chip Decoder",
+          "Stolen Goods",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-21T12:25:13Z"
+        "updated": "2026-11-22T12:27:36Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 326112357.67,
-        "pricedItems": 13,
+        "total": 324860651.7,
+        "pricedItems": 12,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -76,6 +76,7 @@
           "Hacker ID Slice",
           "Kardimo Palettan",
           "Kutill's Data Chip",
+          "Kyan Magdesh's DNA",
           "Lagaster Malotoff's Tag",
           "Machul's Head",
           "Minmatar Republic Narcotic Officer's Tag",
@@ -95,7 +96,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-21T12:25:13Z"
+        "updated": "2026-11-22T12:27:36Z"
       }
     }
   }
