@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-22T12:27:36Z",
+  "generatedAt": "2026-11-23T14:21:55Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-22",
-    "everefLastModified": "Sun, 22 Nov 2026 12:27:27 GMT",
-    "everefScrapeEnd": "2026-11-22T12:00:48Z",
-    "fuzzworkOrderset": 176952
+    "lastRunDate": "2026-11-23",
+    "everefLastModified": "Mon, 23 Nov 2026 14:21:03 GMT",
+    "everefScrapeEnd": "2026-11-23T14:00:50Z",
+    "fuzzworkOrderset": 177003
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 341399987.19,
+        "total": 341440832.93,
         "pricedItems": 15,
         "totalItems": 26,
         "unpriced": [
@@ -30,39 +30,38 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-22T12:27:36Z"
+        "updated": "2026-11-23T14:21:55Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3543656048.66,
+        "total": 43658403600.01,
         "pricedItems": 60,
         "totalItems": 62,
         "unpriced": [
           "Loki's DNA",
           "User Manual"
         ],
-        "updated": "2026-11-22T12:27:36Z"
+        "updated": "2026-11-23T14:21:55Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 104308344.41,
-        "pricedItems": 6,
+        "total": 111314966.87,
+        "pricedItems": 7,
         "totalItems": 10,
         "unpriced": [
           "Neural Bio Link",
           "Serpentis Data Chip Decoder",
-          "Stolen Goods",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-22T12:27:36Z"
+        "updated": "2026-11-23T14:21:55Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 324860651.7,
-        "pricedItems": 12,
+        "total": 316275898.76,
+        "pricedItems": 11,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -88,6 +87,7 @@
           "Red Hammer's Personal Effects",
           "Rekker's Keycard",
           "Republic Pilot",
+          "ST 60 Memory Chip",
           "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
           "Searcher Drone's Memory Chip",
@@ -96,7 +96,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-22T12:27:36Z"
+        "updated": "2026-11-23T14:21:55Z"
       }
     }
   }
