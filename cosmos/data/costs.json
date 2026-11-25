@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-24T14:44:11Z",
+  "generatedAt": "2026-11-25T14:07:43Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-24",
-    "everefLastModified": "Tue, 24 Nov 2026 14:44:05 GMT",
-    "everefScrapeEnd": "2026-11-24T14:30:44Z",
-    "fuzzworkOrderset": 177051
+    "lastRunDate": "2026-11-25",
+    "everefLastModified": "Wed, 25 Nov 2026 14:06:10 GMT",
+    "everefScrapeEnd": "2026-11-25T14:00:46Z",
+    "fuzzworkOrderset": 177097
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 341441258.22,
+        "total": 363431215.43,
         "pricedItems": 15,
         "totalItems": 26,
         "unpriced": [
@@ -30,24 +30,25 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-24T14:44:11Z"
+        "updated": "2026-11-25T14:07:43Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3589275370.86,
-        "pricedItems": 60,
+        "total": 3237057973.92,
+        "pricedItems": 59,
         "totalItems": 62,
         "unpriced": [
-          "Loki's DNA",
-          "User Manual"
+          "Encoded Lai Dai Reports",
+          "User Manual",
+          "Wiyrkomi Rifles"
         ],
-        "updated": "2026-11-24T14:44:11Z"
+        "updated": "2026-11-25T14:07:43Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 70298609.69,
+        "total": 77151359.37,
         "pricedItems": 5,
         "totalItems": 10,
         "unpriced": [
@@ -57,13 +58,13 @@
           "Temko Mercenaries",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-24T14:44:11Z"
+        "updated": "2026-11-25T14:07:43Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 312132635.79,
-        "pricedItems": 11,
+        "total": 317226412.64,
+        "pricedItems": 12,
         "totalItems": 42,
         "unpriced": [
           "Angel Cartel Scanner Data",
@@ -92,13 +93,12 @@
           "ST 60 Memory Chip",
           "Sadry Damoklet's Head",
           "Sample of Septicemic Agent",
-          "Searcher Drone's Memory Chip",
           "Sispur's Security Camera Logs",
           "Sniper ID Slice",
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-24T14:44:11Z"
+        "updated": "2026-11-25T14:07:43Z"
       }
     }
   }
