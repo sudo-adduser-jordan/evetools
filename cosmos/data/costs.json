@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-27T13:42:16Z",
+  "generatedAt": "2026-11-28T12:51:34Z",
   "sources": {
     "market": "Fuzzwork aggregates (Jita 4-4, station 60003760)",
     "contracts": "EVE Ref public contract snapshot",
     "types": "Fuzzwork SDE invTypes.csv"
   },
   "snapshot": {
-    "lastRunDate": "2026-11-27",
-    "everefLastModified": "Fri, 27 Nov 2026 13:41:45 GMT",
-    "everefScrapeEnd": "2026-11-27T13:32:13Z",
-    "fuzzworkOrderset": 177191
+    "lastRunDate": "2026-11-28",
+    "everefLastModified": "Sat, 28 Nov 2026 12:51:30 GMT",
+    "everefScrapeEnd": "2026-11-28T12:30:43Z",
+    "fuzzworkOrderset": 177236
   },
   "lines": {
     "amarr": {
       "shopping": {
-        "total": 626826410.44,
+        "total": 621941029.11,
         "pricedItems": 17,
         "totalItems": 26,
         "unpriced": [
@@ -28,25 +28,25 @@
           "Manel's Servant",
           "Yamia Mida's Remains"
         ],
-        "updated": "2026-11-27T13:42:16Z"
+        "updated": "2026-11-28T12:51:34Z"
       }
     },
     "caldari": {
       "shopping": {
-        "total": 3468741200.56,
+        "total": 1424939778.11,
         "pricedItems": 59,
         "totalItems": 62,
         "unpriced": [
-          "Assistant's Keychain",
-          "Pakkori's Hat",
+          "Myrkai's Data Chip",
+          "Ryoke Laika",
           "User Manual"
         ],
-        "updated": "2026-11-27T13:42:16Z"
+        "updated": "2026-11-28T12:51:34Z"
       }
     },
     "gallente": {
       "shopping": {
-        "total": 72149502.57,
+        "total": 72214023.41,
         "pricedItems": 5,
         "totalItems": 10,
         "unpriced": [
@@ -56,12 +56,12 @@
           "Temko Mercenaries",
           "Trust Partners Business Card"
         ],
-        "updated": "2026-11-27T13:42:16Z"
+        "updated": "2026-11-28T12:51:34Z"
       }
     },
     "minmatar": {
       "shopping": {
-        "total": 317004268.24,
+        "total": 310572930.3,
         "pricedItems": 12,
         "totalItems": 42,
         "unpriced": [
@@ -96,7 +96,7 @@
           "Transputer Orb",
           "Vanir Makono's DNA"
         ],
-        "updated": "2026-11-27T13:42:16Z"
+        "updated": "2026-11-28T12:51:34Z"
       }
     }
   }
